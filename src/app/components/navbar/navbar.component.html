@@ -1,0 +1,40 @@
+<nav class="bg-blue-900 p-4">
+    <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+      <div class="relative flex items-center justify-between h-16">
+        <!-- Logo -->
+        <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
+          <button type="button" class="text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white">
+            <span class="sr-only">Open main menu</span>
+            <!-- Icone do Menu (hamburguer) -->
+            <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </button>
+        </div>
+        <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
+          <a href="#" class="text-white text-2xl font-bold">PJLIMITADA</a>
+        </div>
+        
+        <!-- Navbar Links -->
+        <div class="hidden sm:block sm:ml-6">
+          <div class="flex space-x-4">
+            <a href="#" class="text-white hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium">Home</a>
+            <a routerLink="/veiculos" class="text-white hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium">Carros</a>
+            <a routerLink="/pecas" href="#" class="text-white hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium">Peças</a>
+            <a routerLink="/bodykits" href="#" class="text-white hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium">Body Kits</a>
+            <div class="relative">
+              <button routerLink="/login" class="text-white hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium">
+                Login/Registro
+              </button>
+              <!-- Menu Dropdown -->
+              <div class="absolute hidden text-gray-700 bg-white shadow-md rounded-md w-48 right-0 mt-2">
+                <a href="#" class="block px-4 py-2 text-sm">Login</a>
+                <a href="#" class="block px-4 py-2 text-sm">Registrar</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+  

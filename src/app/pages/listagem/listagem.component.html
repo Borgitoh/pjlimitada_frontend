@@ -1,0 +1,30 @@
+<div class="p-4">
+    <div class="p-4">
+        <h2 class="text-2xl font-semibold mb-4">Marcas de Veículos</h2>
+      
+        <!-- Barra Horizontal de Marcas de Veículos -->
+        <div class="flex space-x-4 overflow-x-auto">
+          <div *ngFor="let marca of marcas" class="flex-shrink-0">
+            <img [src]="marca.imagem" alt="{{ marca.nome }}" class="h-16 object-contain" />
+            <p class="text-center text-sm mt-2">{{ marca.nome }}</p>
+          </div>
+        </div>
+      </div>
+      
+    
+    <!-- Listagem de Veículos Disponíveis -->
+    <h2 class="text-2xl font-semibold mb-6">Veículos Disponíveis</h2>
+  
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div *ngFor="let carro of carros" class="border p-4 rounded shadow hover:shadow-md transition">
+        <img [src]="carro.imagem" alt="{{ carro.modelo }}" class="w-full h-48 object-cover rounded mb-4" />
+        <h3 class="text-xl font-bold">{{ carro.modelo }}</h3>
+        <p class="text-gray-600">{{ carro.marca }} - {{ carro.ano }}</p>
+        <p class="text-blue-600 font-semibold">USD {{ carro.preco }}</p>
+        <a [routerLink]="['/veiculos', carro.id]" class="mt-3 block text-sm text-blue-500 hover:underline">
+          Ver Detalhes
+        </a>
+      </div>
+    </div>
+  </div>
+  
