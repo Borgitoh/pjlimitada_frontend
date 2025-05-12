@@ -1,6 +1,11 @@
 import { Component } from '@angular/core';
-import { SwiperOptions } from 'swiper'; // Importar SwiperOptions
+import { SwiperOptions } from 'swiper'; 
+import SwiperCore, { Autoplay,Navigation  } from 'swiper';
+
 import { VEICULOS } from '../../data/veiculos.mock';
+
+// Ativar autoplay
+SwiperCore.use([Autoplay, Navigation]);
 
 @Component({
   selector: 'app-listagem',
@@ -33,24 +38,24 @@ export class ListagemComponent {
 
   marcaSelecionada: any = null;
 
-  swiperConfig: SwiperOptions = {
-    slidesPerView: 4, // Número de imagens visíveis por vez
-    spaceBetween: 20, // Espaço entre os slides
-    navigation: true, // Habilitar navegação com setas
-    loop: true, // Ativar loop infinito
+  // Configuração do Swiper
+ swiperConfig: SwiperOptions = {
+    slidesPerView: 6,
+    spaceBetween:5 ,
+    loop: true,
+    autoplay: {
+      delay: 2500,
+      disableOnInteraction: false
+    },
+    navigation:true,
     breakpoints: {
-      640: {
-        slidesPerView: 2, // Ajuste para telas pequenas
-      },
-      768: {
-        slidesPerView: 3, // Ajuste para telas médias
-      },
-      1024: {
-        slidesPerView: 4, // Ajuste para telas grandes
-      },
+      640: { slidesPerView: 2 },
+      768: { slidesPerView: 3 },
+      1024: { slidesPerView: 6, spaceBetween:5 },
     },
   };
 
+  // Função para selecionar a marca
   selecionarMarca(marca: any) {
     this.marcaSelecionada = marca;
   }
