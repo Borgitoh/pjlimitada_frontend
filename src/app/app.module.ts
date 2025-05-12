@@ -13,6 +13,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { FormsModule } from '@angular/forms';
 import { PecasComponent } from './pages/pecas/pecas.component';
 import { BodykitsComponent } from './pages/bodykits/bodykits.component';
+import { SwiperModule } from 'swiper/angular';
 
 @NgModule({
   declarations: [
@@ -28,9 +29,10 @@ import { BodykitsComponent } from './pages/bodykits/bodykits.component';
     BodykitsComponent
   ],
   imports: [
-    BrowserModule,
+  BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    SwiperModule
   ],
   providers: [],
   bootstrap: [AppComponent]
