@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -14,6 +14,21 @@ import { FormsModule } from '@angular/forms';
 import { PecasComponent } from './pages/pecas/pecas.component';
 import { BodykitsComponent } from './pages/bodykits/bodykits.component';
 import { SwiperModule } from 'swiper/angular';
+import {
+  LucideAngularModule, Settings,
+  Repeat,
+  Activity,
+  PauseCircle,
+  Zap,
+  Thermometer,
+  Wind,
+  Compass,
+  Package,
+  Battery,
+  Wrench,
+} from 'lucide-angular';
+
+
 
 @NgModule({
   declarations: [
@@ -29,12 +44,26 @@ import { SwiperModule } from 'swiper/angular';
     BodykitsComponent
   ],
   imports: [
-  BrowserModule,
+    BrowserModule,
     AppRoutingModule,
     FormsModule,
-    SwiperModule
+    SwiperModule,
+    LucideAngularModule.pick({
+      Settings,
+      Repeat,
+      Activity,
+      PauseCircle,
+      Zap,
+      Thermometer,
+      Wind,
+      Compass,
+      Package,
+      Battery,
+      Wrench
+    })
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }

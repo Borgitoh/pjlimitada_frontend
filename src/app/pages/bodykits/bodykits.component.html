@@ -15,7 +15,7 @@
     <div *ngIf="marcaSelecionada" class="mt-6 bg-gray-100 p-6 rounded-lg shadow-inner">
       <h3 class="text-xl font-semibold mb-4">Filtrar veículos da marca: {{ marcaSelecionada.nome }}</h3>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-6">
         <!-- Modelo -->
         <div>
           <label class="block text-sm font-semibold text-gray-700 mb-1">Modelo</label>
@@ -24,44 +24,6 @@
             <option value="">Selecione o modelo</option>
           </select>
         </div>
-
-        <!-- Tipo de Carro -->
-        <div>
-          <label class="block text-sm font-semibold text-gray-700 mb-1">Tipo de Carro</label>
-          <select
-            class="w-full rounded-lg border border-gray-300 p-3 text-sm shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
-            <option value="">SUV, Sedan, Hatch...</option>
-          </select>
-        </div>
-
-        <!-- Combustível -->
-        <div>
-          <label class="block text-sm font-semibold text-gray-700 mb-1">Combustível</label>
-          <select
-            class="w-full rounded-lg border border-gray-300 p-3 text-sm shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
-            <option value="">Gasolina, Diesel, Elétrico...</option>
-          </select>
-        </div>
-
-        <!-- Condição -->
-        <div>
-          <label class="block text-sm font-semibold text-gray-700 mb-1">Condição</label>
-          <select
-            class="w-full rounded-lg border border-gray-300 p-3 text-sm shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
-            <option value="">Novo, Usado</option>
-          </select>
-        </div>
-
-        <!-- Transmissão -->
-        <div>
-          <label class="block text-sm font-semibold text-gray-700 mb-1">Transmissão</label>
-          <select
-            class="w-full rounded-lg border border-gray-300 p-3 text-sm shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
-            <option value="">Manual, Automático</option>
-          </select>
-        </div>
-
-
         <!-- Intervalo de Preço -->
         <div class="flex gap-2">
           <div class="w-1/2">
@@ -88,7 +50,7 @@
             class="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out placeholder-gray-400 hover:border-blue-500" />
         </div>
         
-        <div>
+        <div >
           <label class="block text-sm font-medium text-gray-700 mb-2 invisible">Ano Máx.</label>
           <button class="w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
             Pesquisar
