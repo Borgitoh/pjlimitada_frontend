@@ -27,6 +27,7 @@ import {
   Battery,
   Wrench,
 } from 'lucide-angular';
+import { FooterComponent } from './pages/footer/footer.component';
 
 
 
@@ -41,7 +42,8 @@ import {
     LoginComponent,
     RegisterComponent,
     PecasComponent,
-    BodykitsComponent
+    BodykitsComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,

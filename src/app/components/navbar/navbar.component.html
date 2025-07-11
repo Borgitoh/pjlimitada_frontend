@@ -1,40 +1,492 @@
-<nav class="bg-blue-900 p-4">
-    <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-      <div class="relative flex items-center justify-between h-16">
-        <!-- Logo -->
-        <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
-          <button type="button" class="text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white">
-            <span class="sr-only">Open main menu</span>
-            <!-- Icone do Menu (hamburguer) -->
-            <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-            </svg>
-          </button>
+<!-- Start Header -->
+  <!-- Start top bar -->
+  <div class="d-none d-md-block">
+    <div class="top-bar">
+      <div class="container">
+        <div class="row">
+          <div class="col-xl-6 col-lg-6 col-md-7 col-sm-12">
+            <div class="top-contact">
+              <ul>
+                <li><a href="javascript:void(0)" class="text-dark-grey "><i class="fas fa-phone-alt"></i> +123 4567 8910</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-xl-6 col-lg-6 col-md-5 col-sm-12">
+            <div class="top-contact float-right">
+              <ul>
+                <li class="border-left-0">
+                  <a routerLink="/login" class="text-dark-grey">
+                    <img src="assets/images/user.png" class="rounded-circle" alt="#">Sign In
+                  </a>
+                </li>
+                <li class="dropdown">
+                  <a href="javascript:void(0)" class="text-dark-grey" data-toggle="dropdown">
+                    <img src="assets/images/usa.png" class="rounded-circle" alt="#">USD <i class="fas fa-caret-down"></i>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <a href="javascript:void(0)" class="text-dark-grey">
+                        <img src="assets/images/italy.png" class="rounded-circle" alt="#">EUR</a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="dropdown border-right"><a href="javascript:void(0)" class="text-dark-grey" data-toggle="dropdown">Help <i class="fas fa-caret-down"></i></a>
+                  <ul class="dropdown-menu">
+                    <li><a routerLink="/contact" class="text-dark-grey">Contact Us </a>
+                    </li>
+                    <li><a routerLink="/contact" class="text-dark-grey">Support Desk </a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
-        <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
-          <a href="#" class="text-white text-2xl font-bold">PJLIMITADA</a>
+      </div>
+    </div>
+    <!-- Header sec 1 -->
+    <header id="menu-style-1">
+      <div class="container">
+        <div class="row">
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12">
+            <div class="logo">
+              <a routerLink="/">
+                <img src="assets/images/logo.png" class="img-fluid" alt="Logo">
+              </a>
+            </div>
+          </div>
+          <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+            <div class="searchbox align-item-center">
+              <div class="input-group">
+                <input type="text" class="form-control h-100" placeholder="Palavras-chave de pesquisa, categoria, marca da peça">
+                <div class="input-group-prepend catergory-selct">
+                  <ul class="list-unstyled cat-selc">
+                    <li class="init">TODAS AS CATEGORIAS <i class="fas fa-caret-down"></i> 
+                    </li>
+                    <li data-value="Luxury Car"><i class="flaticon-supercar"></i>Carro de luxo</li>
+                    <li data-value="Sports Car"><i class="flaticon-sportive-car"></i> Carro esportivo</li>
+                    <li data-value="Economy Car"><i class="flaticon-coupe-car"></i>Carro Econômico</li>
+                    <li data-value="Excutive Car"><i class="flaticon-minivan-car"></i> Carro Executivo</li>
+                  </ul>
+                </div>
+                <div class="input-group-prepend">
+                  <button class="btn-second orange-btn" type="submit">Search</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12">
+            <div class="cart-sec float-right">
+              <ul>
+                <li><a href="javascript:void(0)" class="text-dark-grey"><i class="flaticon-reload"></i></a>
+                </li>
+                <li><a href="javascript:void(0)" class="text-dark-grey"><i class="flaticon-like"></i></a>
+                  <span class="pro-value bg-orange">5</span>
+                </li>
+                <li><a href="javascript:void(0)" class="text-light-black"><i class="flaticon-shopping-cart text-dark-grey"></i>$ 155</a>
+                  <span class="pro-value bg-orange">5</span>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
-        
-        <!-- Navbar Links -->
-        <div class="hidden sm:block sm:ml-6">
-          <div class="flex space-x-4">
-            <a href="#" class="text-white hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium">Home</a>
-            <a routerLink="/veiculos" class="text-white hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium">Carros</a>
-            <a routerLink="/pecas" href="#" class="text-white hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium">Peças</a>
-            <a routerLink="/bodykits" href="#" class="text-white hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium">Body Kits</a>
-            <div class="relative">
-              <button routerLink="/login" class="text-white hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium">
-                Login/Registro
-              </button>
-              <!-- Menu Dropdown -->
-              <div class="absolute hidden text-gray-700 bg-white shadow-md rounded-md w-48 right-0 mt-2">
-                <a href="#" class="block px-4 py-2 text-sm">Login</a>
-                <a href="#" class="block px-4 py-2 text-sm">Registrar</a>
+      </div>
+    </header>
+    <!-- Header sec 1 -->
+  </div>
+  <!-- End top bar -->
+  <!-- Start Mobile Menu -->
+  <div class="mobile-menu d-block d-md-none">
+    <div class="top-bar">
+      <div class="container">
+        <div class="row">
+          <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
+            <div class="top-contact">
+              <ul>
+                <li><a href="javascript:void(0)" class="text-dark-grey "><i class="fas fa-phone-alt"></i> +123 4567 8910</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
+            <div class="top-contact float-right">
+              <ul>
+                <li class="border-left-0">
+                  <a routerLink="/login" class="text-dark-grey">
+                    <img src="assets/images/user.png" class="rounded-circle" alt="#">Sign In</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mobile-nav">
+      <div class="container">
+        <div class="row" id="main-sec">
+          <div class="col-sm-9 col-6">
+            <div class="logo">
+              <a routerLink="/">
+                <img src="assets/images/rims.png" class="img-fluid" alt="Logo">
+              </a>
+            </div>
+            <div class="mobile-search align-item-center">
+              <div class="input-group">
+                <input type="text" class="form-control h-100" placeholder="Search keywords, category, brand of part">
+                <div class="input-group-append">
+                  <button class="btn-second orange-btn" type="submit"><i class="flaticon-search"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-3 col-6">
+            <div class="mobile-search align-item-center">
+              <div class="mobile-cart  float-right">
+                <div class="cart-sec">
+                  <ul>
+                    <li class="mob-search" id="search-btn"><a href="javascript:void(0)" class="text-dark-grey"><i class="flaticon-search"></i></a>
+                    </li>
+                    <li><a href="javascript:void(0)" class="text-dark-grey"><i class="flaticon-like"></i></a>
+                      <span class="pro-value bg-orange">5</span>
+                    </li>
+                    <li><a href="javascript:void(0)" class="text-light-black"><i class="flaticon-shopping-cart text-dark-grey"></i></a>
+                      <span class="pro-value bg-orange">5</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row none" id="show-search">
+          <div class="col-12">
+            <div class="mobile-search-new align-item-center"> <span class="close-icon" id="close">X</span>
+              <div class="input-group">
+                <input type="text" class="form-control h-100" placeholder="Search keywords, category, brand of part">
+                <div class="input-group-append">
+                  <button class="btn-second orange-btn" type="submit"><i class="flaticon-search"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div id="mobile-mySidenav" class="sidenav">
+            <div class="side-nav-wrapper"> <span class="float-left ">Rims</span>
+              <span class="float-right">
+              <a href="javascript:void(0)" class="closebtn" id="mobile-close-nav">X</a>
+              </span>
+              <ul>
+                <li class="custom-dropdown-nav"><a href="javascript:void(0)" class="text-custom-white"><h3 class="mb-0">Home</h3></a>
+                  <ul class="dropdown-menu">
+                    <li><a routerLink="/">Landing Page</a>
+                    </li>
+                    <li><a routerLink="/homepage2">Home 2</a>
+                    </li>
+                    <li><a routerLink="/homepage3">Home 3</a>
+                    </li>
+                    <li><a routerLink="/homepage4">Home 4</a>
+                    </li>
+                    <li><a routerLink="/homepage5">Home 5</a>
+                    </li>
+                    <li><a routerLink="/homepage6">Home 6</a>
+                    </li>
+                    <li><a routerLink="/homepage7">Home 7</a>
+                    </li>
+                  </ul>
+                </li>
+                <li><a routerLink="/media"><h3 class="mb-0">Media</h3></a>
+                </li>
+                <li class="custom-dropdown-nav"><a href="javascript:void(0)"><h3 class="mb-0">Pages</h3></a>
+                  <ul class="dropdown-menu">
+                    <li><a routerLink="/listing">Listing</a>
+                    </li>
+                    <li><a routerLink="/listing1">Listing 1</a>
+                    </li>
+                    <li><a routerLink="/listing2">Listing 2</a>
+                    </li>
+                    <li><a routerLink="/listing3">Listing 3</a>
+                    </li>
+                    <li><a routerLink="/listing4">Listing 4</a>
+                    </li>
+                    <li><a routerLink="/listing1-style2">Listing 1 Style 2</a>
+                    </li>
+                    <li><a routerLink="/listing2-style2">Listing 2 Style 2</a>
+                    </li>
+                    <li><a routerLink="/add-listing">Add Listing</a>
+                    </li>
+                    <li><a routerLink="/aboutus">About Us</a>
+                    </li>
+                    <li><a routerLink="/car-detail">Car Details</a>
+                    </li>
+                    <li><a routerLink="/car-page">Car Page</a>
+                    </li>
+                    <li><a routerLink="/user">User</a>
+                    </li>
+                    <li><a routerLink="/register">Register</a>
+                    </li>
+                    <li><a routerLink="/login">Login</a>
+                    </li>
+                    <li><a routerLink="/invoice">Invoice</a>
+                    </li>
+                    <li><a routerLink="/coming-soon">Coming Soon</a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="custom-dropdown-nav"><a href="javascript:void(0)" class="text-custom-white"><h3 class="mb-0">Blog</h3></a>
+                  <ul class="dropdown-menu">
+                    <li><a routerLink="/blog-grid">Blog Grid</a>
+                    </li>
+                    <li><a routerLink="/blog-left">Blog Left Sidebar</a>
+                    </li>
+                    <li><a routerLink="/blog-right">Blog Right Sidebar</a>
+                    </li>
+                    <li><a routerLink="/blog-standard">Blog Single</a>
+                    </li>
+                    <li><a routerLink="/blog-gallery">Blog Gallery</a>
+                    </li>
+                    <li><a routerLink="/blog-video">Blog Video</a>
+                    </li>
+                    <li><a routerLink="/blog-quote">Blog Quote</a>
+                    </li>
+                    <li><a routerLink="/blog-detail-left">Blog Details Left</a>
+                    </li>
+                    <li><a routerLink="/blog-detail-right">Blog Details Right</a>
+                    </li>
+                  </ul>
+                </li>
+                <li><a routerLink="/pricing"><h3 class="mb-0">Pricing</h3></a>
+                </li>
+                <li><a routerLink="/contact"><h3 class="mb-0">Contact</h3></a>
+                </li>
+              </ul>
+              <div class="mobile-social-icon">
+                <ul>
+                  <li><a href="javascript:void(0)"><i class="fab fa-facebook-f"></i></a>
+                  </li>
+                  <li><a href="javascript:void(0)"><i class="fab fa-twitter"></i></a>
+                  </li>
+                  <li><a href="javascript:void(0)"><i class="fab fa-pinterest-p"></i></a>
+                  </li>
+                  <li><a href="javascript:void(0)"><i class="fab fa-instagram"></i></a>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </nav>
-  
+  </div>
+  <!-- End Mobile Menu -->
+  <!-- Desktop Menu -->
+  <div id="menu-style-2" class="bg-dark-black">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="menu-style-2">
+            <div class="category-sec-head bg-orange p-relative"><span class="black-sepreta"></span>
+              <button class="text-custom-white full-width bg-transparent fw-600 category-button" id="categoryheadaccordionbtn"><i class="flaticon-menu"></i> TODAS AS CATEGORIAS</button>
+              <div id="accordion" class="categoryheadaccordion">
+                <div class="card">
+                  <div class="card-header" id="headingOne">
+                    <h5 class="mb-0 rubik">
+                      <button class="collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        <i class="flaticon-supercar"></i> Carro de luxo
+                      </button>
+                    </h5>
+                  </div>
+                  <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+                      <ul>
+                        <li><a href="javascript:void(0)">Rolls-Royce Phantom</a>
+                        </li>
+                        <li><a href="javascript:void(0)">Mercedes</a>
+                        </li>
+                        <li><a href="javascript:void(0)">Bentley Bentayga</a>
+                        </li>
+                        <li><a href="javascript:void(0)">BMW 7-Series</a>
+                        </li>
+                        <li><a href="javascript:void(0)">Porsche Panamera</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="card-header" id="headingTwo">
+                    <h5 class="mb-0 rubik">
+                      <button class="collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        <i class="flaticon-sportive-car"></i> Carro esportivo
+                      </button>
+                    </h5>
+                  </div>
+                  <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                    <div class="card-body">
+                      <ul>
+                        <li><a href="javascript:void(0)">Porsche 911 Carrera</a>
+                        </li>
+                        <li><a href="javascript:void(0)">Jaguar F-Type</a>
+                        </li>
+                        <li><a href="javascript:void(0)">Lotus Evora</a>
+                        </li>
+                        <li><a href="javascript:void(0)">BMW i8</a>
+                        </li>
+                        <li><a href="javascript:void(0)">Nissan GT-R</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="card-header" id="headingThree">
+                    <h5 class="mb-0 rubik">
+                      <button class="collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        <i class="flaticon-coupe-car"></i> Carro Econômico
+                      </button>
+                    </h5>
+                  </div>
+                  <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                    <div class="card-body">
+                      <ul>
+                        <li><a href="javascript:void(0)">Nissan Micra</a>
+                        </li>
+                        <li><a href="javascript:void(0)">Chevrolet Monza</a>
+                        </li>
+                        <li><a href="javascript:void(0)">Ford Anglia</a>
+                        </li>
+                        <li><a href="javascript:void(0)">Suzuki Alto</a>
+                        </li>
+                        <li><a href="javascript:void(0)">Toyota Vios</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="card-header" id="headingfive">
+                    <h5 class="mb-0 rubik">
+                      <button class="collapsed" data-toggle="collapse" data-target="#collapsefive" aria-expanded="false" aria-controls="collapsefive">
+                        <i class="flaticon-minivan-car"></i>Carro Executivo
+                      </button>
+                    </h5>
+                  </div>
+                  <div id="collapsefive" class="collapse" aria-labelledby="headingfive" data-parent="#accordion">
+                    <div class="card-body">
+                      <ul>
+                        <li><a href="javascript:void(0)">BMW 5 Series</a>
+                        </li>
+                        <li><a href="javascript:void(0)">Jaguar XF</a>
+                        </li>
+                        <li><a href="javascript:void(0)">Mercedes-Benz E-Class</a>
+                        </li>
+                        <li><a href="javascript:void(0)">Audi A6</a>
+                        </li>
+                        <li><a href="javascript:void(0)">Volvo S90</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="navigation">
+              <nav class="d-none d-md-block">
+                <ul>
+                  <li class="menu-item dropdownbtn"><a href="javascript:void(0)" class="text-custom-white fw-600 dropdown-toggle">Carros</a>
+                    <ul class="dropdown-menu">
+                         <li><a routerLink="/homepage2" class="text-light-black">Suv</a></li>
+                        <li><a routerLink="/homepage3" class="text-light-black">Sedan</a></li>
+                  </ul>
+                  </li>
+                                    <li class="menu-item parent-megamenu"><a href="javascript:void(0)" class="text-custom-white fw-600 dropdown-toggle">Peças</a>
+                    <div class="megamenu">
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <div class="row">
+                            <div class="col-sm-4">
+                              <div class="menu-style">
+                                <div class="menu-title">
+                                  <h6 class="cat-name"><a href="javascript:void(0)" class="text-light-black">Listing</a></h6>
+                                </div>
+                                <ul>
+                                  <li><a routerLink="/listing" class="text-dark-grey">Listing</a>
+                                  </li>
+                                  <li><a routerLink="/listing1" class="text-dark-grey">Listing 1</a>
+                                  </li>
+                                  <li><a routerLink="/listing2" class="text-dark-grey">Listing 2</a>
+                                  </li>
+                                  <li><a routerLink="/listing3" class="text-dark-grey">Listing 3</a>
+                                  </li>
+                                  <li><a routerLink="/listing4" class="text-dark-grey">Listing 4</a>
+                                  </li>
+                                  <li><a routerLink="/listing1-style2" class="text-dark-grey">Listing 1 Style 2</a>
+                                  </li>
+                                  <li><a routerLink="/listing2-style2" class="text-dark-grey">Listing 2 Style 2</a>
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                            <div class="col-sm-4">
+                              <div class="menu-style">
+                                <div class="menu-title">
+                                  <h6 class="cat-name"><a href="javascript:void(0)" class="text-light-black">Addon</a></h6>
+                                </div>
+                                <ul>
+                                  <li><a routerLink="/add-listing" class="text-dark-grey">Add Listing</a>
+                                  </li>
+                                  <li><a routerLink="/aboutus" class="text-dark-grey">About Us</a>
+                                  </li>
+                                  <li><a routerLink="/car-detail" class="text-dark-grey">Car Details</a>
+                                  </li>
+                                  <li><a routerLink="/car-page" class="text-dark-grey">Car Page</a>
+                                  </li>
+                                  <li><a routerLink="/user" class="text-dark-grey">User</a>
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                            <div class="col-sm-4">
+                              <div class="menu-style">
+                                <div class="menu-title">
+                                  <h6 class="cat-name"><a href="javascript:void(0)" class="text-light-black">Extra Pages</a></h6>
+                                </div>
+                                <ul>
+                                  <li><a routerLink="/register" class="text-dark-grey">Register</a>
+                                  </li>
+                                  <li><a routerLink="/login" class="text-dark-grey">Login</a>
+                                  </li>
+                                  <li><a routerLink="/invoice" class="text-dark-grey">Invoice</a>
+                                  </li>
+                                  <li><a routerLink="/coming-soon" class="text-dark-grey">Coming Soon</a>
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="menu-item"><a routerLink="/media" class="text-custom-white fw-600">Media</a>
+                  </li>
+                  <li class="menu-item"><a routerLink="/pricing" class="text-custom-white fw-600">Body kits</a>
+                  </li>
+                  <li class="menu-item"><a routerLink="/contact" class="text-custom-white fw-600">Contactos</a>
+                  </li>
+                </ul>
+              </nav>
+              <button class="d-block d-md-none" type="button" id="mobile-open-nav"><i class="flaticon-menu"></i>
+              </button>
+            </div>
+            <div class="shipping-content">
+             
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
