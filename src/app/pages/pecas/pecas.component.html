@@ -13,19 +13,16 @@
       <!-- Busca -->
       <div class="md:col-span-2">
         <label class="block text-sm font-medium text-gray-700 mb-2">Buscar</label>
-        <input type="text" 
-               [(ngModel)]="filtros.busca"
-               (input)="aplicarFiltros()"
-               placeholder="Ex: freios, filtro, bobina..." 
-               class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <input type="text" [(ngModel)]="filtros.busca" (input)="aplicarFiltros()"
+          placeholder="Ex: freios, filtro, bobina..."
+          class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
       </div>
 
       <!-- Categoria -->
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-2">Categoria</label>
-        <select [(ngModel)]="filtros.categoria" 
-                (change)="aplicarFiltros()"
-                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <select [(ngModel)]="filtros.categoria" (change)="aplicarFiltros()"
+          class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
           <option value="">Todas</option>
           <option *ngFor="let categoria of categorias" [value]="categoria">{{categoria}}</option>
         </select>
@@ -34,9 +31,8 @@
       <!-- Marca -->
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-2">Marca</label>
-        <select [(ngModel)]="filtros.marca" 
-                (change)="aplicarFiltros()"
-                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <select [(ngModel)]="filtros.marca" (change)="aplicarFiltros()"
+          class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
           <option value="">Todas</option>
           <option *ngFor="let marca of marcas" [value]="marca">{{marca}}</option>
         </select>
@@ -45,28 +41,21 @@
       <!-- Preço Mínimo -->
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-2">Preço Min.</label>
-        <input type="number" 
-               [(ngModel)]="filtros.precoMin"
-               (input)="aplicarFiltros()"
-               placeholder="0" 
-               class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <input type="number" [(ngModel)]="filtros.precoMin" (input)="aplicarFiltros()" placeholder="0"
+          class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
       </div>
 
       <!-- Preço Máximo -->
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-2">Preço Max.</label>
-        <input type="number" 
-               [(ngModel)]="filtros.precoMax"
-               (input)="aplicarFiltros()"
-               placeholder="10000" 
-               class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <input type="number" [(ngModel)]="filtros.precoMax" (input)="aplicarFiltros()" placeholder="10000"
+          class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
       </div>
     </div>
-    
+
     <!-- Botão Limpar Filtros -->
     <div class="mt-4 flex justify-between items-center">
-      <button (click)="limparFiltros()" 
-              class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+      <button (click)="limparFiltros()" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
         Limpar Filtros
       </button>
       <div class="text-sm text-gray-600">
@@ -87,22 +76,23 @@
   <!-- Empty State -->
   <div *ngIf="!loading && pecasFiltradas.length === 0" class="text-center py-12">
     <svg class="mx-auto h-24 w-24 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2M4 13h2m13-8V4a1 1 0 00-1-1H7a1 1 0 00-1 1v1m7 0V4.5"></path>
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
+        d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2M4 13h2m13-8V4a1 1 0 00-1-1H7a1 1 0 00-1 1v1m7 0V4.5">
+      </path>
     </svg>
     <h3 class="mt-4 text-lg font-medium text-gray-900">Nenhuma peça encontrada</h3>
     <p class="mt-2 text-gray-500">Tente ajustar os filtros ou fazer uma nova busca.</p>
   </div>
 
   <!-- Grid de Produtos -->
-  <div *ngIf="!loading && pecasFiltradas.length > 0" 
-       class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-    <div *ngFor="let peca of pecasFiltradas" 
-         class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300 group">
+  <div *ngIf="!loading && pecasFiltradas.length > 0"
+    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <div *ngFor="let peca of pecasFiltradas"
+      class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300 group">
       <!-- Imagem do Produto -->
       <div class="relative overflow-hidden cursor-pointer" [routerLink]="['/pecas', peca.id]">
-        <img [src]="peca.imagem" 
-             [alt]="peca.nome" 
-             class="w-full h-48 object-cover group-hover:scale-110 transition duration-300">
+        <img [src]="peca.imagem" [alt]="peca.nome"
+          class="w-full h-48 object-cover group-hover:scale-110 transition duration-300">
         <div class="absolute top-3 right-3">
           <span class="bg-blue-600 text-white px-2 py-1 rounded-full text-xs font-semibold">
             {{peca.categoria}}
@@ -119,24 +109,22 @@
       <div class="p-6">
         <div class="mb-3">
           <h3 class="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition cursor-pointer"
-              [routerLink]="['/pecas', peca.id]">
+            [routerLink]="['/pecas', peca.id]">
             {{peca.nome}}
           </h3>
           <p class="text-sm text-gray-600 mt-1">{{peca.marca}}</p>
         </div>
-
         <p class="text-sm text-gray-700 mb-4 line-clamp-2">{{peca.descricao}}</p>
 
         <!-- Compatibilidade -->
         <div class="mb-4">
           <p class="text-xs font-medium text-gray-500 mb-1">Compatível com:</p>
           <div class="flex flex-wrap gap-1">
-            <span *ngFor="let compat of peca.compatibilidade.slice(0, 3)" 
-                  class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">
+            <span *ngFor="let compat of peca.compatibilidade.slice(0, 3)"
+              class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">
               {{compat}}
             </span>
-            <span *ngIf="peca.compatibilidade.length > 3" 
-                  class="text-xs text-gray-500">
+            <span *ngIf="peca.compatibilidade.length > 3" class="text-xs text-gray-500">
               +{{peca.compatibilidade.length - 3}} mais
             </span>
           </div>
@@ -150,15 +138,20 @@
           </div>
           <div class="flex space-x-2">
             <button class="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg transition duration-200"
-                    title="Adicionar ao carrinho">
+              title="Adicionar ao carrinho">
               <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l-1.5 6m9.5-6v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l-1.5 6m9.5-6v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01">
+                </path>
               </svg>
             </button>
-            <button class="border border-gray-300 hover:border-blue-600 text-gray-600 hover:text-blue-600 p-2 rounded-lg transition duration-200"
-                    title="Adicionar aos favoritos">
+            <button
+              class="border border-gray-300 hover:border-blue-600 text-gray-600 hover:text-blue-600 p-2 rounded-lg transition duration-200"
+              title="Adicionar aos favoritos">
               <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                </path>
               </svg>
             </button>
           </div>
@@ -173,13 +166,14 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">Categorias Populares</h2>
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-      <div *ngFor="let categoria of categorias" 
-           (click)="filtrarPorCategoria(categoria)"
-           class="text-center cursor-pointer group">
+      <div *ngFor="let categoria of categorias" (click)="filtrarPorCategoria(categoria)"
+        class="text-center cursor-pointer group">
         <div class="bg-white rounded-xl shadow-md p-6 group-hover:shadow-lg transition duration-300">
-          <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-200 transition duration-300">
+          <div
+            class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-200 transition duration-300">
             <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z">
+              </path>
             </svg>
           </div>
           <h3 class="font-semibold text-gray-900 group-hover:text-blue-600 transition">{{categoria}}</h3>

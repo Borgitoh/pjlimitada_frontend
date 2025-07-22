@@ -5,11 +5,7 @@
   "projects": {
     "pjlimitada": {
       "projectType": "application",
-      "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss"
-        }
-      },
+      "schematics": {},
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -30,25 +26,43 @@
               "src/assets"
             ],
             "styles": [
-              "node_modules/swiper/swiper-bundle.min.css",
+
+              "src/assets/css/bootstrap.min.css",
+              "src/assets/css/font-awesome.css",
+              "src/assets/css/font/flaticon.css",
+              "src/assets/css/jquery-ui.css",
+              "src/assets/css/slick.css",
+              "src/assets/css/slick-theme.css",
+              "src/assets/css/animate.css",
+              "src/assets/css/nice-select.css",
+              "src/assets/css/jarallex.css",
+              "src/assets/css/mapbox-gl.min.css",
+              "src/assets/css/style.css",
+              "src/assets/css/responsive.css",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+
+              "src/assets/js/jquery-3.4.1.min.js",
+               "src/assets/js/popper.min.js",
+               "src/assets/js/bootstrap.min.js",
+               "src/assets/js/jarallax.min.js",
+               "src/assets/js/jarallax-video.min.js",
+               "src/assets/js/slick.min.js",
+               "src/assets/js/jquery-ui.js",
+               "src/assets/js/isotope.pkgd.js",
+               "src/assets/js/jquery.nice-select.min.js",
+               "src/assets/js/jquery-steps.js",
+               "src/assets/js/bootstrap-tagsinput.min.js",
+               "src/assets/js/mapbox-gl.min.js",
+               "src/assets/js/mapdata.js",
+               "src/assets/js/wow.js",
+               "src/assets/js/custom.js"
+            ]
           },
           "configurations": {
             "production": {
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
-                }
-              ],
+              "budgets": [ ],
               "outputHashing": "all"
             },
             "development": {
