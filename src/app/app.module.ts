@@ -14,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 import { PecasComponent } from './pages/pecas/pecas.component';
 import { BodykitsComponent } from './pages/bodykits/bodykits.component';
 import { SwiperModule } from 'swiper/angular';
+import { FooterComponent } from './components/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { SwiperModule } from 'swiper/angular';
     LoginComponent,
     RegisterComponent,
     PecasComponent,
-    BodykitsComponent
+    BodykitsComponent,
+    FooterComponent
   ],
   imports: [
   BrowserModule,
