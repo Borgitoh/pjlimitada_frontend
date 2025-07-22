@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
 @Component({
@@ -17,17 +17,24 @@ export class AppComponent implements OnInit {
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event) => {
         if (event instanceof NavigationEnd) {
-          this.showHeaderFooter = !this.isAuthPage(event.url);
+          this.checkRoute(event.url);
         }
       });
   }
 
   ngOnInit() {
     // Verificar rota inicial
-    this.showHeaderFooter = !this.isAuthPage(this.router.url);
+    this.checkRoute(this.router.url);
+  }
+
+  private checkRoute(url: string) {
+    const isAuth = this.isAuthPage(url);
+    this.showHeaderFooter = !isAuth;
+    console.log('Current URL:', url, 'Show Header/Footer:', this.showHeaderFooter);
   }
 
   private isAuthPage(url: string): boolean {
-    return url === '/login' || url === '/register';
+    // Verificar se a URL contém login ou register
+    return url.includes('/login') || url.includes('/register') || url === '/login' || url === '/register';
   }
 }
