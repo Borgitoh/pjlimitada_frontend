@@ -15,9 +15,11 @@ export class AppComponent {
     // Detectar mudanças de rota
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe((event: NavigationEnd) => {
+      .subscribe((event) => {
         // Esconder header e footer nas páginas de login e registro
-        this.showHeaderFooter = !this.isAuthPage(event.url);
+        if (event instanceof NavigationEnd) {
+          this.showHeaderFooter = !this.isAuthPage(event.url);
+        }
       });
   }
 
