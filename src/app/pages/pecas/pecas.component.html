@@ -90,7 +90,7 @@
     <div *ngFor="let peca of pecasFiltradas"
       class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300 group">
       <!-- Imagem do Produto -->
-      <div class="relative overflow-hidden cursor-pointer" [routerLink]="['/pecas', peca.id]">
+      <a class="relative overflow-hidden cursor-pointer block" [routerLink]="['/pecas', peca.id]">
         <img [src]="peca.imagem" [alt]="peca.nome"
           class="w-full h-48 object-cover group-hover:scale-110 transition duration-300">
         <div class="absolute top-3 right-3">
@@ -103,7 +103,7 @@
             Últimas unidades
           </span>
         </div>
-      </div>
+      </a>
 
       <!-- Informações do Produto -->
       <div class="p-6">
