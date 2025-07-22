@@ -1,0 +1,21 @@
+/* App component styles */
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+}
+
+/* Estilos para páginas de autenticação */
+.auth-page {
+  background: linear-gradient(135deg, var(--pj-gray-900) 0%, var(--pj-gray-800) 50%, var(--pj-cyan-900) 100%);
+  min-height: 100vh;
+}
+
+/* Garantir que navbar e footer sejam escondidos */
+.hidden {
+  display: none !important;
+}
