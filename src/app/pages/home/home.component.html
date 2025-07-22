@@ -121,9 +121,9 @@
     <div>
       <h3 class="text-2xl font-bold text-gray-900 mb-8 text-center">Bodykits Premium</h3>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        <div *ngFor="let bodykit of bodykitsDestaque" 
-             class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300 group cursor-pointer"
-             [routerLink]="['/bodykits', bodykit.id]">
+        <a *ngFor="let bodykit of bodykitsDestaque"
+           class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300 group cursor-pointer block"
+           [routerLink]="['/bodykits', bodykit.id]">
           <div class="relative overflow-hidden">
             <img [src]="bodykit.imagem" [alt]="bodykit.nome" 
                  class="w-full h-56 object-cover group-hover:scale-110 transition duration-300">
@@ -144,7 +144,7 @@
               <span class="text-sm text-green-600">{{bodykit.estoque}} disponível</span>
             </div>
           </div>
-        </div>
+        </a>
       </div>
     </div>
   </div>
