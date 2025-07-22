@@ -1,77 +1,197 @@
-<div class="bg-gray-100 text-center">
-    <h1 class="text-4xl font-bold text-blue-900">Bem-vindo à PJLIMITADA</h1>
-    <p class="text-lg mt-4">A melhor plataforma de compra e venda de carros importados</p>
-</div>
-
-<!-- Home Page -->
-<div class="bg-gray-100 py-8 px-4">
-    <!-- Seção de Carros em Destaque -->
-    <section class="mb-12">
-      <h2 class="text-3xl font-bold text-center text-blue-900 mb-6">Carros em Destaque</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-        <!-- Carro 1 -->
-        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-          <img src="https://via.placeholder.com/300" alt="Carro 1" class="w-full h-48 object-cover">
-          <div class="p-4">
-            <h3 class="text-lg font-semibold text-gray-900">Carro Modelo 1</h3>
-            <p class="text-gray-600">Preço: $30,000</p>
-            <button class="bg-blue-900 text-white px-4 py-2 rounded-md mt-4">Ver Detalhes</button>
-          </div>
-        </div>
-        <!-- Carro 2 -->
-        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-          <img src="https://via.placeholder.com/300" alt="Carro 2" class="w-full h-48 object-cover">
-          <div class="p-4">
-            <h3 class="text-lg font-semibold text-gray-900">Carro Modelo 2</h3>
-            <p class="text-gray-600">Preço: $25,000</p>
-            <button class="bg-blue-900 text-white px-4 py-2 rounded-md mt-4">Ver Detalhes</button>
-          </div>
-        </div>
-        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-            <img src="https://via.placeholder.com/300" alt="Carro 1" class="w-full h-48 object-cover">
-            <div class="p-4">
-              <h3 class="text-lg font-semibold text-gray-900">Carro Modelo 1</h3>
-              <p class="text-gray-600">Preço: $30,000</p>
-              <button class="bg-blue-900 text-white px-4 py-2 rounded-md mt-4">Ver Detalhes</button>
-            </div>
-          </div>
-          <!-- Carro 2 -->
-          <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-            <img src="https://via.placeholder.com/300" alt="Carro 2" class="w-full h-48 object-cover">
-            <div class="p-4">
-              <h3 class="text-lg font-semibold text-gray-900">Carro Modelo 2</h3>
-              <p class="text-gray-600">Preço: $25,000</p>
-              <button class="bg-blue-900 text-white px-4 py-2 rounded-md mt-4">Ver Detalhes</button>
-            </div>
-          </div>
-        <!-- Adicione mais carros conforme necessário -->
-      </div>
-    </section>
-  
-    <!-- Seção de Promoções -->
-    <section>
-      <h2 class="text-3xl font-bold text-center text-blue-900 mb-6">Promoções</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-        <!-- Promoção 1 -->
-        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-          <img src="https://via.placeholder.com/300" alt="Promoção 1" class="w-full h-48 object-cover">
-          <div class="p-4">
-            <h3 class="text-lg font-semibold text-gray-900">Promoção de Carro 1</h3>
-            <p class="text-gray-600">Desconto de até 15%</p>
-            <button class="bg-red-500 text-white px-4 py-2 rounded-md mt-4">Ver Detalhes</button>
-          </div>
-        </div>
-        <!-- Promoção 2 -->
-        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-          <img src="https://via.placeholder.com/300" alt="Promoção 2" class="w-full h-48 object-cover">
-          <div class="p-4">
-            <h3 class="text-lg font-semibold text-gray-900">Promoção de Peças</h3>
-            <p class="text-gray-600">Compre 1, leve 2!</p>
-            <button class="bg-red-500 text-white px-4 py-2 rounded-md mt-4">Ver Detalhes</button>
-          </div>
-        </div>
-        <!-- Adicione mais promoções conforme necessário -->
-      </div>
-    </section>
+<!-- Hero Section -->
+<section class="relative bg-gradient-to-br from-gray-900 via-gray-800 to-blue-900 text-white overflow-hidden">
+  <div class="absolute inset-0 opacity-20">
+    <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1920&h=800&fit=crop" 
+         alt="Background" class="w-full h-full object-cover">
   </div>
-  
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+    <div class="text-center">
+      <h1 class="text-5xl md:text-7xl font-bold mb-6">
+        <span class="text-blue-400">PJ</span>LIMITADA
+      </h1>
+      <p class="text-xl md:text-2xl mb-8 text-gray-200 max-w-3xl mx-auto">
+        Sua loja especializada em peças automotivas e bodykits de alta performance
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a routerLink="/pecas" 
+           class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition duration-300 transform hover:scale-105">
+          Ver Peças
+        </a>
+        <a routerLink="/bodykits" 
+           class="bg-transparent border-2 border-white hover:bg-white hover:text-gray-900 text-white px-8 py-4 rounded-lg text-lg font-semibold transition duration-300 transform hover:scale-105">
+          Ver Bodykits
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="absolute bottom-0 left-0 right-0">
+    <svg viewBox="0 0 1440 320" class="w-full h-16 fill-gray-100">
+      <path d="M0,96L48,112C96,128,192,160,288,186.7C384,213,480,235,576,213.3C672,192,768,128,864,128C960,128,1056,192,1152,208C1248,224,1344,192,1392,176L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+    </svg>
+  </div>
+</section>
+
+<!-- Categorias em Destaque -->
+<section class="py-16 bg-gray-100">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12">
+      Categorias em Destaque
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- Peças Automotivas -->
+      <div class="group cursor-pointer" routerLink="/pecas">
+        <div class="relative overflow-hidden rounded-2xl shadow-xl transform group-hover:scale-105 transition duration-300">
+          <img src="https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=600&h=400&fit=crop" 
+               alt="Peças Automotivas" class="w-full h-64 object-cover">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+          <div class="absolute bottom-6 left-6 text-white">
+            <h3 class="text-2xl font-bold mb-2">Peças Automotivas</h3>
+            <p class="text-gray-200">Performance e qualidade garantida</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bodykits -->
+      <div class="group cursor-pointer" routerLink="/bodykits">
+        <div class="relative overflow-hidden rounded-2xl shadow-xl transform group-hover:scale-105 transition duration-300">
+          <img src="https://images.unsplash.com/photo-1544829099-b9a0c5303bea?w=600&h=400&fit=crop" 
+               alt="Bodykits" class="w-full h-64 object-cover">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+          <div class="absolute bottom-6 left-6 text-white">
+            <h3 class="text-2xl font-bold mb-2">Bodykits</h3>
+            <p class="text-gray-200">Transforme seu carro completamente</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Veículos -->
+      <div class="group cursor-pointer" routerLink="/veiculos">
+        <div class="relative overflow-hidden rounded-2xl shadow-xl transform group-hover:scale-105 transition duration-300">
+          <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=600&h=400&fit=crop" 
+               alt="Veículos" class="w-full h-64 object-cover">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+          <div class="absolute bottom-6 left-6 text-white">
+            <h3 class="text-2xl font-bold mb-2">Veículos</h3>
+            <p class="text-gray-200">Carros importados selecionados</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Produtos em Destaque -->
+<section class="py-16 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12">
+      Produtos em Destaque
+    </h2>
+    
+    <!-- Peças em Destaque -->
+    <div class="mb-16">
+      <h3 class="text-2xl font-bold text-gray-900 mb-8 text-center">Peças Mais Vendidas</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div *ngFor="let peca of pecasDestaque" 
+             class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300 group cursor-pointer"
+             [routerLink]="['/pecas', peca.id]">
+          <div class="relative overflow-hidden">
+            <img [src]="peca.imagem" [alt]="peca.nome" 
+                 class="w-full h-48 object-cover group-hover:scale-110 transition duration-300">
+            <div class="absolute top-4 right-4">
+              <span class="bg-blue-600 text-white px-2 py-1 rounded-full text-xs font-semibold">
+                {{peca.categoria}}
+              </span>
+            </div>
+          </div>
+          <div class="p-6">
+            <h4 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition">
+              {{peca.nome}}
+            </h4>
+            <p class="text-gray-600 text-sm mb-3">{{peca.marca}}</p>
+            <div class="flex justify-between items-center">
+              <span class="text-2xl font-bold text-blue-600">${{peca.preco}}</span>
+              <span class="text-sm text-green-600">{{peca.estoque}} em estoque</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bodykits em Destaque -->
+    <div>
+      <h3 class="text-2xl font-bold text-gray-900 mb-8 text-center">Bodykits Premium</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div *ngFor="let bodykit of bodykitsDestaque" 
+             class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300 group cursor-pointer"
+             [routerLink]="['/bodykits', bodykit.id]">
+          <div class="relative overflow-hidden">
+            <img [src]="bodykit.imagem" [alt]="bodykit.nome" 
+                 class="w-full h-56 object-cover group-hover:scale-110 transition duration-300">
+            <div class="absolute top-4 left-4">
+              <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                {{bodykit.categoria}}
+              </span>
+            </div>
+          </div>
+          <div class="p-6">
+            <h4 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition">
+              {{bodykit.nome}}
+            </h4>
+            <p class="text-gray-600 mb-2">{{bodykit.marca}} - {{bodykit.modelo}}</p>
+            <p class="text-sm text-gray-500 mb-4">{{bodykit.material}}</p>
+            <div class="flex justify-between items-center">
+              <span class="text-2xl font-bold text-blue-600">${{bodykit.preco}}</span>
+              <span class="text-sm text-green-600">{{bodykit.estoque}} disponível</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Estatísticas -->
+<section class="py-16 bg-blue-900 text-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+      <div>
+        <div class="text-4xl font-bold text-blue-400 mb-2">500+</div>
+        <div class="text-lg">Produtos Disponíveis</div>
+      </div>
+      <div>
+        <div class="text-4xl font-bold text-blue-400 mb-2">1000+</div>
+        <div class="text-lg">Clientes Satisfeitos</div>
+      </div>
+      <div>
+        <div class="text-4xl font-bold text-blue-400 mb-2">24/7</div>
+        <div class="text-lg">Suporte ao Cliente</div>
+      </div>
+      <div>
+        <div class="text-4xl font-bold text-blue-400 mb-2">5★</div>
+        <div class="text-lg">Avaliação Média</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Call to Action -->
+<section class="py-16 bg-gray-50">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+      Pronto para turbinar seu carro?
+    </h2>
+    <p class="text-xl text-gray-600 mb-8">
+      Encontre as melhores peças e bodykits para transformar seu veículo em uma máquina de alta performance.
+    </p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <a routerLink="/pecas" 
+         class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition duration-300">
+        Explorar Peças
+      </a>
+      <a routerLink="/bodykits" 
+         class="bg-gray-800 hover:bg-gray-900 text-white px-8 py-4 rounded-lg text-lg font-semibold transition duration-300">
+        Ver Bodykits
+      </a>
+    </div>
+  </div>
+</section>
