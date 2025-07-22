@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
@@ -7,7 +7,7 @@ import { filter } from 'rxjs/operators';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'pjlimitada';
   showHeaderFooter = true;
 
@@ -16,11 +16,15 @@ export class AppComponent {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event) => {
-        // Esconder header e footer nas páginas de login e registro
         if (event instanceof NavigationEnd) {
           this.showHeaderFooter = !this.isAuthPage(event.url);
         }
       });
+  }
+
+  ngOnInit() {
+    // Verificar rota inicial
+    this.showHeaderFooter = !this.isAuthPage(this.router.url);
   }
 
   private isAuthPage(url: string): boolean {
