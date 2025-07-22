@@ -9,21 +9,91 @@ import { Router } from '@angular/router';
 export class LoginComponent {
   email: string = '';
   password: string = '';
+  rememberMe: boolean = false;
+  showPassword: boolean = false;
+  isLoading: boolean = false;
+  
   errorMessage: string = '';
+  emailError: string = '';
+  passwordError: string = '';
 
   constructor(private router: Router) {}
 
-  login(): void {
-    // Usuário e senha fixos para fins de simulação
-    const mockEmail = 'user@example.com';
-    const mockPassword = 'password123';
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+  }
 
-    // Verificação simples do login
-    if (this.email === mockEmail && this.password === mockPassword) {
-      // Redirecionar para a página inicial (home) após login bem-sucedido
-      this.router.navigate(['/']);
-    } else {
-      this.errorMessage = 'E-mail ou senha incorretos.';
+  validateForm(): boolean {
+    this.clearErrors();
+    let isValid = true;
+
+    // Validar email
+    if (!this.email) {
+      this.emailError = 'E-mail é obrigatório';
+      isValid = false;
+    } else if (!this.isValidEmail(this.email)) {
+      this.emailError = 'E-mail inválido';
+      isValid = false;
     }
+
+    // Validar senha
+    if (!this.password) {
+      this.passwordError = 'Senha é obrigatória';
+      isValid = false;
+    } else if (this.password.length < 6) {
+      this.passwordError = 'Senha deve ter pelo menos 6 caracteres';
+      isValid = false;
+    }
+
+    return isValid;
+  }
+
+  isValidEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  clearErrors() {
+    this.errorMessage = '';
+    this.emailError = '';
+    this.passwordError = '';
+  }
+
+  async login() {
+    if (!this.validateForm()) {
+      return;
+    }
+
+    this.isLoading = true;
+    this.clearErrors();
+
+    try {
+      // Simular chamada de API
+      await this.simulateApiCall();
+      
+      // Simular validação
+      if (this.email === 'admin@pjlimitada.com' && this.password === 'admin123') {
+        // Login bem-sucedido
+        localStorage.setItem('user', JSON.stringify({
+          email: this.email,
+          name: 'Administrador',
+          rememberMe: this.rememberMe
+        }));
+        
+        this.router.navigate(['/']);
+      } else {
+        this.errorMessage = 'E-mail ou senha incorretos';
+      }
+    } catch (error) {
+      this.errorMessage = 'Erro ao fazer login. Tente novamente.';
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  private simulateApiCall(): Promise<void> {
+    return new Promise((resolve) => {
+      setTimeout(resolve, 1500); // Simular delay de rede
+    });
   }
 }
