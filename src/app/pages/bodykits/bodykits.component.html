@@ -1,78 +1,256 @@
-<div class="p-4">
-     <div class="p-4">
-    <h2 class="text-2xl font-semibold mb-4">Marcas de Veículos</h2>
+<!-- Header da Página -->
+<div class="bg-gradient-to-r from-red-900 to-red-700 text-white py-16">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h1 class="text-4xl md:text-5xl font-bold mb-4">Bodykits Premium</h1>
+    <p class="text-xl text-red-100">Transforme seu carro com os melhores kits aerodinâmicos</p>
+  </div>
+</div>
 
-    <swiper [config]="swiperConfig" class="w-full">
-      <ng-template swiperSlide *ngFor="let marca of marcas">
-        <div (click)="selecionarMarca(marca)"
-          class="ml-14 cursor-pointer w-32 bg-white rounded-xl shadow-md p-2 hover:shadow-lg transition duration-300 text-center">
-          <img [src]="marca.imagem" alt="{{ marca.nome }}" class="h-16 mx-auto object-contain" />
-          <p class="text-sm font-medium mt-2 truncate">{{ marca.nome }}</p>
-        </div>
-      </ng-template>
-    </swiper>
+<!-- Filtros -->
+<div class="bg-white shadow-md border-b">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-4">
+      <!-- Busca -->
+      <div class="md:col-span-2">
+        <label class="block text-sm font-medium text-gray-700 mb-2">Buscar</label>
+        <input type="text" 
+               [(ngModel)]="filtros.busca"
+               (input)="aplicarFiltros()"
+               placeholder="Ex: Liberty Walk, BMW, spoiler..." 
+               class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500">
+      </div>
 
-    <div *ngIf="marcaSelecionada" class="mt-6 bg-gray-100 p-6 rounded-lg shadow-inner">
-      <h3 class="text-xl font-semibold mb-4">Filtrar veículos da marca: {{ marcaSelecionada.nome }}</h3>
+      <!-- Categoria -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Categoria</label>
+        <select [(ngModel)]="filtros.categoria" 
+                (change)="aplicarFiltros()"
+                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500">
+          <option value="">Todas</option>
+          <option *ngFor="let categoria of categorias" [value]="categoria">{{categoria}}</option>
+        </select>
+      </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-6">
-        <!-- Modelo -->
-        <div>
-          <label class="block text-sm font-semibold text-gray-700 mb-1">Modelo</label>
-          <select
-            class="w-full rounded-lg border border-gray-300 p-3 text-sm shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
-            <option value="">Selecione o modelo</option>
-          </select>
-        </div>
-        <!-- Intervalo de Preço -->
-        <div class="flex gap-2">
-          <div class="w-1/2">
-            <label class="block text-sm font-semibold text-gray-700 mb-1">Preço Mín.</label>
-            <input type="number" placeholder="Ex: 5000"
-              class="w-full border border-gray-300 rounded-lg p-3 text-sm shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
-          </div>
-          <div class="w-1/2">
-            <label class="block text-sm font-semibold text-gray-700 mb-1">Preço Máx.</label>
-            <input type="number" placeholder="Ex: 30000"
-              class="w-full border border-gray-300 rounded-lg p-3 text-sm shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
-          </div>
-        </div>
+      <!-- Marca -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Marca</label>
+        <select [(ngModel)]="filtros.marca" 
+                (change)="aplicarFiltros()"
+                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500">
+          <option value="">Todas</option>
+          <option *ngFor="let marca of marcas" [value]="marca">{{marca}}</option>
+        </select>
+      </div>
 
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">Ano Mín.</label>
-          <input type="number" placeholder="Ex: 2010"
-            class="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out placeholder-gray-400 hover:border-blue-500" />
-        </div>
+      <!-- Material -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Material</label>
+        <select [(ngModel)]="filtros.material" 
+                (change)="aplicarFiltros()"
+                class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500">
+          <option value="">Todos</option>
+          <option *ngFor="let material of materiais" [value]="material">{{material}}</option>
+        </select>
+      </div>
 
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">Ano Máx.</label>
-          <input type="number" placeholder="Ex: 2024"
-            class="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out placeholder-gray-400 hover:border-blue-500" />
+      <!-- Preço Máximo -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Preço Max.</label>
+        <input type="number" 
+               [(ngModel)]="filtros.precoMax"
+               (input)="aplicarFiltros()"
+               placeholder="5000" 
+               class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500">
+      </div>
+    </div>
+    
+    <!-- Botão Limpar Filtros -->
+    <div class="mt-4 flex justify-between items-center">
+      <button (click)="limparFiltros()" 
+              class="text-red-600 hover:text-red-800 text-sm font-medium">
+        Limpar Filtros
+      </button>
+      <div class="text-sm text-gray-600">
+        {{bodykitsFiltrados.length}} produtos encontrados
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Catálogo de Bodykits -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <!-- Loading State -->
+  <div *ngIf="loading" class="text-center py-12">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto"></div>
+    <p class="mt-4 text-gray-600">Carregando bodykits...</p>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading && bodykitsFiltrados.length === 0" class="text-center py-12">
+    <svg class="mx-auto h-24 w-24 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+    </svg>
+    <h3 class="mt-4 text-lg font-medium text-gray-900">Nenhum bodykit encontrado</h3>
+    <p class="mt-2 text-gray-500">Tente ajustar os filtros ou fazer uma nova busca.</p>
+  </div>
+
+  <!-- Grid de Produtos -->
+  <div *ngIf="!loading && bodykitsFiltrados.length > 0" 
+       class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div *ngFor="let bodykit of bodykitsFiltrados" 
+         class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition duration-300 group">
+      <!-- Imagem do Produto -->
+      <div class="relative overflow-hidden cursor-pointer" [routerLink]="['/bodykits', bodykit.id]">
+        <img [src]="bodykit.imagem" 
+             [alt]="bodykit.nome" 
+             class="w-full h-64 object-cover group-hover:scale-110 transition duration-300">
+        
+        <!-- Badges -->
+        <div class="absolute top-4 right-4">
+          <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
+            {{bodykit.categoria}}
+          </span>
         </div>
         
-        <div >
-          <label class="block text-sm font-medium text-gray-700 mb-2 invisible">Ano Máx.</label>
-          <button class="w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
-            Pesquisar
-          </button>
+        <div class="absolute top-4 left-4">
+          <span class="bg-black/70 text-white px-3 py-1 rounded-full text-sm font-semibold">
+            {{bodykit.material}}
+          </span>
+        </div>
+
+        <div *ngIf="bodykit.estoque <= 2" class="absolute bottom-4 left-4">
+          <span class="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold animate-pulse">
+            Últimas unidades
+          </span>
+        </div>
+
+        <!-- Overlay de hover -->
+        <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center">
+          <span class="text-white font-semibold text-lg">Ver Detalhes</span>
+        </div>
+      </div>
+
+      <!-- Informações do Produto -->
+      <div class="p-6">
+        <div class="mb-4">
+          <h3 class="text-xl font-bold text-gray-900 group-hover:text-red-600 transition cursor-pointer"
+              [routerLink]="['/bodykits', bodykit.id]">
+            {{bodykit.nome}}
+          </h3>
+          <div class="flex items-center justify-between mt-2">
+            <p class="text-sm text-gray-600">{{bodykit.marca}}</p>
+            <span class="text-sm font-medium text-blue-600">{{bodykit.modelo}}</span>
+          </div>
+        </div>
+
+        <p class="text-sm text-gray-700 mb-4 line-clamp-2">{{bodykit.descricao}}</p>
+
+        <!-- Itens Inclusos -->
+        <div class="mb-4">
+          <p class="text-xs font-medium text-gray-500 mb-2">Itens inclusos:</p>
+          <div class="flex flex-wrap gap-1">
+            <span *ngFor="let item of bodykit.itens.slice(0, 3)" 
+                  class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">
+              {{item}}
+            </span>
+            <span *ngIf="bodykit.itens.length > 3" 
+                  class="text-xs text-gray-500">
+              +{{bodykit.itens.length - 3}} mais
+            </span>
+          </div>
+        </div>
+
+        <!-- Compatibilidade -->
+        <div class="mb-4">
+          <p class="text-xs font-medium text-gray-500 mb-1">Compatível com:</p>
+          <div class="flex flex-wrap gap-1">
+            <span *ngFor="let compat of bodykit.compatibilidade.slice(0, 2)" 
+                  class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs">
+              {{compat}}
+            </span>
+            <span *ngIf="bodykit.compatibilidade.length > 2" 
+                  class="text-xs text-blue-600">
+              +{{bodykit.compatibilidade.length - 2}} mais
+            </span>
+          </div>
+        </div>
+
+        <!-- Preço e Ações -->
+        <div class="flex justify-between items-center pt-4 border-t border-gray-100">
+          <div>
+            <span class="text-2xl font-bold text-red-600">${{bodykit.preco}}</span>
+            <p class="text-xs text-green-600 mt-1">{{bodykit.estoque}} em estoque</p>
+          </div>
+          <div class="flex space-x-2">
+            <button class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition duration-200"
+                    title="Solicitar Orçamento">
+              Orçar
+            </button>
+            <button class="border border-gray-300 hover:border-red-600 text-gray-600 hover:text-red-600 p-2 rounded-lg transition duration-200"
+                    title="Adicionar aos favoritos">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 
-  
-    <!-- Listagem de Veículos Disponíveis -->
-    <h2 class="text-2xl font-semibold my-6">body kits Disponíveis</h2>
-  
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div *ngFor="let carro of carros" class="border p-4 rounded-xl shadow hover:shadow-lg transition duration-300">
-        <img [src]="carro.imagem" alt="{{ carro.modelo }}" class="w-full h-48 object-cover rounded mb-4" />
-        <h3 class="text-xl font-bold">{{ carro.modelo }}</h3>
-        <p class="text-gray-600">{{ carro.marca }} - {{ carro.ano }}</p>
-        <p class="text-blue-600 font-semibold">USD {{ carro.preco }}</p>
-        <a [routerLink]="['/veiculos', carro.id]" class="mt-3 block text-sm text-blue-500 hover:underline">
-          Ver Detalhes
-        </a>
+<!-- Marcas em Destaque -->
+<section class="bg-gray-50 py-16">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">Marcas Premium</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-6">
+      <div *ngFor="let marca of marcas" 
+           (click)="filtrarPorMarca(marca)"
+           class="text-center cursor-pointer group">
+        <div class="bg-white rounded-xl shadow-md p-6 group-hover:shadow-lg transition duration-300 border-2 border-transparent group-hover:border-red-200">
+          <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-red-200 transition duration-300">
+            <span class="text-red-600 font-bold text-lg">{{marca.charAt(0)}}</span>
+          </div>
+          <h3 class="font-semibold text-gray-900 group-hover:text-red-600 transition text-sm">{{marca}}</h3>
+          <p class="text-xs text-gray-500 mt-1">{{contarPorMarca(marca)}} kits</p>
+        </div>
       </div>
     </div>
   </div>
+</section>
+
+<!-- Guia de Instalação -->
+<section class="bg-white py-16">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-gray-900 mb-4">Processo de Instalação</h2>
+      <p class="text-lg text-gray-600">Saiba como funciona a instalação de um bodykit</p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="text-center">
+        <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <span class="text-red-600 font-bold text-2xl">1</span>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-900 mb-2">Escolha seu Kit</h3>
+        <p class="text-gray-600">Selecione o bodykit compatível com seu veículo</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <span class="text-red-600 font-bold text-2xl">2</span>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-900 mb-2">Instalação Profissional</h3>
+        <p class="text-gray-600">Nossos parceiros especializados fazem a instalação</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <span class="text-red-600 font-bold text-2xl">3</span>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-900 mb-2">Resultado Final</h3>
+        <p class="text-gray-600">Seu carro totalmente transformado</p>
+      </div>
+    </div>
+  </div>
+</section>
