@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
 @Component({
@@ -30,7 +30,6 @@ export class AppComponent implements OnInit {
   private checkRoute(url: string) {
     const isAuth = this.isAuthPage(url);
     this.showHeaderFooter = !isAuth;
-    console.log('Current URL:', url, 'Show Header/Footer:', this.showHeaderFooter);
   }
 
   private isAuthPage(url: string): boolean {
