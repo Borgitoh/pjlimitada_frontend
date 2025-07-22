@@ -7,7 +7,7 @@
 
   <div class="relative w-full max-w-md">
     <!-- Logo/Brand -->
-    <div class="text-center mb-8">
+    <div class="text-center mb-2">
       <div class="flex items-center justify-center mb-4">
         <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-lg">
           <span class="text-pj-cyan font-bold text-2xl">PJ</span>
@@ -173,14 +173,14 @@
               type="checkbox" 
               required
               [class.border-red-500]="termsError"
-              class="focus:ring-red-500 h-4 w-4 text-red-600 border-gray-300 rounded">
+              class="focus:ring-cyan-600 h-4 w-4 text-cyan-600 border-gray-300 rounded">
           </div>
           <div class="ml-3 text-sm">
             <label for="terms" class="text-gray-700">
               Concordo com os 
-              <a href="#" class="text-red-600 hover:text-red-500 font-medium">Termos de Uso</a> 
+              <a href="#" class="text-cyan-600 hover:text-cyan-600 font-medium">Termos de Uso</a> 
               e 
-              <a href="#" class="text-red-600 hover:text-red-500 font-medium">Política de Privacidade</a>
+              <a href="#" class="text-cyan-600 hover:text-cyan-600font-medium">Política de Privacidade</a>
             </label>
             <p *ngIf="termsError" class="text-red-500 text-sm mt-1">{{termsError}}</p>
           </div>
