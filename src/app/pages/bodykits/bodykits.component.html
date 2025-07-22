@@ -1,8 +1,8 @@
 <!-- Header da Página -->
-<div class="bg-gradient-to-r from-red-900 to-red-700 text-white py-16">
+<div class="bg-gradient-to-r from-blue-900 to-blue-700 text-white py-16">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <h1 class="text-4xl md:text-5xl font-bold mb-4">Bodykits Premium</h1>
-    <p class="text-xl text-red-100">Transforme seu carro com os melhores kits aerodinâmicos</p>
+    <h1 class="text-blue-100 text-4xl md:text-5xl font-bold mb-4">Bodykits Premium</h1>
+    <p class="text-xl text-blue-100">Transforme seu carro com os melhores kits aerodinâmicos</p>
   </div>
 </div>
 
@@ -67,7 +67,7 @@
     <!-- Botão Limpar Filtros -->
     <div class="mt-4 flex justify-between items-center">
       <button (click)="limparFiltros()" 
-              class="text-red-600 hover:text-red-800 text-sm font-medium">
+              class="text-blue-600 hover:text-red-800 text-sm font-medium">
         Limpar Filtros
       </button>
       <div class="text-sm text-gray-600">
@@ -81,7 +81,7 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
   <!-- Loading State -->
   <div *ngIf="loading" class="text-center py-12">
-    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto"></div>
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
     <p class="mt-4 text-gray-600">Carregando bodykits...</p>
   </div>
 
@@ -107,7 +107,7 @@
         
         <!-- Badges -->
         <div class="absolute top-4 right-4">
-          <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
+          <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
             {{bodykit.categoria}}
           </span>
         </div>
@@ -133,7 +133,7 @@
       <!-- Informações do Produto -->
       <div class="p-6">
         <div class="mb-4">
-          <h3 class="text-xl font-bold text-gray-900 group-hover:text-red-600 transition cursor-pointer"
+          <h3 class="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition cursor-pointer"
               [routerLink]="['/bodykits', bodykit.id]">
             {{bodykit.nome}}
           </h3>
@@ -178,15 +178,15 @@
         <!-- Preço e Ações -->
         <div class="flex justify-between items-center pt-4 border-t border-gray-100">
           <div>
-            <span class="text-2xl font-bold text-red-600">${{bodykit.preco}}</span>
+            <span class="text-2xl font-bold text-blue-600">${{bodykit.preco}}</span>
             <p class="text-xs text-green-600 mt-1">{{bodykit.estoque}} em estoque</p>
           </div>
           <div class="flex space-x-2">
-            <button class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition duration-200"
+            <button class="bg-blue-600 hover:bg-ring-blue-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition duration-200"
                     title="Solicitar Orçamento">
-              Orçar
+              Comprar Agora  
             </button>
-            <button class="border border-gray-300 hover:border-red-600 text-gray-600 hover:text-red-600 p-2 rounded-lg transition duration-200"
+            <button class="border border-gray-300 hover:border-blue-600 text-gray-600 hover:text-blue-600 p-2 rounded-lg transition duration-200"
                     title="Adicionar aos favoritos">
               <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
@@ -199,26 +199,6 @@
   </div>
 </div>
 
-<!-- Marcas em Destaque -->
-<section class="bg-gray-50 py-16">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">Marcas Premium</h2>
-    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-6">
-      <div *ngFor="let marca of marcas" 
-           (click)="filtrarPorMarca(marca)"
-           class="text-center cursor-pointer group">
-        <div class="bg-white rounded-xl shadow-md p-6 group-hover:shadow-lg transition duration-300 border-2 border-transparent group-hover:border-red-200">
-          <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-red-200 transition duration-300">
-            <span class="text-red-600 font-bold text-lg">{{marca.charAt(0)}}</span>
-          </div>
-          <h3 class="font-semibold text-gray-900 group-hover:text-red-600 transition text-sm">{{marca}}</h3>
-          <p class="text-xs text-gray-500 mt-1">{{contarPorMarca(marca)}} kits</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- Guia de Instalação -->
 <section class="bg-white py-16">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -230,7 +210,7 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
       <div class="text-center">
         <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <span class="text-red-600 font-bold text-2xl">1</span>
+          <span class="text-gray-900 font-bold text-2xl">1</span>
         </div>
         <h3 class="text-xl font-semibold text-gray-900 mb-2">Escolha seu Kit</h3>
         <p class="text-gray-600">Selecione o bodykit compatível com seu veículo</p>
@@ -238,7 +218,7 @@
       
       <div class="text-center">
         <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <span class="text-red-600 font-bold text-2xl">2</span>
+          <span class="text-gray-900 font-bold text-2xl">2</span>
         </div>
         <h3 class="text-xl font-semibold text-gray-900 mb-2">Instalação Profissional</h3>
         <p class="text-gray-600">Nossos parceiros especializados fazem a instalação</p>
@@ -246,7 +226,7 @@
       
       <div class="text-center">
         <div class="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <span class="text-red-600 font-bold text-2xl">3</span>
+          <span class="text-gray-900 font-bold text-2xl">3</span>
         </div>
         <h3 class="text-xl font-semibold text-gray-900 mb-2">Resultado Final</h3>
         <p class="text-gray-600">Seu carro totalmente transformado</p>

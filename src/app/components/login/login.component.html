@@ -1,4 +1,4 @@
-<div class="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-blue-600 flex items-center justify-center p-4">
+<div class="min-h-screen gradient-pj-hero flex items-center justify-center p-4">
   <!-- Background Pattern -->
   <div class="absolute inset-0 overflow-hidden">
     <div class="absolute -top-40 -right-40 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
@@ -10,11 +10,11 @@
     <div class="text-center mb-8">
       <div class="flex items-center justify-center mb-4">
         <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-lg">
-          <span class="text-blue-600 font-bold text-2xl">PJ</span>
+          <span class="text-pj-cyan font-bold text-2xl">PJ</span>
         </div>
       </div>
       <h1 class="text-3xl font-bold text-white mb-2">Bem-vindo de volta</h1>
-      <p class="text-blue-100">Entre na sua conta para continuar</p>
+      <p class="text-cyan-100">Entre na sua conta para continuar</p>
     </div>
 
     <!-- Login Form -->
@@ -36,7 +36,7 @@
               name="email" 
               required 
               [class.border-red-500]="emailError"
-              class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 bg-gray-50 focus:bg-white" 
+              class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pj-cyan focus:border-transparent transition duration-200 bg-gray-50 focus:bg-white" 
               placeholder="seu@email.com">
           </div>
           <p *ngIf="emailError" class="text-red-500 text-sm mt-1">{{emailError}}</p>
@@ -58,7 +58,7 @@
               name="password" 
               required 
               [class.border-red-500]="passwordError"
-              class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 bg-gray-50 focus:bg-white" 
+              class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pj-cyan focus:border-transparent transition duration-200 bg-gray-50 focus:bg-white" 
               placeholder="••••••••">
             <button 
               type="button" 
@@ -90,7 +90,7 @@
             </label>
           </div>
           <div class="text-sm">
-            <a href="#" class="font-medium text-blue-600 hover:text-blue-500 transition duration-200">
+            <a href="#" class="font-medium text-pj-cyan hover:text-cyan-600 transition duration-200">
               Esqueceu a senha?
             </a>
           </div>
@@ -155,7 +155,7 @@
       <div class="mt-6 text-center">
         <p class="text-sm text-gray-600">
           Ainda não tem uma conta? 
-          <a routerLink="/register" class="font-medium text-blue-600 hover:text-blue-500 transition duration-200">
+          <a routerLink="/register" class="font-medium text-pj-cyan hover:text-cyan-600 transition duration-200">
             Cadastre-se gratuitamente
           </a>
         </p>
@@ -164,7 +164,7 @@
 
     <!-- Footer -->
     <div class="mt-8 text-center">
-      <p class="text-sm text-blue-100">
+      <p class="text-sm text-cyan-100">
         © 2024 PJ LIMITADA. Todos os direitos reservados.
       </p>
     </div>
