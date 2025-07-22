@@ -1,40 +1,26 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { FooterComponent } from './components/footer/footer.component';
 import { HomeComponent } from './pages/home/home.component';
 import { ListagemComponent } from './pages/listagem/listagem.component';
 import { DetalhesComponent } from './pages/detalhes/detalhes.component';
 import { SearchBarComponent } from './components/search-bar/search-bar.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
-import { FormsModule } from '@angular/forms';
 import { PecasComponent } from './pages/pecas/pecas.component';
 import { BodykitsComponent } from './pages/bodykits/bodykits.component';
 import { SwiperModule } from 'swiper/angular';
-import {
-  LucideAngularModule, Settings,
-  Repeat,
-  Activity,
-  PauseCircle,
-  Zap,
-  Thermometer,
-  Wind,
-  Compass,
-  Package,
-  Battery,
-  Wrench,
-} from 'lucide-angular';
-import { FooterComponent } from './pages/footer/footer.component';
-
-
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
+    FooterComponent,
     HomeComponent,
     ListagemComponent,
     DetalhesComponent,
@@ -42,30 +28,15 @@ import { FooterComponent } from './pages/footer/footer.component';
     LoginComponent,
     RegisterComponent,
     PecasComponent,
-    BodykitsComponent,
-    FooterComponent
+    BodykitsComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    SwiperModule,
-    LucideAngularModule.pick({
-      Settings,
-      Repeat,
-      Activity,
-      PauseCircle,
-      Zap,
-      Thermometer,
-      Wind,
-      Compass,
-      Package,
-      Battery,
-      Wrench
-    })
+    SwiperModule
   ],
   providers: [],
-  bootstrap: [AppComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  bootstrap: [AppComponent]
 })
 export class AppModule { }
