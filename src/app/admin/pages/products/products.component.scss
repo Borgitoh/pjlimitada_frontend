@@ -1,0 +1,26 @@
+:host {
+  display: block;
+}
+
+.stats-grid {
+  .stat-card {
+    transition: all 0.2s ease-in-out;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.filters {
+  .filter-select {
+    min-width: 150px;
+  }
+}
+
+.product-form {
+  .grid-cols-2 {
+    gap: 1rem;
+  }
+}
