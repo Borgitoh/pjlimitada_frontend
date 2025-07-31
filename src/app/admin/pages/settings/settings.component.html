@@ -1,0 +1,345 @@
+<div class="space-y-6">
+  <!-- Page Header -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900">Configurações do Sistema</h1>
+      <p class="text-gray-600">Gerencie configurações gerais e preferências</p>
+    </div>
+    <button
+      (click)="saveSettings()"
+      [disabled]="!hasChanges"
+      class="px-4 py-2 bg-pj-cyan text-white rounded-lg hover:bg-pj-cyan-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+      <svg class="h-4 w-4 mr-2 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+              d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3-3m0 0l-3 3m3-3v12" />
+      </svg>
+      Salvar Alterações
+    </button>
+  </div>
+
+  <!-- Settings Tabs -->
+  <div class="border-b border-gray-200">
+    <nav class="-mb-px flex space-x-8">
+      <button
+        *ngFor="let tab of tabs"
+        (click)="activeTab = tab.id"
+        [class.border-pj-cyan]="activeTab === tab.id"
+        [class.text-pj-cyan]="activeTab === tab.id"
+        [class.border-transparent]="activeTab !== tab.id"
+        [class.text-gray-500]="activeTab !== tab.id"
+        class="whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm hover:text-gray-700 hover:border-gray-300">
+        {{tab.label}}
+      </button>
+    </nav>
+  </div>
+
+  <!-- Company Information Tab -->
+  <div *ngIf="activeTab === 'company'" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+    <h3 class="text-lg font-medium text-gray-900 mb-6">Informações da Empresa</h3>
+    <form class="space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label for="companyName" class="block text-sm font-medium text-gray-700 mb-1">
+            Nome da Empresa
+          </label>
+          <input
+            id="companyName"
+            type="text"
+            [(ngModel)]="settings.companyName"
+            (ngModelChange)="markAsChanged()"
+            name="companyName"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pj-cyan focus:border-transparent">
+        </div>
+
+        <div>
+          <label for="companyEmail" class="block text-sm font-medium text-gray-700 mb-1">
+            E-mail da Empresa
+          </label>
+          <input
+            id="companyEmail"
+            type="email"
+            [(ngModel)]="settings.companyEmail"
+            (ngModelChange)="markAsChanged()"
+            name="companyEmail"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pj-cyan focus:border-transparent">
+        </div>
+      </div>
+
+      <div>
+        <label for="companyAddress" class="block text-sm font-medium text-gray-700 mb-1">
+          Endereço
+        </label>
+        <textarea
+          id="companyAddress"
+          rows="2"
+          [(ngModel)]="settings.companyAddress"
+          (ngModelChange)="markAsChanged()"
+          name="companyAddress"
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pj-cyan focus:border-transparent"></textarea>
+      </div>
+
+      <div>
+        <label for="companyPhone" class="block text-sm font-medium text-gray-700 mb-1">
+          Telefone
+        </label>
+        <input
+          id="companyPhone"
+          type="tel"
+          [(ngModel)]="settings.companyPhone"
+          (ngModelChange)="markAsChanged()"
+          name="companyPhone"
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pj-cyan focus:border-transparent">
+      </div>
+    </form>
+  </div>
+
+  <!-- Business Settings Tab -->
+  <div *ngIf="activeTab === 'business'" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+    <h3 class="text-lg font-medium text-gray-900 mb-6">Configurações de Negócio</h3>
+    <form class="space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div>
+          <label for="defaultMinStock" class="block text-sm font-medium text-gray-700 mb-1">
+            Estoque Mínimo Padrão
+          </label>
+          <input
+            id="defaultMinStock"
+            type="number"
+            min="0"
+            [(ngModel)]="settings.defaultMinStock"
+            (ngModelChange)="markAsChanged()"
+            name="defaultMinStock"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pj-cyan focus:border-transparent">
+        </div>
+
+        <div>
+          <label for="taxRate" class="block text-sm font-medium text-gray-700 mb-1">
+            Taxa de Imposto (%)
+          </label>
+          <input
+            id="taxRate"
+            type="number"
+            step="0.01"
+            min="0"
+            max="100"
+            [(ngModel)]="taxRatePercent"
+            (ngModelChange)="updateTaxRate($event)"
+            name="taxRate"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pj-cyan focus:border-transparent">
+        </div>
+
+        <div>
+          <label for="currency" class="block text-sm font-medium text-gray-700 mb-1">
+            Moeda
+          </label>
+          <select
+            id="currency"
+            [(ngModel)]="settings.currency"
+            (ngModelChange)="markAsChanged()"
+            name="currency"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pj-cyan focus:border-transparent">
+            <option value="BRL">Real (R$)</option>
+            <option value="USD">Dólar ($)</option>
+            <option value="EUR">Euro (€)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Product Categories -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-3">
+          Categorias de Produtos
+        </label>
+        <div class="space-y-2">
+          <div *ngFor="let category of productCategories; let i = index" 
+               class="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg">
+            <input
+              type="text"
+              [(ngModel)]="category.name"
+              (ngModelChange)="markAsChanged()"
+              name="category_{{i}}"
+              class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pj-cyan focus:border-transparent">
+            <label class="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                [(ngModel)]="category.active"
+                (ngModelChange)="markAsChanged()"
+                name="categoryActive_{{i}}"
+                class="h-4 w-4 text-pj-cyan focus:ring-pj-cyan border-gray-300 rounded">
+              <span class="text-sm text-gray-700">Ativo</span>
+            </label>
+            <button
+              type="button"
+              (click)="removeCategory(i)"
+              class="p-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors">
+              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          <button
+            type="button"
+            (click)="addCategory()"
+            class="w-full px-4 py-2 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-pj-cyan hover:text-pj-cyan transition-colors">
+            <svg class="h-4 w-4 mr-2 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            </svg>
+            Adicionar Categoria
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- System Preferences Tab -->
+  <div *ngIf="activeTab === 'system'" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+    <h3 class="text-lg font-medium text-gray-900 mb-6">Preferências do Sistema</h3>
+    <form class="space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label for="language" class="block text-sm font-medium text-gray-700 mb-1">
+            Idioma
+          </label>
+          <select
+            id="language"
+            [(ngModel)]="settings.language"
+            (ngModelChange)="markAsChanged()"
+            name="language"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pj-cyan focus:border-transparent">
+            <option value="pt">Português</option>
+            <option value="en">English</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="theme" class="block text-sm font-medium text-gray-700 mb-1">
+            Tema
+          </label>
+          <select
+            id="theme"
+            [(ngModel)]="settings.theme"
+            (ngModelChange)="markAsChanged()"
+            name="theme"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pj-cyan focus:border-transparent">
+            <option value="light">Claro</option>
+            <option value="dark">Escuro</option>
+          </select>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Notifications Tab -->
+  <div *ngIf="activeTab === 'notifications'" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+    <h3 class="text-lg font-medium text-gray-900 mb-6">Configurações de Notificações</h3>
+    <div class="space-y-6">
+      <div class="flex items-center justify-between py-4 border-b border-gray-200">
+        <div>
+          <h4 class="text-sm font-medium text-gray-900">Notificações por E-mail</h4>
+          <p class="text-sm text-gray-500">Receber notificações importantes por e-mail</p>
+        </div>
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            [(ngModel)]="settings.notifications.email"
+            (ngModelChange)="markAsChanged()"
+            class="sr-only peer">
+          <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-pj-cyan/25 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pj-cyan"></div>
+        </label>
+      </div>
+
+      <div class="flex items-center justify-between py-4 border-b border-gray-200">
+        <div>
+          <h4 class="text-sm font-medium text-gray-900">Alertas de Estoque Baixo</h4>
+          <p class="text-sm text-gray-500">Notificar quando produtos atingem estoque mínimo</p>
+        </div>
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            [(ngModel)]="settings.notifications.lowStock"
+            (ngModelChange)="markAsChanged()"
+            class="sr-only peer">
+          <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-pj-cyan/25 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pj-cyan"></div>
+        </label>
+      </div>
+
+      <div class="flex items-center justify-between py-4">
+        <div>
+          <h4 class="text-sm font-medium text-gray-900">Notificações de Vendas</h4>
+          <p class="text-sm text-gray-500">Notificar sobre novas vendas realizadas</p>
+        </div>
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            [(ngModel)]="settings.notifications.newSales"
+            (ngModelChange)="markAsChanged()"
+            class="sr-only peer">
+          <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-pj-cyan/25 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pj-cyan"></div>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Backup & Security Tab -->
+  <div *ngIf="activeTab === 'security'" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+    <h3 class="text-lg font-medium text-gray-900 mb-6">Backup e Segurança</h3>
+    <div class="space-y-6">
+      <div class="border border-gray-200 rounded-lg p-4">
+        <div class="flex items-center justify-between">
+          <div>
+            <h4 class="text-sm font-medium text-gray-900">Backup Automático</h4>
+            <p class="text-sm text-gray-500">Último backup: 25/01/2024 às 03:00</p>
+          </div>
+          <button 
+            (click)="createBackup()"
+            class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+            Fazer Backup Agora
+          </button>
+        </div>
+      </div>
+
+      <div class="border border-gray-200 rounded-lg p-4">
+        <div class="flex items-center justify-between">
+          <div>
+            <h4 class="text-sm font-medium text-gray-900">Logs de Atividade</h4>
+            <p class="text-sm text-gray-500">Visualizar logs do sistema e atividades dos usuários</p>
+          </div>
+          <button 
+            (click)="viewLogs()"
+            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            Ver Logs
+          </button>
+        </div>
+      </div>
+
+      <div class="border border-yellow-200 bg-yellow-50 rounded-lg p-4">
+        <div class="flex">
+          <svg class="h-5 w-5 text-yellow-400 mr-3 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.864-.833-2.634 0L4.18 16.5c-.77.833.192 2.5 1.732 2.5z" />
+          </svg>
+          <div>
+            <h4 class="text-sm font-medium text-yellow-800">Recomendações de Segurança</h4>
+            <ul class="text-sm text-yellow-700 mt-2 space-y-1">
+              <li>• Mantenha senhas seguras e únicas para cada usuário</li>
+              <li>• Realize backups regulares dos dados</li>
+              <li>• Monitore os logs de atividade periodicamente</li>
+              <li>• Mantenha o sistema sempre atualizado</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Message -->
+  <div *ngIf="showSuccessMessage" 
+       class="fixed bottom-4 right-4 bg-green-600 text-white p-4 rounded-lg shadow-lg transition-all duration-300">
+    <div class="flex items-center">
+      <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+      </svg>
+      Configurações salvas com sucesso!
+    </div>
+  </div>
+</div>
