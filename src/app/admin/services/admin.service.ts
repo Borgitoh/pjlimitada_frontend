@@ -143,7 +143,7 @@ export class AdminService {
         id: '1',
         name: 'Admin PJ Limitada',
         email: 'admin@pjlimitada.com',
-        role: 'admin',
+        role: 'admin' as const,
         active: true,
         createdAt: new Date('2024-01-01'),
         lastLogin: new Date()
@@ -152,7 +152,7 @@ export class AdminService {
         id: '2',
         name: 'João Silva',
         email: 'joao.silva@pjlimitada.com',
-        role: 'manager',
+        role: 'manager' as const,
         active: true,
         createdAt: new Date('2024-01-15'),
         lastLogin: new Date(Date.now() - 86400000)
@@ -161,7 +161,7 @@ export class AdminService {
         id: '3',
         name: 'Maria Santos',
         email: 'maria.santos@pjlimitada.com',
-        role: 'seller',
+        role: 'seller' as const,
         active: true,
         createdAt: new Date('2024-02-01'),
         lastLogin: new Date(Date.now() - 3600000)
@@ -170,7 +170,7 @@ export class AdminService {
         id: '4',
         name: 'Pedro Costa',
         email: 'pedro.costa@pjlimitada.com',
-        role: 'seller',
+        role: 'seller' as const,
         active: false,
         createdAt: new Date('2024-01-20'),
         lastLogin: new Date(Date.now() - 604800000)
@@ -214,7 +214,7 @@ export class AdminService {
       {
         id: '1',
         name: 'Kit Freio Performance BMW Serie 3',
-        category: 'brakes',
+        category: 'brakes' as const,
         compatibleModels: ['1', '2'],
         price: 2500,
         cost: 1800,
@@ -229,7 +229,7 @@ export class AdminService {
       {
         id: '2',
         name: 'Bodykit Audi A3 Sportback',
-        category: 'bodykit',
+        category: 'bodykit' as const,
         compatibleModels: ['4'],
         price: 4500,
         cost: 3200,
@@ -244,7 +244,7 @@ export class AdminService {
       {
         id: '3',
         name: 'Filtro de Ar Esportivo',
-        category: 'engine',
+        category: 'engine' as const,
         compatibleModels: ['1', '2', '4', '5'],
         price: 350,
         cost: 250,
@@ -274,8 +274,8 @@ export class AdminService {
       defaultMinStock: 5,
       taxRate: 0.18,
       currency: 'BRL',
-      language: 'pt',
-      theme: 'light',
+      language: 'pt' as const,
+      theme: 'light' as const,
       notifications: {
         email: true,
         lowStock: true,
