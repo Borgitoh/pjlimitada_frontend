@@ -14,7 +14,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
   filteredProducts: Product[] = [];
   selectedCategory: string = '';
   stockFilter: string = '';
-  
+
   currentProduct: any = {
     name: '',
     category: '',
@@ -26,21 +26,21 @@ export class ProductsComponent implements OnInit, OnDestroy {
     description: '',
     active: true
   };
-  
+
   isModalOpen = false;
   modalTitle = '';
   editMode = false;
-  
+
   // Stats
   totalProducts = 0;
   lowStockCount = 0;
   totalValue = 0;
-  
+
   private destroy$ = new Subject<void>();
 
   tableColumns: TableColumn[] = [
     { key: 'name', label: 'Produto', sortable: true, type: 'text' },
-    { key: 'category', label: 'Categoria', sortable: true, type: 'text' },
+    { key: 'categoryLabel', label: 'Categoria', sortable: true, type: 'text' },
     { key: 'sku', label: 'SKU', sortable: true, type: 'text' },
     { key: 'price', label: 'Preço', type: 'currency', sortable: true },
     { key: 'stock', label: 'Estoque', type: 'number', sortable: true },
@@ -184,7 +184,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
 
     // Category filter
     if (this.selectedCategory) {
-      filtered = filtered.filter(product => 
+      filtered = filtered.filter(product =>
         product.category.toLowerCase() === this.selectedCategory.toLowerCase()
       );
     }
@@ -207,9 +207,9 @@ export class ProductsComponent implements OnInit, OnDestroy {
     // Add stock status for display
     this.filteredProducts = filtered.map(product => ({
       ...product,
-      category: this.getCategoryLabel(product.category),
+      categoryLabel: this.getCategoryLabel(product.category),
       stockStatus: this.getStockStatus(product)
-    }));
+    })) as any;
   }
 
   private loadProducts(): void {
