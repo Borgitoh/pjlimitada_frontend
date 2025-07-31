@@ -303,7 +303,7 @@ export class AdminService {
         subtotal: 2500,
         discount: 0,
         total: 2500,
-        paymentMethod: 'card',
+        paymentMethod: 'card' as const,
         customerName: 'Carlos Silva'
       },
       {
@@ -323,7 +323,7 @@ export class AdminService {
         subtotal: 700,
         discount: 50,
         total: 650,
-        paymentMethod: 'cash'
+        paymentMethod: 'cash' as const
       }
     ];
   }
