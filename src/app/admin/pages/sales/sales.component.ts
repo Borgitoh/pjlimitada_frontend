@@ -14,19 +14,19 @@ export class SalesComponent implements OnInit, OnDestroy {
   filteredSales: Sale[] = [];
   availableProducts: Product[] = [];
   sellers: User[] = [];
-  
+
   // Filters
   dateFrom: string = '';
   dateTo: string = '';
   selectedSeller: string = '';
   selectedPayment: string = '';
-  
+
   // Stats
   todaySales = 0;
   todayCount = 0;
   monthSales = 0;
   averageTicket = 0;
-  
+
   // Form
   currentSale: any = {
     date: new Date().toISOString().split('T')[0],
@@ -39,11 +39,11 @@ export class SalesComponent implements OnInit, OnDestroy {
     subtotal: 0,
     total: 0
   };
-  
+
   isModalOpen = false;
   modalTitle = '';
   editMode = false;
-  
+
   private destroy$ = new Subject<void>();
 
   tableColumns: TableColumn[] = [
@@ -52,7 +52,7 @@ export class SalesComponent implements OnInit, OnDestroy {
     { key: 'customerName', label: 'Cliente', type: 'text' },
     { key: 'itemsCount', label: 'Itens', type: 'number' },
     { key: 'total', label: 'Total', type: 'currency', sortable: true },
-    { key: 'paymentMethod', label: 'Pagamento', type: 'text' },
+    { key: 'paymentMethodLabel', label: 'Pagamento', type: 'text' },
     { key: 'actions', label: 'Ações', type: 'actions', width: '120px' }
   ];
 
@@ -193,7 +193,7 @@ export class SalesComponent implements OnInit, OnDestroy {
       const fromDate = new Date(this.dateFrom);
       filtered = filtered.filter(sale => new Date(sale.date) >= fromDate);
     }
-    
+
     if (this.dateTo) {
       const toDate = new Date(this.dateTo);
       filtered = filtered.filter(sale => new Date(sale.date) <= toDate);
@@ -213,8 +213,8 @@ export class SalesComponent implements OnInit, OnDestroy {
     this.filteredSales = filtered.map(sale => ({
       ...sale,
       itemsCount: sale.items.length,
-      paymentMethod: this.getPaymentMethodLabel(sale.paymentMethod)
-    }));
+      paymentMethodLabel: this.getPaymentMethodLabel(sale.paymentMethod)
+    })) as any;
   }
 
   private loadSales(): void {
@@ -246,7 +246,7 @@ export class SalesComponent implements OnInit, OnDestroy {
   private calculateStats(): void {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    
+
     const todaySales = this.sales.filter(sale => {
       const saleDate = new Date(sale.date);
       saleDate.setHours(0, 0, 0, 0);
