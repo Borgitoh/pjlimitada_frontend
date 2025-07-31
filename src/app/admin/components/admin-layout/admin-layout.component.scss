@@ -1,0 +1,28 @@
+:host {
+  display: block;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.sidebar-transition {
+  transition: margin-left 0.3s ease-in-out;
+}
+
+@media (max-width: 1023px) {
+  .sidebar-collapsed {
+    margin-left: 0;
+  }
+}
+
+.notification-badge {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
