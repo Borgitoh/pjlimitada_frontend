@@ -1,0 +1,192 @@
+<div class="space-y-6">
+  <!-- Page Header -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900">Marcas e Modelos</h1>
+      <p class="text-gray-600">Gerencie marcas e modelos de veículos compatíveis</p>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="border-b border-gray-200">
+    <nav class="-mb-px flex space-x-8">
+      <button
+        (click)="activeTab = 'brands'"
+        [class.border-pj-cyan]="activeTab === 'brands'"
+        [class.text-pj-cyan]="activeTab === 'brands'"
+        [class.border-transparent]="activeTab !== 'brands'"
+        [class.text-gray-500]="activeTab !== 'brands'"
+        class="whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm hover:text-gray-700 hover:border-gray-300">
+        Marcas ({{brands.length}})
+      </button>
+      <button
+        (click)="activeTab = 'models'"
+        [class.border-pj-cyan]="activeTab === 'models'"
+        [class.text-pj-cyan]="activeTab === 'models'"
+        [class.border-transparent]="activeTab !== 'models'"
+        [class.text-gray-500]="activeTab !== 'models'"
+        class="whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm hover:text-gray-700 hover:border-gray-300">
+        Modelos
+      </button>
+    </nav>
+  </div>
+
+  <!-- Brands Tab -->
+  <div *ngIf="activeTab === 'brands'">
+    <app-table
+      title="Marcas de Veículos"
+      [data]="brands"
+      [columns]="brandColumns"
+      [actions]="brandActions"
+      (add)="openBrandModal()"
+      addButtonText="Nova Marca"
+      emptyMessage="Nenhuma marca cadastrada">
+    </app-table>
+  </div>
+
+  <!-- Models Tab -->
+  <div *ngIf="activeTab === 'models'">
+    <!-- Brand Filter -->
+    <div class="mb-4">
+      <label for="brandFilter" class="block text-sm font-medium text-gray-700 mb-2">
+        Filtrar por marca:
+      </label>
+      <select
+        id="brandFilter"
+        [(ngModel)]="selectedBrandFilter"
+        (ngModelChange)="filterModelsByBrand()"
+        class="w-64 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pj-cyan focus:border-transparent">
+        <option value="">Todas as marcas</option>
+        <option *ngFor="let brand of brands" [value]="brand.id">{{brand.name}}</option>
+      </select>
+    </div>
+
+    <app-table
+      title="Modelos de Veículos"
+      [data]="filteredModels"
+      [columns]="modelColumns"
+      [actions]="modelActions"
+      (add)="openModelModal()"
+      addButtonText="Novo Modelo"
+      emptyMessage="Nenhum modelo cadastrado">
+    </app-table>
+  </div>
+
+  <!-- Brand Modal -->
+  <app-modal
+    [isOpen]="isBrandModalOpen"
+    [title]="brandModalTitle"
+    size="md"
+    [confirmDisabled]="!isBrandFormValid()"
+    (closed)="closeBrandModal()"
+    (confirmed)="saveBrand()">
+    
+    <form #brandForm="ngForm" class="space-y-4">
+      <div>
+        <label for="brandName" class="block text-sm font-medium text-gray-700 mb-1">
+          Nome da Marca *
+        </label>
+        <input
+          id="brandName"
+          name="brandName"
+          type="text"
+          required
+          [(ngModel)]="currentBrand.name"
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pj-cyan focus:border-transparent"
+          placeholder="Ex: BMW, Audi, Toyota">
+      </div>
+
+      <div>
+        <label class="flex items-center space-x-2">
+          <input
+            type="checkbox"
+            [(ngModel)]="currentBrand.active"
+            name="brandActive"
+            class="h-4 w-4 text-pj-cyan focus:ring-pj-cyan border-gray-300 rounded">
+          <span class="text-sm font-medium text-gray-700">Marca ativa</span>
+        </label>
+      </div>
+    </form>
+  </app-modal>
+
+  <!-- Model Modal -->
+  <app-modal
+    [isOpen]="isModelModalOpen"
+    [title]="modelModalTitle"
+    size="md"
+    [confirmDisabled]="!isModelFormValid()"
+    (closed)="closeModelModal()"
+    (confirmed)="saveModel()">
+    
+    <form #modelForm="ngForm" class="space-y-4">
+      <div>
+        <label for="modelBrand" class="block text-sm font-medium text-gray-700 mb-1">
+          Marca *
+        </label>
+        <select
+          id="modelBrand"
+          name="modelBrand"
+          required
+          [(ngModel)]="currentModel.brandId"
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pj-cyan focus:border-transparent">
+          <option value="">Selecione uma marca</option>
+          <option *ngFor="let brand of brands" [value]="brand.id">{{brand.name}}</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="modelName" class="block text-sm font-medium text-gray-700 mb-1">
+          Nome do Modelo *
+        </label>
+        <input
+          id="modelName"
+          name="modelName"
+          type="text"
+          required
+          [(ngModel)]="currentModel.name"
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pj-cyan focus:border-transparent"
+          placeholder="Ex: Serie 3, A4, Corolla">
+      </div>
+
+      <div>
+        <label for="modelYear" class="block text-sm font-medium text-gray-700 mb-1">
+          Ano *
+        </label>
+        <input
+          id="modelYear"
+          name="modelYear"
+          type="number"
+          required
+          min="1990"
+          max="2030"
+          [(ngModel)]="currentModel.year"
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pj-cyan focus:border-transparent"
+          placeholder="2024">
+      </div>
+
+      <div>
+        <label for="modelVersion" class="block text-sm font-medium text-gray-700 mb-1">
+          Versão (Opcional)
+        </label>
+        <input
+          id="modelVersion"
+          name="modelVersion"
+          type="text"
+          [(ngModel)]="currentModel.version"
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pj-cyan focus:border-transparent"
+          placeholder="Ex: Sport, Luxury, Base">
+      </div>
+
+      <div>
+        <label class="flex items-center space-x-2">
+          <input
+            type="checkbox"
+            [(ngModel)]="currentModel.active"
+            name="modelActive"
+            class="h-4 w-4 text-pj-cyan focus:ring-pj-cyan border-gray-300 rounded">
+          <span class="text-sm font-medium text-gray-700">Modelo ativo</span>
+        </label>
+      </div>
+    </form>
+  </app-modal>
+</div>
