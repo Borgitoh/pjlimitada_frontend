@@ -18,7 +18,11 @@ const routes: Routes = [
   { path: 'bodykits/:id', component: DetalhesComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: '**', redirectTo: '' } 
+  {
+    path: 'admin',
+    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)
+  },
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({
