@@ -26,7 +26,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   salesChartData: ChartData = { labels: [], datasets: [] };
   categoryChartData: ChartData = { labels: [], datasets: [] };
-  
+
   private destroy$ = new Subject<void>();
   loading = true;
 
@@ -81,6 +81,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       labels: this.stats.salesByCategory.map(item => item.category),
       datasets: [
         {
+          label: 'Vendas por Categoria',
           data: this.stats.salesByCategory.map(item => item.value),
           backgroundColor: [
             '#00bcd4',

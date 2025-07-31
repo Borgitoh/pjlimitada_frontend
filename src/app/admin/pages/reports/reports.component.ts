@@ -51,7 +51,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
 
   salesChartData: ChartData = { labels: [], datasets: [] };
   categoryChartData: ChartData = { labels: [], datasets: [] };
-  
+
   sellerPerformance: SellerPerformance[] = [];
   topProducts: TopProduct[] = [];
   lowStockProducts: Product[] = [];
@@ -99,7 +99,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
       sellers: this.sellerPerformance,
       topProducts: this.topProducts
     };
-    
+
     console.log('Exporting report:', reportData);
     alert('Relatório exportado com sucesso! (funcionalidade simulada)');
   }
@@ -107,14 +107,14 @@ export class ReportsComponent implements OnInit, OnDestroy {
   private initializeDates(): void {
     const today = new Date();
     const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-    
+
     this.endDate = today.toISOString().split('T')[0];
     this.startDate = firstDayOfMonth.toISOString().split('T')[0];
   }
 
   private updatePeriodDates(): void {
     const today = new Date();
-    
+
     switch (this.selectedPeriod) {
       case 'today':
         this.startDate = today.toISOString().split('T')[0];
@@ -175,12 +175,12 @@ export class ReportsComponent implements OnInit, OnDestroy {
 
   private calculateSummary(): void {
     const filteredSales = this.getFilteredSales();
-    
+
     this.summary.revenue = filteredSales.reduce((sum, sale) => sum + sale.total, 0);
     this.summary.salesCount = filteredSales.length;
     this.summary.avgTicket = this.summary.salesCount > 0 ? this.summary.revenue / this.summary.salesCount : 0;
     this.summary.itemsSold = filteredSales.reduce((sum, sale) => sum + sale.items.length, 0);
-    
+
     // Calculate top category
     const categoryTotals: { [key: string]: number } = {};
     filteredSales.forEach(sale => {
@@ -192,10 +192,10 @@ export class ReportsComponent implements OnInit, OnDestroy {
         }
       });
     });
-    
-    this.summary.topCategory = Object.keys(categoryTotals).reduce((a, b) => 
+
+    this.summary.topCategory = Object.keys(categoryTotals).reduce((a, b) =>
       categoryTotals[a] > categoryTotals[b] ? a : b, 'N/A');
-    
+
     // Calculate margin (simplified)
     const totalCost = filteredSales.reduce((sum, sale) => {
       return sum + sale.items.reduce((itemSum, item) => {
@@ -203,14 +203,14 @@ export class ReportsComponent implements OnInit, OnDestroy {
         return itemSum + ((product?.cost || 0) * item.quantity);
       }, 0);
     }, 0);
-    
-    this.summary.margin = this.summary.revenue > 0 ? 
+
+    this.summary.margin = this.summary.revenue > 0 ?
       ((this.summary.revenue - totalCost) / this.summary.revenue) * 100 : 0;
   }
 
   private updateCharts(): void {
     const filteredSales = this.getFilteredSales();
-    
+
     // Sales trend chart
     const salesByDate: { [key: string]: number } = {};
     filteredSales.forEach(sale => {
@@ -248,6 +248,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
       labels: Object.keys(categoryTotals),
       datasets: [
         {
+          label: 'Vendas por Categoria',
           data: Object.values(categoryTotals),
           backgroundColor: [
             '#00bcd4',
@@ -277,7 +278,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
     });
 
     // Calculate performance metrics
-    const maxRevenue = Math.max(...Object.values(sellerData).map(data => 
+    const maxRevenue = Math.max(...Object.values(sellerData).map(data =>
       data.sales.reduce((sum, sale) => sum + sale.total, 0)
     ));
 
