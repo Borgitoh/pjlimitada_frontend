@@ -33,7 +33,7 @@ export class AdminService {
   }
 
   // Authentication
-  setCurrentUser(user: User): void {
+  setCurrentUser(user: User | null): void {
     this.currentUserSubject.next(user);
   }
 
