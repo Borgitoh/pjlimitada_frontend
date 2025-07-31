@@ -1,61 +1,99 @@
-import { Component } from '@angular/core';
-import { VEICULOS } from 'src/app/data/veiculos.mock';
-import { SwiperOptions } from 'swiper';
-import SwiperCore, { Autoplay, Navigation } from 'swiper';
+import { Component, OnInit } from '@angular/core';
+import { PECAS, CATEGORIAS_PECAS } from '../../data/pecas.mock';
 
-
-SwiperCore.use([Autoplay, Navigation]);
 @Component({
   selector: 'app-pecas',
   templateUrl: './pecas.component.html',
   styleUrls: ['./pecas.component.scss']
 })
-export class PecasComponent {
-  carros = VEICULOS;
-  marcas = [
-    { nome: 'Toyota', imagem: 'https://car-logos.org/wp-content/uploads/2022/08/toyota.png' },
-    { nome: 'BMW', imagem: 'https://car-logos.org/wp-content/uploads/2022/08/bmw.png' },
-    { nome: 'Mercedes-Benz', imagem: 'https://cdn.worldvectorlogo.com/logos/mercedes-benz-9.svg' },
-    { nome: 'Audi', imagem: 'https://car-logos.org/wp-content/uploads/2022/08/audi.png' },
-    { nome: 'Hyundai', imagem: 'https://car-logos.org/wp-content/uploads/2022/08/hyundai.png' },
-    { nome: 'Volkswagen', imagem: 'https://car-logos.org/wp-content/uploads/2022/08/volkswagen.png' },
-    { nome: 'Kia', imagem: 'https://car-logos.org/wp-content/uploads/2022/08/kia.png' },
-    { nome: 'Ford', imagem: 'https://car-logos.org/wp-content/uploads/2022/08/ford.png' },
-    { nome: 'Chevrolet', imagem: 'https://car-logos.org/wp-content/uploads/2022/08/chevrolet.png' },
-    { nome: 'Nissan', imagem: 'https://car-logos.org/wp-content/uploads/2022/08/nissan.png' },
-    { nome: 'Dodge', imagem: 'https://car-logos.org/wp-content/uploads/2022/08/dodge.png' },
-    { nome: 'Cadillac', imagem: 'https://car-logos.org/wp-content/uploads/2022/08/cadillac.png' },
-    { nome: 'Jeep', imagem: 'https://car-logos.org/wp-content/uploads/2022/08/jeep.png' },
-    { nome: 'Jetour', imagem: 'https://1000logos.net/wp-content/uploads/2023/12/Jetour-Logo-768x432.png' },
-    { nome: 'Suzuki', imagem: 'https://car-logos.org/wp-content/uploads/2022/08/suzuki.png' },
-    { nome: 'Lexus', imagem: 'https://car-logos.org/wp-content/uploads/2022/08/lexus.png' },
-    { nome: 'Mazda', imagem: 'https://car-logos.org/wp-content/uploads/2022/08/mazda.png' },
-    { nome: 'Mitsubishi', imagem: 'https://car-logos.org/wp-content/uploads/2022/08/mitub.png' },
-    { nome: 'Fiat', imagem: 'https://car-logos.org/wp-content/uploads/2022/08/fiat.png' },
-    { nome: 'GMC', imagem: 'https://car-logos.org/wp-content/uploads/2022/08/gmc.png' },
-  ];
+export class PecasComponent implements OnInit {
+  todasPecas = PECAS;
+  pecasFiltradas = PECAS;
+  categorias = CATEGORIAS_PECAS;
+  marcas: string[] = [];
+  loading = false;
 
-  marcaSelecionada: any = null;
-
-  selecionarMarca(marca: any) {
-    this.marcaSelecionada = marca;
-  }
-  // Configuração do Swiper
-  swiperConfig: SwiperOptions = {
-    slidesPerView: 6,
-    spaceBetween: 5,
-    loop: true,
-    autoplay: {
-      delay: 2500,
-      disableOnInteraction: false
-    },
-    navigation: true,
-    breakpoints: {
-      640: { slidesPerView: 2 },
-      768: { slidesPerView: 3 },
-      1024: { slidesPerView: 6, spaceBetween: 5 },
-    },
+  filtros = {
+    busca: '',
+    categoria: '',
+    marca: '',
+    precoMin: null as number | null,
+    precoMax: null as number | null
   };
 
+  ngOnInit() {
+    this.extrairMarcas();
+    this.aplicarFiltros();
+  }
 
+  extrairMarcas() {
+    const marcasUnicas = [...new Set(this.todasPecas.map(peca => peca.marca))];
+    this.marcas = marcasUnicas.sort();
+  }
+
+  aplicarFiltros() {
+    this.loading = true;
+    
+    // Simular delay de loading
+    setTimeout(() => {
+      this.pecasFiltradas = this.todasPecas.filter(peca => {
+        // Filtro de busca
+        if (this.filtros.busca) {
+          const busca = this.filtros.busca.toLowerCase();
+          const matchNome = peca.nome.toLowerCase().includes(busca);
+          const matchDescricao = peca.descricao.toLowerCase().includes(busca);
+          const matchMarca = peca.marca.toLowerCase().includes(busca);
+          const matchCategoria = peca.categoria.toLowerCase().includes(busca);
+          
+          if (!matchNome && !matchDescricao && !matchMarca && !matchCategoria) {
+            return false;
+          }
+        }
+
+        // Filtro de categoria
+        if (this.filtros.categoria && peca.categoria !== this.filtros.categoria) {
+          return false;
+        }
+
+        // Filtro de marca
+        if (this.filtros.marca && peca.marca !== this.filtros.marca) {
+          return false;
+        }
+
+        // Filtro de preço mínimo
+        if (this.filtros.precoMin !== null && peca.preco < this.filtros.precoMin) {
+          return false;
+        }
+
+        // Filtro de preço máximo
+        if (this.filtros.precoMax !== null && peca.preco > this.filtros.precoMax) {
+          return false;
+        }
+
+        return true;
+      });
+
+      this.loading = false;
+    }, 300);
+  }
+
+  limparFiltros() {
+    this.filtros = {
+      busca: '',
+      categoria: '',
+      marca: '',
+      precoMin: null,
+      precoMax: null
+    };
+    this.aplicarFiltros();
+  }
+
+  filtrarPorCategoria(categoria: string) {
+    this.filtros.categoria = categoria;
+    this.aplicarFiltros();
+  }
+
+  contarPorCategoria(categoria: string): number {
+    return this.todasPecas.filter(peca => peca.categoria === categoria).length;
+  }
 }

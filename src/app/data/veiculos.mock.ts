@@ -6,7 +6,7 @@ export const VEICULOS = [
       preco: 5500,
       ano: 2015,
       cambio: 'Automático',
-      imagem: 'https://cdn.autowini.com/image/car/photo/pic/2023/11/10/f8abbb35f93c4cc3b5fc21886193d0f5_1.jpg'
+      imagem: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=600&h=400&fit=crop&q=80'
     },
     {
       id: 2,
@@ -15,7 +15,7 @@ export const VEICULOS = [
       preco: 7200,
       ano: 2016,
       cambio: 'Manual',
-      imagem: 'https://cdn.autowini.com/image/car/photo/pic/2023/10/20/841a94e9c6d54a02920eb9eaf515ff99_1.jpg'
+      imagem: 'https://images.unsplash.com/photo-1544829099-b9a0c5303bea?w=600&h=400&fit=crop&q=80'
     },
     {
       id: 3,
@@ -24,7 +24,7 @@ export const VEICULOS = [
       preco: 8200,
       ano: 2017,
       cambio: 'Automático',
-      imagem: 'https://cdn.autowini.com/image/car/photo/pic/2023/09/05/25fd135b08c64e4fb8809299e94bdf3c_1.jpg'
+      imagem: 'https://images.unsplash.com/photo-1502877338535-766e1452684a?w=600&h=400&fit=crop&q=80'
     },
     {
       id: 4,
@@ -33,7 +33,6 @@ export const VEICULOS = [
       preco: 9800,
       ano: 2018,
       cambio: 'Automático',
-      imagem: 'https://cdn.autowini.com/image/car/photo/pic/2023/08/01/fc4e2ecfa8d74826b3b87a347aa7b062_1.jpg'
+      imagem: 'https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=600&h=400&fit=crop&q=80'
     }
   ];
-  

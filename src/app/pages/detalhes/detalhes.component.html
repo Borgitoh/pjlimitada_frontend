@@ -1,12 +1,255 @@
-<div class="p-6" *ngIf="carro">
-    <h2 class="text-2xl font-bold mb-4">{{ carro.modelo }}</h2>
-    <img [src]="carro.imagem" alt="{{ carro.modelo }}" class="w-full max-w-md rounded shadow mb-6" />
-  
-    <ul class="text-lg space-y-2">
-      <li><strong>Marca:</strong> {{ carro.marca }}</li>
-      <li><strong>Ano:</strong> {{ carro.ano }}</li>
-      <li><strong>Câmbio:</strong> {{ carro.cambio }}</li>
-      <li><strong>Preço:</strong> USD {{ carro.preco }}</li>
-    </ul>
+<!-- Loading State -->
+<div *ngIf="loading" class="min-h-screen flex items-center justify-center">
+  <div class="text-center">
+    <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto"></div>
+    <p class="mt-4 text-gray-600">Carregando produto...</p>
   </div>
-  
+</div>
+
+<!-- Product Not Found -->
+<div *ngIf="!loading && !produto" class="min-h-screen flex items-center justify-center">
+  <div class="text-center">
+    <svg class="mx-auto h-24 w-24 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.47.881-6.08 2.33"></path>
+    </svg>
+    <h3 class="mt-4 text-lg font-medium text-gray-900">Produto não encontrado</h3>
+    <p class="mt-2 text-gray-500">O produto que você está procurando não existe ou foi removido.</p>
+    <a routerLink="/" class="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+      Voltar ao Início
+    </a>
+  </div>
+</div>
+
+<!-- Product Details -->
+<div *ngIf="!loading && produto" class="min-h-screen bg-gray-50">
+  <!-- Breadcrumb -->
+  <div class="bg-white border-b">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <nav class="flex" aria-label="Breadcrumb">
+        <ol class="flex items-center space-x-4">
+          <li>
+            <a routerLink="/" class="text-gray-500 hover:text-gray-700">Home</a>
+          </li>
+          <li>
+            <svg class="flex-shrink-0 h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+            </svg>
+          </li>
+          <li>
+            <a [routerLink]="tipoProduto === 'peca' ? '/pecas' : tipoProduto === 'bodykit' ? '/bodykits' : '/veiculos'" 
+               class="text-gray-500 hover:text-gray-700">
+              {{tipoProduto === 'peca' ? 'Peças' : tipoProduto === 'bodykit' ? 'Bodykits' : 'Veículos'}}
+            </a>
+          </li>
+          <li>
+            <svg class="flex-shrink-0 h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+            </svg>
+          </li>
+          <li>
+            <span class="text-gray-900 font-medium">{{getNomeProduto()}}</span>
+          </li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Product Content -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="lg:grid lg:grid-cols-2 lg:gap-x-8 lg:items-start">
+      <!-- Image Gallery -->
+      <div class="flex flex-col">
+        <div class="w-full aspect-w-1 aspect-h-1 bg-gray-200 rounded-lg overflow-hidden">
+          <img [src]="produto.imagem" [alt]="getNomeProduto()" 
+               class="w-full h-full object-center object-cover">
+        </div>
+        
+        <!-- Thumbnails (placeholder for future implementation) -->
+        <div class="mt-4 flex space-x-2">
+          <div *ngFor="let i of [1,2,3]" 
+               class="w-20 h-20 bg-gray-200 rounded-lg border-2 border-transparent hover:border-blue-500 cursor-pointer">
+            <img [src]="produto.imagem" [alt]="getNomeProduto()" 
+                 class="w-full h-full object-center object-cover rounded-lg opacity-75 hover:opacity-100">
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Info -->
+      <div class="mt-10 px-4 sm:px-0 sm:mt-16 lg:mt-0">
+        <!-- Title and Price -->
+        <div class="mb-6">
+          <h1 class="text-3xl font-bold text-gray-900">{{getNomeProduto()}}</h1>
+          <div class="mt-4 flex items-center justify-between">
+            <p class="text-3xl font-bold text-blue-600">${{produto.preco}}</p>
+            <div class="flex items-center space-x-2">
+              <span *ngIf="getEstoque() > 10" class="text-green-600 text-sm font-medium">✓ Em estoque</span>
+              <span *ngIf="getEstoque() <= 10 && getEstoque() > 0" 
+                    class="text-yellow-600 text-sm font-medium">⚠ Últimas {{getEstoque()}} unidades</span>
+              <span *ngIf="getEstoque() === 0" class="text-red-600 text-sm font-medium">✗ Sem estoque</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="mb-6">
+          <h3 class="text-lg font-medium text-gray-900 mb-3">Descrição</h3>
+          <p class="text-gray-700 leading-relaxed">{{getDescricao()}}</p>
+        </div>
+
+        <!-- Product Specific Details -->
+        <div class="mb-8">
+          <!-- Peça Details -->
+          <div *ngIf="tipoProduto === 'peca'" class="space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <span class="text-sm font-medium text-gray-500">Marca:</span>
+                <p class="text-gray-900">{{produto.marca}}</p>
+              </div>
+              <div>
+                <span class="text-sm font-medium text-gray-500">Categoria:</span>
+                <p class="text-gray-900">{{produto.categoria}}</p>
+              </div>
+            </div>
+            
+            <div *ngIf="produto.compatibilidade">
+              <span class="text-sm font-medium text-gray-500">Compatibilidade:</span>
+              <div class="mt-2 flex flex-wrap gap-2">
+                <span *ngFor="let compat of produto.compatibilidade" 
+                      class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
+                  {{compat}}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bodykit Details -->
+          <div *ngIf="tipoProduto === 'bodykit'" class="space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <span class="text-sm font-medium text-gray-500">Marca:</span>
+                <p class="text-gray-900">{{produto.marca}}</p>
+              </div>
+              <div>
+                <span class="text-sm font-medium text-gray-500">Material:</span>
+                <p class="text-gray-900">{{produto.material}}</p>
+              </div>
+              <div>
+                <span class="text-sm font-medium text-gray-500">Modelo:</span>
+                <p class="text-gray-900">{{produto.modelo}}</p>
+              </div>
+              <div>
+                <span class="text-sm font-medium text-gray-500">Categoria:</span>
+                <p class="text-gray-900">{{produto.categoria}}</p>
+              </div>
+            </div>
+            
+            <div *ngIf="produto.itens">
+              <span class="text-sm font-medium text-gray-500">Itens inclusos:</span>
+              <div class="mt-2 space-y-1">
+                <p *ngFor="let item of produto.itens" class="text-gray-900 text-sm">• {{item}}</p>
+              </div>
+            </div>
+            
+            <div *ngIf="produto.compatibilidade">
+              <span class="text-sm font-medium text-gray-500">Compatibilidade:</span>
+              <div class="mt-2 flex flex-wrap gap-2">
+                <span *ngFor="let compat of produto.compatibilidade" 
+                      class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">
+                  {{compat}}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Veículo Details -->
+          <div *ngIf="tipoProduto === 'veiculo'" class="space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <span class="text-sm font-medium text-gray-500">Marca:</span>
+                <p class="text-gray-900">{{produto.marca}}</p>
+              </div>
+              <div>
+                <span class="text-sm font-medium text-gray-500">Ano:</span>
+                <p class="text-gray-900">{{produto.ano}}</p>
+              </div>
+              <div>
+                <span class="text-sm font-medium text-gray-500">Câmbio:</span>
+                <p class="text-gray-900">{{produto.cambio}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row gap-4">
+          <button *ngIf="tipoProduto !== 'bodykit'" 
+                  [disabled]="getEstoque() === 0"
+                  class="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white py-3 px-6 rounded-lg font-medium transition duration-200 flex items-center justify-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l-1.5 6m9.5-6v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"></path>
+            </svg>
+            {{getEstoque() === 0 ? 'Sem Estoque' : 'Adicionar ao Carrinho'}}
+          </button>
+
+          <button *ngIf="tipoProduto === 'bodykit'" 
+                  class="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 px-6 rounded-lg font-medium transition duration-200 flex items-center justify-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+            </svg>
+            Solicitar Orçamento
+          </button>
+
+          <button class="border border-gray-300 hover:border-blue-600 text-gray-700 hover:text-blue-600 py-3 px-6 rounded-lg font-medium transition duration-200 flex items-center justify-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+            </svg>
+            Favoritar
+          </button>
+        </div>
+
+        <!-- Additional Info -->
+        <div class="mt-8 border-t border-gray-200 pt-6">
+          <div class="flex items-center space-x-4 text-sm text-gray-500">
+            <div class="flex items-center">
+              <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              Garantia de qualidade
+            </div>
+            <div class="flex items-center">
+              <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16l2.879-2.879m0 0a3 3 0 104.243-4.242 3 3 0 00-4.243 4.242zM21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              Entrega rápida
+            </div>
+            <div class="flex items-center">
+              <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364"></path>
+              </svg>
+              Suporte especializado
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Related Products -->
+  <div class="bg-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-bold text-gray-900 mb-8">Produtos Relacionados</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div *ngFor="let produtoRel of produtosRelacionados" 
+             class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-300 cursor-pointer"
+             [routerLink]="getProdutoUrl(produtoRel)">
+          <img [src]="produtoRel.imagem" [alt]="produtoRel.nome || produtoRel.modelo" 
+               class="w-full h-48 object-cover">
+          <div class="p-4">
+            <h3 class="font-medium text-gray-900 mb-2">{{produtoRel.nome || produtoRel.modelo}}</h3>
+            <p class="text-blue-600 font-bold">${{produtoRel.preco}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
