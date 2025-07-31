@@ -18,19 +18,19 @@ export class UsersComponent implements OnInit, OnDestroy {
     active: true,
     password: ''
   };
-  
+
   isModalOpen = false;
   isDeleteModalOpen = false;
   editMode = false;
   modalTitle = '';
   userToDelete: User | null = null;
-  
+
   private destroy$ = new Subject<void>();
 
   tableColumns: TableColumn[] = [
     { key: 'name', label: 'Nome', sortable: true, type: 'text' },
     { key: 'email', label: 'E-mail', sortable: true, type: 'text' },
-    { key: 'role', label: 'Cargo', sortable: true, type: 'text' },
+    { key: 'roleLabel', label: 'Cargo', sortable: true, type: 'text' },
     { key: 'active', label: 'Status', type: 'status' },
     { key: 'lastLogin', label: 'Último Login', type: 'date', sortable: true },
     { key: 'actions', label: 'Ações', type: 'actions', width: '120px' }
@@ -157,11 +157,10 @@ export class UsersComponent implements OnInit, OnDestroy {
     this.adminService.getUsers()
       .pipe(takeUntil(this.destroy$))
       .subscribe(users => {
-        // Transform role labels for display
         this.users = users.map(user => ({
           ...user,
-          role: this.getRoleLabel(user.role)
-        }));
+          roleLabel: this.getRoleLabel(user.role)
+        })) as any;
       });
   }
 
