@@ -54,7 +54,7 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
   private setupRouterListener(): void {
     this.router.events
       .pipe(
-        filter(event => event instanceof NavigationEnd),
+        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
         takeUntil(this.destroy$)
       )
       .subscribe((event: NavigationEnd) => {

@@ -94,7 +94,8 @@ export class AdminSidebarComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
-    this.adminService.setCurrentUser(null);
+    // Clear current user by setting to null
+    (this.adminService as any).currentUserSubject.next(null);
     this.router.navigate(['/login']);
   }
 
