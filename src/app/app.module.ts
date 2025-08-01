@@ -17,6 +17,7 @@ import { BodykitsComponent } from './pages/bodykits/bodykits.component';
 import { CartModalComponent } from './components/cart-modal/cart-modal.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
 import { OrderSuccessComponent } from './components/order-success/order-success.component';
+import { OrderTrackingComponent } from './components/order-tracking/order-tracking.component';
 import { SwiperModule } from 'swiper/angular';
 
 @NgModule({
@@ -34,7 +35,8 @@ import { SwiperModule } from 'swiper/angular';
     BodykitsComponent,
     CartModalComponent,
     CheckoutComponent,
-    OrderSuccessComponent
+    OrderSuccessComponent,
+    OrderTrackingComponent
   ],
   imports: [
     BrowserModule,
