@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -14,6 +14,9 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { PecasComponent } from './pages/pecas/pecas.component';
 import { BodykitsComponent } from './pages/bodykits/bodykits.component';
+import { CartModalComponent } from './components/cart-modal/cart-modal.component';
+import { CheckoutComponent } from './components/checkout/checkout.component';
+import { OrderSuccessComponent } from './components/order-success/order-success.component';
 import { SwiperModule } from 'swiper/angular';
 
 @NgModule({
@@ -28,12 +31,16 @@ import { SwiperModule } from 'swiper/angular';
     LoginComponent,
     RegisterComponent,
     PecasComponent,
-    BodykitsComponent
+    BodykitsComponent,
+    CartModalComponent,
+    CheckoutComponent,
+    OrderSuccessComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    ReactiveFormsModule,
     SwiperModule
   ],
   providers: [],
