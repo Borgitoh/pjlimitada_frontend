@@ -261,7 +261,18 @@ export class AdminService {
 
   // Sales
   getSales(): Observable<Sale[]> {
-    return of(this.getMockSales()).pipe(delay(300));
+    const mockSales = this.getMockSales();
+    const ecommerceSales = this.getEcommerceSales();
+    const allSales = [...mockSales, ...ecommerceSales];
+    return of(allSales.sort((a, b) => b.date.getTime() - a.date.getTime())).pipe(delay(300));
+  }
+
+  private getEcommerceSales(): Sale[] {
+    const ecommerceSales = JSON.parse(localStorage.getItem('admin_sales') || '[]');
+    return ecommerceSales.map((sale: any) => ({
+      ...sale,
+      date: new Date(sale.date)
+    }));
   }
 
   // System Settings
