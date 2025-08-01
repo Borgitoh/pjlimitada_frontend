@@ -9,6 +9,7 @@ import { BodykitsComponent } from './pages/bodykits/bodykits.component';
 import { RegisterComponent } from './components/register/register.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
 import { OrderSuccessComponent } from './components/order-success/order-success.component';
+import { OrderTrackingComponent } from './components/order-tracking/order-tracking.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'checkout', component: CheckoutComponent },
   { path: 'order-success', component: OrderSuccessComponent },
+  { path: 'rastreamento', component: OrderTrackingComponent },
   {
     path: 'admin',
     loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)

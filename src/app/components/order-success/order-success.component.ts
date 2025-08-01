@@ -41,7 +41,10 @@ export class OrderSuccessComponent implements OnInit {
   }
 
   trackOrder(): void {
-    // Navigate to order tracking page (would be implemented)
-    alert('Funcionalidade de acompanhamento será implementada em breve!');
+    if (this.order?.id) {
+      this.router.navigate(['/rastreamento'], {
+        queryParams: { orderId: this.order.id }
+      });
+    }
   }
 }
