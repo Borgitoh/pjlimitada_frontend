@@ -70,23 +70,24 @@
             [class.break-words]="column.type === 'text'">
 
             <!-- Text -->
-            <div *ngIf="column.type === 'text' || !column.type" class="text-sm text-gray-900">
-              {{getFieldValue(item, column.key)}}
+            <div *ngIf="column.type === 'text' || !column.type" class="text-gray-900">
+              <span class="truncate block max-w-xs">{{getFieldValue(item, column.key)}}</span>
             </div>
 
             <!-- Number -->
-            <div *ngIf="column.type === 'number'" class="text-sm text-gray-900">
+            <div *ngIf="column.type === 'number'" class="text-gray-900 font-medium">
               {{getFieldValue(item, column.key) | number}}
             </div>
 
             <!-- Currency -->
-            <div *ngIf="column.type === 'currency'" class="text-sm text-gray-900">
-              R$ {{getFieldValue(item, column.key) | number:'1.2-2'}}
+            <div *ngIf="column.type === 'currency'" class="text-gray-900 font-medium">
+              <span class="hidden sm:inline">R$ </span>{{getFieldValue(item, column.key) | number:'1.2-2'}}
             </div>
 
             <!-- Date -->
-            <div *ngIf="column.type === 'date'" class="text-sm text-gray-900">
-              {{getFieldValue(item, column.key) | date:'short'}}
+            <div *ngIf="column.type === 'date'" class="text-gray-900">
+              <span class="hidden sm:inline">{{getFieldValue(item, column.key) | date:'short'}}</span>
+              <span class="sm:hidden">{{getFieldValue(item, column.key) | date:'dd/MM'}}</span>
             </div>
 
             <!-- Status -->
@@ -101,13 +102,13 @@
             </span>
 
             <!-- Actions -->
-            <div *ngIf="column.type === 'actions'" class="flex items-center space-x-2">
+            <div *ngIf="column.type === 'actions'" class="flex items-center space-x-1 sm:space-x-2">
               <button
                 *ngFor="let action of actions"
                 (click)="action.action(item)"
                 [class]="getActionClasses(action.type)"
                 [title]="action.label">
-                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg class="h-3 w-3 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="action.icon" />
                 </svg>
               </button>
