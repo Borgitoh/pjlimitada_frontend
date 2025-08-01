@@ -1,13 +1,13 @@
-<div class="space-y-6">
+<div class="space-y-4 sm:space-y-6">
   <!-- Page Header -->
-  <div class="flex items-center justify-between">
+  <div class="flex flex-col space-y-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
     <div>
       <h1 class="text-2xl font-bold text-gray-900">Gestão de Produtos</h1>
       <p class="text-gray-600">Gerencie peças, bodykits e controle de estoque</p>
     </div>
     <div class="flex items-center space-x-3">
       <!-- Category Filter -->
-      <select 
+      <select
         [(ngModel)]="selectedCategory"
         (ngModelChange)="filterProducts()"
         class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pj-cyan focus:border-transparent">
@@ -19,9 +19,9 @@
         <option value="interior">Interior</option>
         <option value="exterior">Exterior</option>
       </select>
-      
+
       <!-- Stock Filter -->
-      <select 
+      <select
         [(ngModel)]="stockFilter"
         (ngModelChange)="filterProducts()"
         class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pj-cyan focus:border-transparent">
@@ -39,7 +39,7 @@
       <div class="flex items-center">
         <div class="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center">
           <svg class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
           </svg>
         </div>
@@ -54,7 +54,7 @@
       <div class="flex items-center">
         <div class="h-12 w-12 bg-red-100 rounded-lg flex items-center justify-center">
           <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.864-.833-2.634 0L4.18 16.5c-.77.833.192 2.5 1.732 2.5z" />
           </svg>
         </div>
@@ -69,7 +69,7 @@
       <div class="flex items-center">
         <div class="h-12 w-12 bg-green-100 rounded-lg flex items-center justify-center">
           <svg class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
           </svg>
         </div>
@@ -100,7 +100,7 @@
     [confirmDisabled]="!isFormValid()"
     (closed)="closeModal()"
     (confirmed)="saveProduct()">
-    
+
     <form #productForm="ngForm" class="space-y-4">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <!-- Product Name -->

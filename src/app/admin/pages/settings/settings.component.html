@@ -1,6 +1,6 @@
-<div class="space-y-6">
+<div class="space-y-4 sm:space-y-6">
   <!-- Page Header -->
-  <div class="flex items-center justify-between">
+  <div class="flex flex-col space-y-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
     <div>
       <h1 class="text-2xl font-bold text-gray-900">Configurações do Sistema</h1>
       <p class="text-gray-600">Gerencie configurações gerais e preferências</p>
@@ -10,7 +10,7 @@
       [disabled]="!hasChanges"
       class="px-4 py-2 bg-pj-cyan text-white rounded-lg hover:bg-pj-cyan-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
       <svg class="h-4 w-4 mr-2 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3-3m0 0l-3 3m3-3v12" />
       </svg>
       Salvar Alterações
@@ -151,7 +151,7 @@
           Categorias de Produtos
         </label>
         <div class="space-y-2">
-          <div *ngFor="let category of productCategories; let i = index" 
+          <div *ngFor="let category of productCategories; let i = index"
                class="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg">
             <input
               type="text"
@@ -290,7 +290,7 @@
             <h4 class="text-sm font-medium text-gray-900">Backup Automático</h4>
             <p class="text-sm text-gray-500">Último backup: 25/01/2024 às 03:00</p>
           </div>
-          <button 
+          <button
             (click)="createBackup()"
             class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
             Fazer Backup Agora
@@ -304,7 +304,7 @@
             <h4 class="text-sm font-medium text-gray-900">Logs de Atividade</h4>
             <p class="text-sm text-gray-500">Visualizar logs do sistema e atividades dos usuários</p>
           </div>
-          <button 
+          <button
             (click)="viewLogs()"
             class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
             Ver Logs
@@ -315,7 +315,7 @@
       <div class="border border-yellow-200 bg-yellow-50 rounded-lg p-4">
         <div class="flex">
           <svg class="h-5 w-5 text-yellow-400 mr-3 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.864-.833-2.634 0L4.18 16.5c-.77.833.192 2.5 1.732 2.5z" />
           </svg>
           <div>
@@ -333,7 +333,7 @@
   </div>
 
   <!-- Success Message -->
-  <div *ngIf="showSuccessMessage" 
+  <div *ngIf="showSuccessMessage"
        class="fixed bottom-4 right-4 bg-green-600 text-white p-4 rounded-lg shadow-lg transition-all duration-300">
     <div class="flex items-center">
       <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
