@@ -55,7 +55,53 @@ export class CheckoutService {
       estimatedDelivery: this.calculateEstimatedDelivery()
     };
 
+    // Integrate with admin sales system
+    this.addToAdminSales(order, checkoutData);
+
     return of(order).pipe(delay(2000)); // Simulate API call
+  }
+
+  private addToAdminSales(order: Order, checkoutData: CheckoutData): void {
+    // Convert e-commerce order to admin sale format
+    const adminSale = {
+      id: order.id,
+      date: order.createdAt,
+      sellerId: 'ecommerce', // Special seller ID for e-commerce
+      sellerName: 'E-commerce Online',
+      items: order.items.map(item => ({
+        productId: item.id.toString(),
+        productName: item.nome,
+        quantity: item.quantidade,
+        unitPrice: item.preco,
+        total: item.preco * item.quantidade
+      })),
+      subtotal: order.total,
+      discount: 0,
+      total: order.total,
+      paymentMethod: this.mapPaymentMethod(order.paymentMethod),
+      customerName: checkoutData.customerInfo.nome,
+      notes: `Pedido e-commerce - ${checkoutData.customerInfo.email}`
+    };
+
+    // In a real app, this would be an API call to save the sale
+    console.log('Sale integrated with admin system:', adminSale);
+
+    // Store in localStorage for demo purposes
+    const existingSales = JSON.parse(localStorage.getItem('admin_sales') || '[]');
+    existingSales.unshift(adminSale);
+    localStorage.setItem('admin_sales', JSON.stringify(existingSales));
+  }
+
+  private mapPaymentMethod(method: string): 'cash' | 'card' | 'transfer' {
+    switch (method) {
+      case 'express':
+        return 'card';
+      case 'pix':
+      case 'bank_transfer':
+        return 'transfer';
+      default:
+        return 'card';
+    }
   }
 
   getPaymentMethods() {
