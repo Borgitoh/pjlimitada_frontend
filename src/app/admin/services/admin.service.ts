@@ -275,6 +275,34 @@ export class AdminService {
     }));
   }
 
+  // Orders management (E-commerce integration)
+  getEcommerceOrders(): Observable<any[]> {
+    const ecommerceSales = JSON.parse(localStorage.getItem('admin_sales') || '[]');
+    const orders = ecommerceSales
+      .filter((sale: any) => sale.sellerId === 'ecommerce')
+      .map((sale: any) => ({
+        ...sale,
+        date: new Date(sale.date),
+        status: sale.status || 'confirmed'
+      }));
+    return of(orders).pipe(delay(300));
+  }
+
+  updateOrderStatus(orderId: string, status: string, trackingCode?: string, notes?: string): Observable<boolean> {
+    const ecommerceSales = JSON.parse(localStorage.getItem('admin_sales') || '[]');
+    const orderIndex = ecommerceSales.findIndex((sale: any) => sale.id === orderId);
+
+    if (orderIndex !== -1) {
+      ecommerceSales[orderIndex].status = status;
+      ecommerceSales[orderIndex].updatedAt = new Date();
+      if (trackingCode) ecommerceSales[orderIndex].trackingCode = trackingCode;
+      if (notes) ecommerceSales[orderIndex].adminNotes = notes;
+      localStorage.setItem('admin_sales', JSON.stringify(ecommerceSales));
+      return of(true).pipe(delay(200));
+    }
+    return of(false);
+  }
+
   // System Settings
   getSystemSettings(): Observable<SystemSettings> {
     return of({
