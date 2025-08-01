@@ -1,0 +1,23 @@
+:host {
+  display: block;
+}
+
+.sale-item {
+  transition: all 0.2s ease-in-out;
+}
+
+.sale-item:hover {
+  background-color: var(--pj-gray-50);
+}
+
+.total-display {
+  background: linear-gradient(135deg, var(--pj-cyan-500) 0%, var(--pj-cyan-600) 100%);
+}
+
+.filters-panel {
+  .filter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+}

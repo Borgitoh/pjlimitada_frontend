@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PECAS, CATEGORIAS_PECAS } from '../../data/pecas.mock';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-pecas',
@@ -12,6 +13,8 @@ export class PecasComponent implements OnInit {
   categorias = CATEGORIAS_PECAS;
   marcas: string[] = [];
   loading = false;
+
+  constructor(public cartService: CartService) {}
 
   filtros = {
     busca: '',
@@ -33,7 +36,7 @@ export class PecasComponent implements OnInit {
 
   aplicarFiltros() {
     this.loading = true;
-    
+
     // Simular delay de loading
     setTimeout(() => {
       this.pecasFiltradas = this.todasPecas.filter(peca => {
@@ -44,7 +47,7 @@ export class PecasComponent implements OnInit {
           const matchDescricao = peca.descricao.toLowerCase().includes(busca);
           const matchMarca = peca.marca.toLowerCase().includes(busca);
           const matchCategoria = peca.categoria.toLowerCase().includes(busca);
-          
+
           if (!matchNome && !matchDescricao && !matchMarca && !matchCategoria) {
             return false;
           }
@@ -95,5 +98,12 @@ export class PecasComponent implements OnInit {
 
   contarPorCategoria(categoria: string): number {
     return this.todasPecas.filter(peca => peca.categoria === categoria).length;
+  }
+
+  addToCart(peca: any) {
+    if (peca.estoque > 0) {
+      this.cartService.addToCart(peca, 'peca', 1);
+      console.log(`${peca.nome} adicionado ao carrinho!`);
+    }
   }
 }

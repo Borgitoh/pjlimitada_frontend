@@ -1,0 +1,16 @@
+:host {
+  display: block;
+}
+
+.performance-bar {
+  transition: width 0.3s ease-in-out;
+}
+
+.export-button {
+  transition: all 0.2s ease-in-out;
+}
+
+.export-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 188, 212, 0.3);
+}

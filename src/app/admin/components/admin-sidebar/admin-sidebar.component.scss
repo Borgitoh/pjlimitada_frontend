@@ -1,0 +1,35 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.sidebar-transition {
+  transition: transform 0.3s ease-in-out;
+}
+
+nav a.router-link-active {
+  background-color: var(--pj-cyan-500);
+  color: white;
+}
+
+nav a.router-link-active svg {
+  color: white;
+}
+
+nav a:hover:not(.router-link-active) {
+  background-color: var(--pj-gray-100);
+  color: var(--pj-gray-900);
+}
+
+.badge-pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}

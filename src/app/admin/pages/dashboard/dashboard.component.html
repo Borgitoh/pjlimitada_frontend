@@ -1,0 +1,219 @@
+<div class="space-y-4 sm:space-y-6">
+  <!-- KPIs Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+    <app-stats-card
+      title="Vendas Hoje"
+      [value]="stats.todaySales"
+      subtitle="vendas realizadas hoje"
+      [change]="15.2"
+      icon="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+      iconBgClass="bg-blue-100"
+      iconColorClass="text-blue-600">
+    </app-stats-card>
+
+    <app-stats-card
+      title="Vendas Semana"
+      [value]="stats.weekSales"
+      subtitle="últimos 7 dias"
+      [change]="8.7"
+      icon="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+      iconBgClass="bg-green-100"
+      iconColorClass="text-green-600">
+    </app-stats-card>
+
+    <app-stats-card
+      title="Produtos"
+      [value]="stats.totalProducts"
+      subtitle="em catálogo"
+      icon="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+      iconBgClass="bg-purple-100"
+      iconColorClass="text-purple-600">
+    </app-stats-card>
+
+    <app-stats-card
+      title="Estoque Baixo"
+      [value]="stats.lowStockProducts"
+      subtitle="produtos com estoque baixo"
+      [change]="-12.3"
+      icon="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.864-.833-2.634 0L4.18 16.5c-.77.833.192 2.5 1.732 2.5z"
+      iconBgClass="bg-red-100"
+      iconColorClass="text-red-600">
+    </app-stats-card>
+  </div>
+
+  <!-- Charts Row -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+    <!-- Sales Trend Chart -->
+    <app-chart
+      title="Vendas Mensais"
+      type="line"
+      [data]="salesChartData"
+      [showControls]="true">
+    </app-chart>
+
+    <!-- Sales by Category -->
+    <app-chart
+      title="Vendas por Categoria"
+      type="doughnut"
+      [data]="categoryChartData">
+    </app-chart>
+  </div>
+
+  <!-- Content Row -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+    <!-- Top Products -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <h3 class="text-lg font-semibold text-gray-900 mb-4">Produtos Mais Vendidos</h3>
+      <div class="space-y-4">
+        <div
+          *ngFor="let product of stats.topProducts; let i = index"
+          class="flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <div class="h-8 w-8 bg-pj-cyan rounded-full flex items-center justify-center text-white font-medium text-sm">
+              {{i + 1}}
+            </div>
+            <div>
+              <p class="font-medium text-gray-900">{{product.name}}</p>
+              <p class="text-sm text-gray-500">{{product.sales}} vendas</p>
+            </div>
+          </div>
+          <div class="text-right">
+            <div class="h-2 w-20 bg-gray-200 rounded-full">
+              <div
+                class="h-2 bg-pj-cyan rounded-full"
+                [style.width.%]="(product.sales / stats.topProducts[0].sales) * 100">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Brands -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <h3 class="text-lg font-semibold text-gray-900 mb-4">Marcas Populares</h3>
+      <div class="space-y-4">
+        <div
+          *ngFor="let brand of stats.topBrands; let i = index"
+          class="flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <div class="h-8 w-8 bg-gray-100 rounded-full flex items-center justify-center">
+              <svg class="h-4 w-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+              </svg>
+            </div>
+            <div>
+              <p class="font-medium text-gray-900">{{brand.brand}}</p>
+              <p class="text-sm text-gray-500">{{brand.count}} clientes</p>
+            </div>
+          </div>
+          <span class="text-sm font-medium text-pj-cyan">
+            {{((brand.count / stats.topBrands[0].count) * 100) | number:'1.0-0'}}%
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Sales -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold text-gray-900">Últimas Vendas</h3>
+        <a routerLink="/admin/sales" class="text-sm text-pj-cyan hover:text-pj-cyan font-medium">
+          Ver todas
+        </a>
+      </div>
+      <div class="space-y-4">
+        <div
+          *ngFor="let sale of stats.recentSales"
+          class="border-b border-gray-100 pb-3 last:border-b-0">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="font-medium text-gray-900">{{sale.items[0].productName}}</p>
+              <p class="text-sm text-gray-500">{{sale.sellerName}}</p>
+              <p class="text-xs text-gray-400">{{sale.date | date:'short'}}</p>
+            </div>
+            <div class="text-right">
+              <p class="font-semibold text-gray-900">R$ {{sale.total | number:'1.2-2'}}</p>
+              <span
+                class="inline-flex px-2 py-1 text-xs font-medium rounded-full"
+                [ngClass]="{
+                  'bg-green-100 text-green-800': sale.paymentMethod === 'cash',
+                  'bg-blue-100 text-blue-800': sale.paymentMethod === 'card',
+                  'bg-purple-100 text-purple-800': sale.paymentMethod === 'transfer'
+                }">
+                {{getPaymentMethodLabel(sale.paymentMethod)}}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+    <h3 class="text-lg font-semibold text-gray-900 mb-4">Ações Rápidas</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+      <button
+        routerLink="/admin/products"
+        class="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:border-pj-cyan hover:bg-gray-50 transition-colors">
+        <div class="h-10 w-10 bg-blue-100 rounded-lg flex items-center justify-center">
+          <svg class="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+          </svg>
+        </div>
+        <div class="text-left">
+          <p class="font-medium text-gray-900">Novo Produto</p>
+          <p class="text-sm text-gray-500">Cadastrar produto</p>
+        </div>
+      </button>
+
+      <button
+        routerLink="/admin/sales"
+        class="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:border-pj-cyan hover:bg-gray-50 transition-colors">
+        <div class="h-10 w-10 bg-green-100 rounded-lg flex items-center justify-center">
+          <svg class="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+        </div>
+        <div class="text-left">
+          <p class="font-medium text-gray-900">Nova Venda</p>
+          <p class="text-sm text-gray-500">Registrar venda</p>
+        </div>
+      </button>
+
+      <button
+        routerLink="/admin/brands"
+        class="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:border-pj-cyan hover:bg-gray-50 transition-colors">
+        <div class="h-10 w-10 bg-purple-100 rounded-lg flex items-center justify-center">
+          <svg class="h-5 w-5 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+          </svg>
+        </div>
+        <div class="text-left">
+          <p class="font-medium text-gray-900">Nova Marca</p>
+          <p class="text-sm text-gray-500">Cadastrar marca</p>
+        </div>
+      </button>
+
+      <button
+        routerLink="/admin/reports"
+        class="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:border-pj-cyan hover:bg-gray-50 transition-colors">
+        <div class="h-10 w-10 bg-yellow-100 rounded-lg flex items-center justify-center">
+          <svg class="h-5 w-5 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+        </div>
+        <div class="text-left">
+          <p class="font-medium text-gray-900">Relatórios</p>
+          <p class="text-sm text-gray-500">Ver análises</p>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>

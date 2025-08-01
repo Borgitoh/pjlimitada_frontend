@@ -160,12 +160,20 @@
             <p class="text-xs text-green-600 mt-1">{{peca.estoque}} em estoque</p>
           </div>
           <div class="flex space-x-2">
-            <button class="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg transition duration-200"
+            <button
+              (click)="addToCart(peca)"
+              [disabled]="peca.estoque === 0"
+              class="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              [class.bg-green-600]="cartService.isInCart(peca.id, 'peca')"
+              [class.hover:bg-green-700]="cartService.isInCart(peca.id, 'peca')"
               title="Adicionar ao carrinho">
-              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg *ngIf="!cartService.isInCart(peca.id, 'peca')" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l-1.5 6m9.5-6v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01">
                 </path>
+              </svg>
+              <svg *ngIf="cartService.isInCart(peca.id, 'peca')" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
               </svg>
             </button>
             <button
@@ -183,4 +191,3 @@
     </div>
   </div>
 </div>
-

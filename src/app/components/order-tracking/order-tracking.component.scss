@@ -1,0 +1,61 @@
+// Order tracking specific styles
+.order-timeline {
+  &::before {
+    content: '';
+    position: absolute;
+    left: 16px;
+    top: 32px;
+    bottom: 0;
+    width: 2px;
+    background: #e5e7eb;
+  }
+}
+
+.timeline-step {
+  position: relative;
+  
+  &.completed::before {
+    background: #0891b2;
+  }
+}
+
+// Mobile optimizations
+@media (max-width: 768px) {
+  .order-info-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .order-actions {
+    flex-direction: column;
+    
+    button {
+      width: 100%;
+    }
+  }
+}
+
+// Status colors
+.status-pending {
+  @apply text-yellow-600 bg-yellow-100;
+}
+
+.status-confirmed {
+  @apply text-blue-600 bg-blue-100;
+}
+
+.status-processing {
+  @apply text-purple-600 bg-purple-100;
+}
+
+.status-shipped {
+  @apply text-indigo-600 bg-indigo-100;
+}
+
+.status-delivered {
+  @apply text-green-600 bg-green-100;
+}
+
+.status-cancelled {
+  @apply text-red-600 bg-red-100;
+}

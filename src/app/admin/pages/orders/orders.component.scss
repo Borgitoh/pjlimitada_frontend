@@ -1,0 +1,71 @@
+// Admin orders specific styles
+.order-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.order-timeline {
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    left: 12px;
+    top: 24px;
+    bottom: 0;
+    width: 2px;
+    background: #e5e7eb;
+  }
+}
+
+.timeline-item {
+  position: relative;
+  
+  &.completed::before {
+    background: #0891b2;
+  }
+}
+
+// Status badges
+.status-badge {
+  &.pending {
+    @apply text-yellow-600 bg-yellow-100;
+  }
+  
+  &.confirmed {
+    @apply text-blue-600 bg-blue-100;
+  }
+  
+  &.processing {
+    @apply text-purple-600 bg-purple-100;
+  }
+  
+  &.shipped {
+    @apply text-indigo-600 bg-indigo-100;
+  }
+  
+  &.delivered {
+    @apply text-green-600 bg-green-100;
+  }
+  
+  &.cancelled {
+    @apply text-red-600 bg-red-100;
+  }
+}
+
+// Mobile responsiveness
+@media (max-width: 768px) {
+  .order-stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .order-filters {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .order-details-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,21 @@
+<div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="text-lg font-semibold text-gray-900">{{title}}</h3>
+    <div class="flex space-x-2" *ngIf="showControls">
+      <button 
+        *ngFor="let period of periods"
+        (click)="selectedPeriod = period"
+        [class.bg-pj-cyan]="selectedPeriod === period"
+        [class.text-white]="selectedPeriod === period"
+        [class.bg-gray-100]="selectedPeriod !== period"
+        [class.text-gray-700]="selectedPeriod !== period"
+        class="px-3 py-1 text-sm font-medium rounded-md transition-colors">
+        {{period}}
+      </button>
+    </div>
+  </div>
+  
+  <div class="relative h-80">
+    <canvas #chartCanvas [id]="chartId"></canvas>
+  </div>
+</div>

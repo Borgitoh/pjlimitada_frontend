@@ -1,0 +1,126 @@
+<!-- Modal Background -->
+<div *ngIf="isOpen" class="fixed inset-0 z-50 overflow-y-auto">
+  <!-- Backdrop -->
+  <div class="fixed inset-0 bg-gray-600 bg-opacity-75 transition-opacity" (click)="closeModal()"></div>
+  
+  <!-- Modal -->
+  <div class="flex min-h-full items-center justify-center p-4">
+    <div class="relative transform overflow-hidden rounded-lg bg-white shadow-xl transition-all w-full max-w-lg">
+      
+      <!-- Header -->
+      <div class="px-6 py-4 border-b border-gray-200">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-semibold text-gray-900">
+            Carrinho de Compras
+            <span *ngIf="cartSummary.itemCount > 0" class="ml-2 text-sm text-gray-500">
+              ({{cartSummary.itemCount}} {{cartSummary.itemCount === 1 ? 'item' : 'itens'}})
+            </span>
+          </h3>
+          <button 
+            (click)="closeModal()"
+            class="p-2 text-gray-400 hover:text-gray-600 transition-colors">
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      
+      <!-- Content -->
+      <div class="px-6 py-4 max-h-96 overflow-y-auto">
+        <!-- Empty Cart -->
+        <div *ngIf="cartSummary.itemCount === 0" class="text-center py-8">
+          <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                  d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l-1.5 6m9.5-6v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01" />
+          </svg>
+          <h3 class="mt-4 text-lg font-medium text-gray-900">Carrinho vazio</h3>
+          <p class="mt-2 text-gray-500">Adicione alguns produtos para começar suas compras!</p>
+          <button 
+            (click)="closeModal()"
+            class="mt-4 px-4 py-2 bg-pj-cyan text-white rounded-lg hover:bg-pj-cyan-hover transition-colors">
+            Continuar Comprando
+          </button>
+        </div>
+
+        <!-- Cart Items -->
+        <div *ngIf="cartSummary.itemCount > 0" class="space-y-4">
+          <div *ngFor="let item of cartSummary.items" 
+               class="flex items-center space-x-4 p-3 border border-gray-200 rounded-lg">
+            
+            <!-- Product Image -->
+            <img [src]="item.imagem" [alt]="item.nome" 
+                 class="h-16 w-16 object-cover rounded-lg">
+            
+            <!-- Product Info -->
+            <div class="flex-1 min-w-0">
+              <h4 class="text-sm font-medium text-gray-900 truncate">{{item.nome}}</h4>
+              <p class="text-xs text-gray-500">{{item.marca}} • {{item.categoria}}</p>
+              <p class="text-sm font-semibold text-pj-cyan">R$ {{item.preco | number:'1.2-2'}}</p>
+            </div>
+            
+            <!-- Quantity Controls -->
+            <div class="flex items-center space-x-2">
+              <button 
+                (click)="updateQuantity(item, item.quantidade - 1)"
+                class="p-1 text-gray-400 hover:text-gray-600 transition-colors">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+                </svg>
+              </button>
+              
+              <span class="w-8 text-center text-sm font-medium">{{item.quantidade}}</span>
+              
+              <button 
+                (click)="updateQuantity(item, item.quantidade + 1)"
+                [disabled]="item.quantidade >= item.estoque"
+                class="p-1 text-gray-400 hover:text-gray-600 transition-colors disabled:opacity-50">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+              </button>
+            </div>
+            
+            <!-- Remove Button -->
+            <button 
+              (click)="removeItem(item)"
+              class="p-1 text-red-400 hover:text-red-600 transition-colors">
+              <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Footer -->
+      <div *ngIf="cartSummary.itemCount > 0" class="px-6 py-4 border-t border-gray-200 bg-gray-50">
+        <!-- Summary -->
+        <div class="space-y-2 mb-4">
+          <div class="flex justify-between text-sm">
+            <span class="text-gray-600">Subtotal:</span>
+            <span class="font-medium">R$ {{cartSummary.subtotal | number:'1.2-2'}}</span>
+          </div>
+          <div class="flex justify-between text-base font-semibold">
+            <span class="text-gray-900">Total:</span>
+            <span class="text-pj-cyan">R$ {{cartSummary.total | number:'1.2-2'}}</span>
+          </div>
+        </div>
+        
+        <!-- Actions -->
+        <div class="flex space-x-3">
+          <button 
+            (click)="closeModal()"
+            class="flex-1 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors">
+            Continuar Comprando
+          </button>
+          <button 
+            (click)="proceedToCheckout()"
+            class="flex-1 px-4 py-2 text-sm font-medium text-white bg-pj-cyan rounded-md hover:bg-pj-cyan-hover transition-colors">
+            Finalizar Compra
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

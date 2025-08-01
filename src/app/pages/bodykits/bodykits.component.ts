@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BODYKITS, CATEGORIAS_BODYKITS, MARCAS_BODYKITS } from '../../data/bodykits.mock';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-bodykits',
@@ -22,6 +23,8 @@ export class BodykitsComponent implements OnInit {
     precoMax: null as number | null
   };
 
+  constructor(public cartService: CartService) {}
+
   ngOnInit() {
     this.extrairMateriais();
     this.aplicarFiltros();
@@ -34,7 +37,7 @@ export class BodykitsComponent implements OnInit {
 
   aplicarFiltros() {
     this.loading = true;
-    
+
     // Simular delay de loading
     setTimeout(() => {
       this.bodykitsFiltrados = this.todosBodykits.filter(bodykit => {
@@ -46,7 +49,7 @@ export class BodykitsComponent implements OnInit {
           const matchMarca = bodykit.marca.toLowerCase().includes(busca);
           const matchModelo = bodykit.modelo.toLowerCase().includes(busca);
           const matchCategoria = bodykit.categoria.toLowerCase().includes(busca);
-          
+
           if (!matchNome && !matchDescricao && !matchMarca && !matchModelo && !matchCategoria) {
             return false;
           }
@@ -97,5 +100,12 @@ export class BodykitsComponent implements OnInit {
 
   contarPorMarca(marca: string): number {
     return this.todosBodykits.filter(bodykit => bodykit.marca === marca).length;
+  }
+
+  addToCart(bodykit: any) {
+    if (bodykit.estoque > 0) {
+      this.cartService.addToCart(bodykit, 'bodykit', 1);
+      console.log(`${bodykit.nome} adicionado ao carrinho!`);
+    }
   }
 }
