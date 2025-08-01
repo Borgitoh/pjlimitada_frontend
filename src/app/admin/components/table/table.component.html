@@ -42,14 +42,14 @@
             *ngFor="let column of columns"
             scope="col"
             [style.width]="column.width"
-            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+            class="px-3 sm:px-4 lg:px-6 py-2 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
             [class.cursor-pointer]="column.sortable"
             (click)="onSort(column.key)">
             <div class="flex items-center space-x-1">
-              <span>{{column.label}}</span>
+              <span class="truncate">{{column.label}}</span>
               <svg
                 *ngIf="column.sortable"
-                class="h-4 w-4"
+                class="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0"
                 [class.text-pj-cyan]="sortColumn === column.key"
                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -65,7 +65,9 @@
           class="hover:bg-gray-50 transition-colors">
           <td
             *ngFor="let column of columns"
-            class="px-6 py-4 whitespace-nowrap">
+            class="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 text-xs sm:text-sm"
+            [class.whitespace-nowrap]="column.type !== 'text'"
+            [class.break-words]="column.type === 'text'">
 
             <!-- Text -->
             <div *ngIf="column.type === 'text' || !column.type" class="text-sm text-gray-900">
