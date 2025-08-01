@@ -44,11 +44,9 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
 
   private checkScreenSize(): void {
     this.isLargeScreen = window.innerWidth >= 1024;
-    if (this.isLargeScreen) {
-      this.sidebarCollapsed = false;
-    } else {
-      this.sidebarCollapsed = true;
-    }
+    // On mobile, always start with sidebar collapsed
+    // On desktop, always show sidebar
+    this.sidebarCollapsed = !this.isLargeScreen;
   }
 
   private setupRouterListener(): void {
