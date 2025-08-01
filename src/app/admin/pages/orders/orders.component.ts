@@ -13,23 +13,23 @@ import { TableColumn, TableAction } from '../../models/admin.models';
 export class OrdersComponent implements OnInit, OnDestroy {
   orders: any[] = [];
   filteredOrders: any[] = [];
-  
+
   // Filters
   statusFilter: string = '';
   dateFrom: string = '';
   dateTo: string = '';
-  
+
   // Stats
   totalOrders = 0;
   pendingOrders = 0;
   shippedOrders = 0;
   deliveredOrders = 0;
-  
+
   // Modal
   selectedOrder: OrderTracking | null = null;
   isModalOpen = false;
   modalTitle = '';
-  
+
   // Status update
   statusUpdate: OrderStatusUpdate = {
     status: 'pending',
@@ -188,7 +188,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
     this.deliveredOrders = this.orders.filter(o => o.status === 'delivered').length;
   }
 
-  private getStatusLabel(status: string): string {
+  getStatusLabel(status: string): string {
     const option = this.statusOptions.find(opt => opt.value === status);
     return option ? option.label : status;
   }

@@ -124,7 +124,7 @@
     [title]="modalTitle"
     size="xl"
     [confirmText]="isViewMode() ? 'Fechar' : 'Atualizar Status'"
-    [showCancel]="!isViewMode()"
+    [showCancelButton]="!isViewMode()"
     (closed)="closeModal()"
     (confirmed)="isViewMode() ? closeModal() : saveStatusUpdate()">
 
@@ -140,7 +140,7 @@
             <p>{{selectedOrder.customerInfo.telefone}}</p>
           </div>
         </div>
-        
+
         <div>
           <h3 class="font-medium text-gray-900 mb-2">Endereço de Entrega</h3>
           <div class="text-sm text-gray-600 space-y-1">
@@ -151,7 +151,7 @@
             <p>CEP: {{selectedOrder.shippingAddress.cep}}</p>
           </div>
         </div>
-        
+
         <div>
           <h3 class="font-medium text-gray-900 mb-2">Detalhes do Pedido</h3>
           <div class="text-sm text-gray-600 space-y-1">
@@ -176,7 +176,7 @@
             <p class="font-semibold text-gray-900">R$ {{(item.preco * item.quantidade) | number:'1.2-2'}}</p>
           </div>
         </div>
-        
+
         <div class="border-t border-gray-200 pt-4 mt-4">
           <div class="flex justify-between text-lg font-semibold">
             <span>Total:</span>

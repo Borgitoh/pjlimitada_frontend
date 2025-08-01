@@ -108,7 +108,7 @@ export interface TableColumn {
   key: string;
   label: string;
   sortable?: boolean;
-  type?: 'text' | 'number' | 'date' | 'currency' | 'status' | 'actions';
+  type?: 'text' | 'number' | 'date' | 'currency' | 'status' | 'actions' | 'badge';
   width?: string;
 }
 
