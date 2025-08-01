@@ -70,11 +70,11 @@ export class TableComponent implements OnInit, OnChanges {
     const pages: number[] = [];
     const start = Math.max(1, this.currentPage - 2);
     const end = Math.min(this.totalPages, this.currentPage + 2);
-    
+
     for (let i = start; i <= end; i++) {
       pages.push(i);
     }
-    
+
     return pages;
   }
 
@@ -89,6 +89,26 @@ export class TableComponent implements OnInit, OnChanges {
     if (value === 'active') return 'Ativo';
     if (value === 'inactive') return 'Inativo';
     return value;
+  }
+
+  getBadgeClasses(badge: any): string {
+    if (!badge || !badge.color) return 'bg-gray-100 text-gray-800';
+
+    const colorClasses: { [key: string]: string } = {
+      'yellow': 'bg-yellow-100 text-yellow-800',
+      'blue': 'bg-blue-100 text-blue-800',
+      'purple': 'bg-purple-100 text-purple-800',
+      'indigo': 'bg-indigo-100 text-indigo-800',
+      'green': 'bg-green-100 text-green-800',
+      'red': 'bg-red-100 text-red-800',
+      'gray': 'bg-gray-100 text-gray-800'
+    };
+
+    return colorClasses[badge.color] || 'bg-gray-100 text-gray-800';
+  }
+
+  getBadgeLabel(badge: any): string {
+    return badge?.label || badge?.toString() || '';
   }
 
   getActionClasses(type: string): string {
@@ -124,14 +144,14 @@ export class TableComponent implements OnInit, OnChanges {
       filtered.sort((a, b) => {
         const aValue = this.getFieldValue(a, this.sortColumn);
         const bValue = this.getFieldValue(b, this.sortColumn);
-        
+
         let comparison = 0;
         if (aValue > bValue) {
           comparison = 1;
         } else if (aValue < bValue) {
           comparison = -1;
         }
-        
+
         return this.sortDirection === 'asc' ? comparison : -comparison;
       });
     }
