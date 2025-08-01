@@ -199,4 +199,10 @@
       </a>
     </div>
   </div>
+
+  <!-- Cart Modal -->
+  <app-cart-modal
+    [isOpen]="cartModalOpen"
+    (closed)="closeCartModal()">
+  </app-cart-modal>
 </nav>
