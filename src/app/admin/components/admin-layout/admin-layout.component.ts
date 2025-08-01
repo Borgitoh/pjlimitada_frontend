@@ -62,6 +62,20 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
       });
   }
 
+  getShortTitle(): string {
+    const shortTitleMap: { [key: string]: string } = {
+      'Dashboard': 'Dashboard',
+      'Gestão de Usuários': 'Usuários',
+      'Marcas e Modelos': 'Marcas',
+      'Gestão de Produtos': 'Produtos',
+      'Gestão de Vendas': 'Vendas',
+      'Relatórios e Análises': 'Relatórios',
+      'Configurações': 'Config'
+    };
+
+    return shortTitleMap[this.pageTitle] || this.pageTitle;
+  }
+
   private updatePageTitle(url: string): void {
     const titleMap: { [key: string]: string } = {
       '/admin/dashboard': 'Dashboard',
