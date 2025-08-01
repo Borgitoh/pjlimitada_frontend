@@ -101,6 +101,14 @@
               {{getStatusLabel(getFieldValue(item, column.key))}}
             </span>
 
+            <!-- Badge -->
+            <span
+              *ngIf="column.type === 'badge'"
+              class="inline-flex px-2 py-1 text-xs font-medium rounded-full"
+              [ngClass]="getBadgeClasses(getFieldValue(item, column.key))">
+              {{getBadgeLabel(getFieldValue(item, column.key))}}
+            </span>
+
             <!-- Actions -->
             <div *ngIf="column.type === 'actions'" class="flex items-center space-x-1 sm:space-x-2">
               <button
