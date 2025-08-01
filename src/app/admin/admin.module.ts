@@ -29,7 +29,7 @@ import { ModalComponent } from './components/modal/modal.component';
     SalesComponent,
     OrdersComponent,
     ReportsComponent,
-    SettingsComponent
+    SettingsComponent,
     ChartComponent,
     StatsCardComponent,
     TableComponent,
