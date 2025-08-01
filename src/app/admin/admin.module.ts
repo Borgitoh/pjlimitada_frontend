@@ -10,6 +10,7 @@ import { UsersComponent } from './pages/users/users.component';
 import { BrandsComponent } from './pages/brands/brands.component';
 import { ProductsComponent } from './pages/products/products.component';
 import { SalesComponent } from './pages/sales/sales.component';
+import { OrdersComponent } from './pages/orders/orders.component';
 import { ReportsComponent } from './pages/reports/reports.component';
 import { SettingsComponent } from './pages/settings/settings.component';
 import { ChartComponent } from './components/chart/chart.component';
@@ -26,8 +27,9 @@ import { ModalComponent } from './components/modal/modal.component';
     BrandsComponent,
     ProductsComponent,
     SalesComponent,
+    OrdersComponent,
     ReportsComponent,
-    SettingsComponent,
+    SettingsComponent
     ChartComponent,
     StatsCardComponent,
     TableComponent,

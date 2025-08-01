@@ -6,6 +6,7 @@ import { UsersComponent } from './pages/users/users.component';
 import { BrandsComponent } from './pages/brands/brands.component';
 import { ProductsComponent } from './pages/products/products.component';
 import { SalesComponent } from './pages/sales/sales.component';
+import { OrdersComponent } from './pages/orders/orders.component';
 import { ReportsComponent } from './pages/reports/reports.component';
 import { SettingsComponent } from './pages/settings/settings.component';
 
@@ -20,6 +21,7 @@ const routes: Routes = [
       { path: 'brands', component: BrandsComponent },
       { path: 'products', component: ProductsComponent },
       { path: 'sales', component: SalesComponent },
+      { path: 'orders', component: OrdersComponent },
       { path: 'reports', component: ReportsComponent },
       { path: 'settings', component: SettingsComponent }
     ]
