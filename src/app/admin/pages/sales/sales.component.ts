@@ -3,6 +3,8 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AdminService } from '../../services/admin.service';
 import { Sale, SaleItem, Product, User, TableColumn, TableAction } from '../../models/admin.models';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-sales',
