@@ -1,0 +1,36 @@
+:host {
+  display: block;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.sidebar-transition {
+  transition: all 0.3s ease-in-out;
+}
+
+.notification-badge {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+// Responsive utilities
+@media (max-width: 1023px) {
+  .mobile-full-height {
+    height: 100vh;
+  }
+}
+
+// Smooth transitions for mobile
+@media (prefers-reduced-motion: no-preference) {
+  .sidebar-transition {
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  }
+}

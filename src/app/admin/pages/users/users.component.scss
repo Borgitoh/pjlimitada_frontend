@@ -1,0 +1,20 @@
+:host {
+  display: block;
+}
+
+.user-form {
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .error-message {
+    color: #ef4444;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
+}
+
+.permissions-info {
+  background-color: var(--pj-gray-50);
+  border-left: 4px solid var(--pj-cyan-500);
+}

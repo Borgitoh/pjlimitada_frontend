@@ -1,0 +1,41 @@
+:host {
+  display: block;
+}
+
+.step-indicator {
+  transition: all 0.3s ease-in-out;
+}
+
+.payment-method {
+  transition: all 0.2s ease-in-out;
+}
+
+.payment-method:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.processing-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.form-error {
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.sticky-summary {
+  position: sticky;
+  top: 2rem;
+}
+
+@media (max-width: 1023px) {
+  .sticky-summary {
+    position: static;
+  }
+}

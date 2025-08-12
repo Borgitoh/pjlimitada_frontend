@@ -1,0 +1,48 @@
+:host {
+  display: block;
+}
+
+.tab-button {
+  transition: all 0.2s ease-in-out;
+}
+
+.tab-button:hover {
+  color: var(--pj-gray-700);
+  border-color: var(--pj-gray-300);
+}
+
+.tab-button.active {
+  color: var(--pj-cyan-500);
+  border-color: var(--pj-cyan-500);
+}
+
+.toggle-switch {
+  transition: all 0.2s ease-in-out;
+}
+
+.category-item {
+  transition: all 0.2s ease-in-out;
+}
+
+.category-item:hover {
+  background-color: var(--pj-gray-50);
+}
+
+.success-message {
+  animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.security-warning {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+}

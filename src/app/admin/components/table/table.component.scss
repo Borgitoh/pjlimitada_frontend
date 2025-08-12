@@ -1,0 +1,25 @@
+:host {
+  display: block;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.table-row-hover:hover {
+  background-color: var(--pj-gray-50);
+}
+
+.pagination-button {
+  transition: all 0.2s ease-in-out;
+}
+
+.pagination-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}

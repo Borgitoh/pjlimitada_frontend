@@ -1,0 +1,211 @@
+<div class="min-h-screen bg-gray-50 py-8">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <!-- Success Message -->
+    <div class="text-center mb-8">
+      <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4">
+        <svg class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+      <h1 class="text-3xl font-bold text-gray-900">Pedido Realizado com Sucesso!</h1>
+      <p class="text-gray-600 mt-2">Obrigado por escolher a PJ Limitada</p>
+    </div>
+
+    <!-- Order Details -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-semibold text-gray-900">Detalhes do Pedido</h2>
+        <span class="text-sm font-medium text-gray-500">{{order?.id}}</span>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <h3 class="font-medium text-gray-900 mb-2">Informações do Cliente</h3>
+          <div class="text-sm text-gray-600 space-y-1">
+            <p>{{order?.customerInfo?.nome}}</p>
+            <p>{{order?.customerInfo?.email}}</p>
+            <p>{{order?.customerInfo?.telefone}}</p>
+          </div>
+        </div>
+        
+        <div>
+          <h3 class="font-medium text-gray-900 mb-2">Endereço de Entrega</h3>
+          <div class="text-sm text-gray-600 space-y-1">
+            <p>{{order?.shippingAddress?.endereco}}, {{order?.shippingAddress?.numero}}</p>
+            <p *ngIf="order?.shippingAddress?.complemento">{{order?.shippingAddress?.complemento}}</p>
+            <p>{{order?.shippingAddress?.bairro}}</p>
+            <p>{{order?.shippingAddress?.cidade}} - {{order?.shippingAddress?.estado}}</p>
+            <p>CEP: {{order?.shippingAddress?.cep}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Payment Information -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+      <h2 class="text-lg font-semibold text-gray-900 mb-4">Informações de Pagamento</h2>
+      
+      <!-- Express Payment -->
+      <div *ngIf="paymentMethod === 'express'" class="text-center py-4">
+        <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4">
+          <svg class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <h3 class="text-lg font-medium text-gray-900">Pagamento Aprovado!</h3>
+        <p class="text-gray-600">Seu pagamento foi processado com sucesso via cartão de crédito.</p>
+      </div>
+
+      <!-- PIX Payment -->
+      <div *ngIf="paymentMethod === 'pix'" class="space-y-4">
+        <div class="text-center">
+          <h3 class="text-lg font-medium text-gray-900 mb-2">Pagamento via PIX</h3>
+          <p class="text-gray-600">Escaneie o QR Code ou use a chave PIX para realizar o pagamento</p>
+        </div>
+        
+        <div class="flex flex-col md:flex-row gap-6">
+          <div class="flex-1 text-center">
+            <div class="w-48 h-48 bg-gray-100 rounded-lg mx-auto mb-4 flex items-center justify-center">
+              <p class="text-gray-500">QR Code PIX</p>
+            </div>
+            <p class="text-sm text-gray-600">Escaneie com o app do seu banco</p>
+          </div>
+          
+          <div class="flex-1">
+            <h4 class="font-medium text-gray-900 mb-2">Chave PIX:</h4>
+            <div class="bg-gray-50 p-3 rounded-lg mb-4">
+              <p class="font-mono text-sm">{{pixData?.pixKey}}</p>
+              <button class="text-pj-cyan text-sm hover:underline mt-1">Copiar chave</button>
+            </div>
+            
+            <div class="space-y-2 text-sm text-gray-600">
+              <p><strong>Valor:</strong> R$ {{order?.total | number:'1.2-2'}}</p>
+              <p><strong>Validade:</strong> 30 minutos</p>
+            </div>
+            
+            <div class="mt-4">
+              <h5 class="font-medium text-gray-900 mb-2">Como pagar:</h5>
+              <ol class="text-sm text-gray-600 space-y-1">
+                <li>1. Abra o app do seu banco</li>
+                <li>2. Escaneie o QR Code ou cole a chave PIX</li>
+                <li>3. Confirme o pagamento</li>
+                <li>4. Seu pedido será processado automaticamente</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bank Transfer -->
+      <div *ngIf="paymentMethod === 'bank_transfer'" class="space-y-4">
+        <div class="text-center mb-4">
+          <h3 class="text-lg font-medium text-gray-900">Transferência Bancária</h3>
+          <p class="text-gray-600">Realize a transferência para os dados abaixo</p>
+        </div>
+        
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <h4 class="font-medium text-gray-900 mb-3">Dados Bancários:</h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div>
+              <p><strong>Banco:</strong> {{bankInfo?.bankName}}</p>
+              <p><strong>Agência:</strong> {{bankInfo?.agency}}</p>
+              <p><strong>Conta:</strong> {{bankInfo?.account}}</p>
+            </div>
+            <div>
+              <p><strong>CNPJ:</strong> {{bankInfo?.cnpj}}</p>
+              <p><strong>Empresa:</strong> {{bankInfo?.companyName}}</p>
+              <p><strong>Valor:</strong> R$ {{order?.total | number:'1.2-2'}}</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+          <h5 class="font-medium text-yellow-800 mb-2">Importante:</h5>
+          <ul class="text-sm text-yellow-700 space-y-1">
+            <li>• Use seu CPF como identificação da transferência</li>
+            <li>• Envie o comprovante para nosso WhatsApp: (11) 99999-9999</li>
+            <li>• Prazo para pagamento: 3 dias úteis</li>
+            <li>• Após confirmação, seu pedido será processado</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order Items -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+      <h2 class="text-lg font-semibold text-gray-900 mb-4">Itens do Pedido</h2>
+      <div class="space-y-3">
+        <div *ngFor="let item of order?.items" class="flex items-center space-x-4 border-b border-gray-100 pb-3 last:border-b-0">
+          <img [src]="item.imagem" [alt]="item.nome" class="h-16 w-16 object-cover rounded-lg">
+          <div class="flex-1">
+            <h4 class="font-medium text-gray-900">{{item.nome}}</h4>
+            <p class="text-sm text-gray-600">{{item.marca}} • Qtd: {{item.quantidade}}</p>
+          </div>
+          <p class="font-semibold text-gray-900">R$ {{(item.preco * item.quantidade) | number:'1.2-2'}}</p>
+        </div>
+      </div>
+      
+      <div class="border-t border-gray-200 pt-4 mt-4">
+        <div class="flex justify-between text-lg font-semibold">
+          <span>Total:</span>
+          <span class="text-pj-cyan">R$ {{order?.total | number:'1.2-2'}}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Next Steps -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+      <h2 class="text-lg font-semibold text-gray-900 mb-4">Próximos Passos</h2>
+      <div class="space-y-3">
+        <div class="flex items-start space-x-3">
+          <div class="h-6 w-6 bg-pj-cyan rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+            <span class="text-white text-xs font-bold">1</span>
+          </div>
+          <div>
+            <h4 class="font-medium text-gray-900">Confirmação de Pagamento</h4>
+            <p class="text-sm text-gray-600">
+              <span *ngIf="paymentMethod === 'express'">Pagamento já confirmado!</span>
+              <span *ngIf="paymentMethod === 'pix'">Aguardando confirmação do PIX (até 1 hora)</span>
+              <span *ngIf="paymentMethod === 'bank_transfer'">Aguardando transferência bancária (até 3 dias)</span>
+            </p>
+          </div>
+        </div>
+        
+        <div class="flex items-start space-x-3">
+          <div class="h-6 w-6 bg-gray-300 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+            <span class="text-white text-xs font-bold">2</span>
+          </div>
+          <div>
+            <h4 class="font-medium text-gray-900">Preparação do Pedido</h4>
+            <p class="text-sm text-gray-600">Separação e embalagem dos produtos (1-2 dias úteis)</p>
+          </div>
+        </div>
+        
+        <div class="flex items-start space-x-3">
+          <div class="h-6 w-6 bg-gray-300 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+            <span class="text-white text-xs font-bold">3</span>
+          </div>
+          <div>
+            <h4 class="font-medium text-gray-900">Envio</h4>
+            <p class="text-sm text-gray-600">Entrega estimada: {{order?.estimatedDelivery | date:'dd/MM/yyyy'}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <button 
+        routerLink="/pecas"
+        class="px-6 py-3 bg-pj-cyan text-white rounded-lg hover:bg-pj-cyan-hover transition-colors">
+        Continuar Comprando
+      </button>
+      <button 
+        (click)="trackOrder()"
+        class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+        Acompanhar Pedido
+      </button>
+    </div>
+  </div>
+</div>
