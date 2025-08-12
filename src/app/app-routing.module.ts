@@ -27,6 +27,7 @@ const routes: Routes = [
   { path: 'order-success', component: OrderSuccessComponent },
   { path: 'rastreamento', component: OrderTrackingComponent },
   { path: 'meus-pedidos', component: MyOrdersComponent },
+  { path: 'demo-fatura', component: DemoInvoiceComponent },
   {
     path: 'admin',
     loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)
