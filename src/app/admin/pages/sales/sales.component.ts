@@ -133,10 +133,10 @@ export class SalesComponent implements OnInit, OnDestroy {
       const pdf = new jsPDF('p', 'mm', 'a4');
 
       // Configurações de cores
-      const primaryColor = [0, 188, 212]; // PJ Cyan
-      const darkColor = [0, 96, 100];
-      const lightGray = [245, 245, 245];
-      const textColor = [33, 33, 33];
+      const primaryColor: [number, number, number] = [0, 188, 212]; // PJ Cyan
+      const darkColor: [number, number, number] = [0, 96, 100];
+      const lightGray: [number, number, number] = [245, 245, 245];
+      const textColor: [number, number, number] = [33, 33, 33];
 
       // Header com logo e informações da empresa
       await this.addCompanyHeader(pdf, primaryColor, darkColor);
