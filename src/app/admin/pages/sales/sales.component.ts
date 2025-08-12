@@ -78,7 +78,10 @@ export class SalesComponent implements OnInit, OnDestroy {
     }
   ];
 
-  constructor(private adminService: AdminService) {}
+  constructor(
+    private adminService: AdminService,
+    private pdfService: PdfService
+  ) {}
 
   ngOnInit(): void {
     this.loadSales();
