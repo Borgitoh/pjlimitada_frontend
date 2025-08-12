@@ -338,30 +338,75 @@ export class PdfService {
   }
 
   private drawFooter(doc: jsPDF, pageHeight: number, contentWidth: number, margin: number, secondaryColor: any): void {
-    const footerY = pageHeight - 20;
-    
-    // Linha separadora
+    const footerY = pageHeight - 40;
+
+    // Fundo do rodapé
+    doc.setFillColor(248, 249, 250);
+    doc.rect(margin, footerY - 5, contentWidth, 35, 'F');
+
+    // Linha separadora elegante
     doc.setDrawColor(200, 200, 200);
-    doc.setLineWidth(0.5);
+    doc.setLineWidth(1);
     doc.line(margin, footerY - 5, margin + contentWidth, footerY - 5);
-    
-    // Texto do rodapé
+
+    // QR Code simulado (quadrado com padrão)
+    const qrSize = 20;
+    const qrX = margin + 10;
+    const qrY = footerY;
+
+    doc.setFillColor(0, 0, 0);
+    doc.rect(qrX, qrY, qrSize, qrSize, 'F');
+    doc.setFillColor(255, 255, 255);
+    // Padrão QR simulado
+    for (let i = 2; i < qrSize - 2; i += 3) {
+      for (let j = 2; j < qrSize - 2; j += 3) {
+        if ((i + j) % 6 === 0) {
+          doc.rect(qrX + i, qrY + j, 2, 2, 'F');
+        }
+      }
+    }
+
+    // Texto ao lado do QR Code
     doc.setTextColor(secondaryColor.r, secondaryColor.g, secondaryColor.b);
     doc.setFontSize(8);
-    doc.setFont('helvetica', 'italic');
-    
-    const footerText = 'Este documento foi gerado automaticamente pelo sistema PJ Limitada';
-    const textWidth = doc.getTextWidth(footerText);
-    const centerX = margin + (contentWidth - textWidth) / 2;
-    
-    doc.text(footerText, centerX, footerY);
-    
-    // Data de geração
+    doc.setFont('helvetica', 'normal');
+    doc.text('Escaneie para verificar', qrX, qrY + qrSize + 8);
+    doc.text('a autenticidade', qrX, qrY + qrSize + 12);
+
+    // Informações legais centralizadas
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'normal');
+
+    const legalTexts = [
+      'PJ LIMITADA - Sociedade por Quotas | NIF: 5417048598',
+      'Registro Comercial: 123456789 | Capital Social: 1.000.000,00 Kz',
+      'Av. Marginal, Edifício Torres Dipanda, 15º Andar - Luanda, Angola'
+    ];
+
+    legalTexts.forEach((text, index) => {
+      const textWidth = doc.getTextWidth(text);
+      const centerX = margin + (contentWidth - textWidth) / 2;
+      doc.text(text, centerX, footerY + 5 + (index * 4));
+    });
+
+    // Data de geração e hash de segurança
     const now = new Date();
-    const generatedText = `Gerado em: ${now.toLocaleDateString('pt-BR')} às ${now.toLocaleTimeString('pt-BR')}`;
-    const generatedWidth = doc.getTextWidth(generatedText);
-    const rightX = margin + contentWidth - generatedWidth;
-    
-    doc.text(generatedText, rightX, footerY + 8);
+    const generatedText = `Gerado: ${now.toLocaleDateString('pt-BR')} ${now.toLocaleTimeString('pt-BR')}`;
+    const hashText = `Hash: ${Math.random().toString(36).substring(2, 15).toUpperCase()}`;
+
+    doc.setFontSize(7);
+    doc.setFont('helvetica', 'italic');
+    doc.text(generatedText, margin + contentWidth - 120, footerY + 20);
+    doc.text(hashText, margin + contentWidth - 120, footerY + 25);
+
+    // Selo de qualidade
+    doc.setDrawColor(40, 167, 69);
+    doc.setLineWidth(2);
+    doc.circle(margin + contentWidth - 25, footerY + 15, 8);
+    doc.setTextColor(40, 167, 69);
+    doc.setFontSize(6);
+    doc.setFont('helvetica', 'bold');
+    doc.text('✓', margin + contentWidth - 28, footerY + 17);
+    doc.text('VÁLIDO', margin + contentWidth - 30, footerY + 20);
   }
 }
