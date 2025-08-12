@@ -299,52 +299,94 @@ export class PdfService {
   }
 
   private drawFinancialSummary(doc: jsPDF, invoiceData: any, y: number, contentWidth: number, margin: number, primaryColor: any, accentColor: any): number {
-    const summaryX = margin + contentWidth - 120;
-    const summaryWidth = 110;
+    const summaryX = margin + contentWidth - 140;
+    const summaryWidth = 130;
 
-    // Fundo do resumo
+    // Título do resumo
+    doc.setFillColor(primaryColor.r, primaryColor.g, primaryColor.b);
+    doc.rect(summaryX, y, summaryWidth, 12, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.text('RESUMO FINANCEIRO', summaryX + 5, y + 8);
+
+    y += 12;
+
+    // Fundo do resumo com gradiente simulado
     doc.setFillColor(248, 249, 250);
-    doc.rect(summaryX, y, summaryWidth, 45, 'F');
+    doc.rect(summaryX, y, summaryWidth, 55, 'F');
 
-    // Borda
-    doc.setDrawColor(200, 200, 200);
-    doc.setLineWidth(0.5);
-    doc.rect(summaryX, y, summaryWidth, 45);
+    // Borda elegante
+    doc.setDrawColor(180, 180, 180);
+    doc.setLineWidth(1);
+    doc.rect(summaryX, y - 12, summaryWidth, 67);
 
     doc.setTextColor(0, 0, 0);
     doc.setFontSize(10);
 
     const summaryItems = [
-      ['Subtotal:', `${invoiceData.resumo.subtotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} Kz`],
-      ['Desconto:', `${invoiceData.resumo.desconto.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} Kz`],
-      ['Impostos:', `${invoiceData.resumo.impostos.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} Kz`]
+      ['Subtotal:', `${invoiceData.resumo.subtotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} Kz`, false],
+      ['Desconto:', `- ${invoiceData.resumo.desconto.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} Kz`, true],
+      ['Impostos (IVA):', `${invoiceData.resumo.impostos.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} Kz`, false]
     ];
 
     summaryItems.forEach((item, index) => {
-      const itemY = y + 10 + (index * 8);
+      const itemY = y + 10 + (index * 10);
+
+      // Linha separadora sutil
+      if (index > 0) {
+        doc.setDrawColor(230, 230, 230);
+        doc.setLineWidth(0.3);
+        doc.line(summaryX + 5, itemY - 5, summaryX + summaryWidth - 5, itemY - 5);
+      }
+
       doc.setFont('helvetica', 'normal');
-      doc.text(item[0], summaryX + 5, itemY);
-      doc.text(item[1], summaryX + 55, itemY);
+
+      // Aplicar cor vermelha para desconto
+      if (item[2]) {
+        doc.setTextColor(220, 53, 69);
+      } else {
+        doc.setTextColor(0, 0, 0);
+      }
+
+      doc.text(item[0], summaryX + 8, itemY);
+      doc.setFont('helvetica', 'bold');
+      doc.text(item[1], summaryX + 70, itemY);
     });
 
-    // Total em destaque
-    doc.setFillColor(accentColor.r, accentColor.g, accentColor.b);
-    doc.rect(summaryX, y + 32, summaryWidth, 13, 'F');
-    
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.text('TOTAL:', summaryX + 5, y + 42);
-    doc.text(`${invoiceData.resumo.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} Kz`, summaryX + 55, y + 42);
+    // Linha separadora antes do total
+    doc.setDrawColor(primaryColor.r, primaryColor.g, primaryColor.b);
+    doc.setLineWidth(2);
+    doc.line(summaryX + 5, y + 38, summaryX + summaryWidth - 5, y + 38);
 
-    // Total por extenso
-    y += 55;
-    doc.setTextColor(0, 0, 0);
+    // Total em destaque com sombra
+    doc.setFillColor(accentColor.r - 10, accentColor.g - 10, accentColor.b - 10);
+    doc.rect(summaryX + 2, y + 42, summaryWidth - 4, 15, 'F');
+    doc.setFillColor(accentColor.r, accentColor.g, accentColor.b);
+    doc.rect(summaryX, y + 40, summaryWidth, 15, 'F');
+
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text('TOTAL GERAL:', summaryX + 8, y + 51);
+    doc.setFontSize(16);
+    doc.text(`${invoiceData.resumo.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} Kz`, summaryX + 70, y + 51);
+
+    // Total por extenso com caixa
+    y += 70;
+    doc.setFillColor(255, 255, 255);
+    doc.setDrawColor(200, 200, 200);
+    doc.setLineWidth(0.5);
+    doc.rect(margin, y, contentWidth, 15, 'FD');
+
+    doc.setTextColor(80, 80, 80);
     doc.setFontSize(9);
     doc.setFont('helvetica', 'italic');
-    doc.text(`Total por extenso: ${invoiceData.resumo.totalPorExtenso}`, margin + 10, y);
+    doc.text('VALOR POR EXTENSO:', margin + 5, y + 7);
+    doc.setFont('helvetica', 'bold');
+    doc.text(invoiceData.resumo.totalPorExtenso.toUpperCase(), margin + 5, y + 12);
 
-    return y + 10;
+    return y + 25;
   }
 
   private drawNotesAndTerms(doc: jsPDF, invoiceData: any, y: number, contentWidth: number, margin: number, secondaryColor: any): void {
