@@ -613,7 +613,7 @@ export class SalesComponent implements OnInit, OnDestroy {
     pdf.text(`TOTAL: KZ ${data.resumo.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`, 160, yPos + 2, { align: 'center' });
   }
 
-  private addFooter(pdf: jsPDF, primaryColor: number[], textColor: number[]): void {
+  private addFooter(pdf: jsPDF, primaryColor: [number, number, number], textColor: [number, number, number]): void {
     const yFooter = 270;
 
     // Linha decorativa
