@@ -46,7 +46,7 @@ export class PhoneMaskDirective {
     }
 
     // Define a posição do cursor
-    const cursorPosition = this.getCursorPosition(input.value, formattedValue, input.selectionStart);
+    const cursorPosition = this.getCursorPosition(input.value, formattedValue, input.selectionStart || 0);
     
     input.value = formattedValue;
     this.updateModel(input, formattedValue);
