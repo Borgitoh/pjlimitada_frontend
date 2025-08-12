@@ -424,7 +424,7 @@ export class SalesComponent implements OnInit, OnDestroy {
     const tens = ['', '', 'vinte', 'trinta', 'quarenta', 'cinquenta', 'sessenta', 'setenta', 'oitenta', 'noventa'];
     const hundreds = ['', 'cento', 'duzentos', 'trezentos', 'quatrocentos', 'quinhentos', 'seiscentos', 'setecentos', 'oitocentos', 'novecentos'];
 
-    const integerPart = Math.floor(value);
+    let integerPart = Math.floor(value);
     const decimalPart = Math.round((value - integerPart) * 100);
 
     let result = '';
