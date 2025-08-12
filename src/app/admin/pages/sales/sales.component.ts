@@ -364,35 +364,114 @@ export class SalesComponent implements OnInit, OnDestroy {
   }
 
   private generateInvoiceData(sale: Sale) {
+    const currentDate = new Date();
+    const saleDate = new Date(sale.date);
+
     return {
       empresa: {
         nome: 'PJ Limitada',
-        endereco: 'Rua das Peças Automotivas, 123',
+        endereco: 'Avenida Marginal, Edifício Torres Dipanda, 15º Andar',
         cidade: 'Luanda, Angola',
         telefone: '+244 923 456 789',
         email: 'contato@pjlimitada.com',
-        nif: '123456789'
+        website: 'www.pjlimitada.com',
+        nif: '5417048598',
+        registro: 'Registro Comercial: 123456789'
       },
       fatura: {
-        numero: sale.id,
-        data: new Date(sale.date).toLocaleDateString('pt-BR'),
+        numero: `FAT-${sale.id}`,
+        serie: '001',
+        data: saleDate.toLocaleDateString('pt-BR'),
+        dataVencimento: new Date(saleDate.getTime() + (30 * 24 * 60 * 60 * 1000)).toLocaleDateString('pt-BR'),
         vendedor: sale.sellerName,
         cliente: sale.customerName || 'Cliente Geral',
-        formaPagamento: this.getPaymentMethodLabel(sale.paymentMethod)
+        formaPagamento: this.getPaymentMethodLabel(sale.paymentMethod),
+        moeda: 'Kwanza (KZ)'
       },
-      itens: sale.items.map(item => ({
+      itens: sale.items.map((item, index) => ({
+        codigo: `${index + 1}`.padStart(3, '0'),
         nome: item.productName,
+        descricao: `Peça automotiva de alta qualidade`,
         quantidade: item.quantity,
+        unidade: 'UN',
         precoUnitario: item.unitPrice,
-        total: item.total
+        total: item.total,
+        categoria: 'Peças Automotivas'
       })),
       resumo: {
         subtotal: sale.subtotal,
         desconto: sale.discount || 0,
-        total: sale.total
+        impostos: 0, // Angola pode ter IVA
+        total: sale.total,
+        totalPorExtenso: this.numberToWords(sale.total)
       },
-      observacoes: sale.notes || ''
+      observacoes: sale.notes || 'Garantia de 6 meses em todas as peças. Válido apenas com apresentação desta fatura.',
+      condicoes: [
+        'Pagamento conforme condições acordadas',
+        'Mercadoria viajam por conta e risco do comprador',
+        'Não nos responsabilizamos por avarias após a entrega',
+        'Garantia válida apenas com apresentação desta fatura'
+      ]
     };
+  }
+
+  private numberToWords(value: number): string {
+    // Implementação simples para converter número em palavras (português)
+    if (value === 0) return 'Zero kwanzas';
+
+    const ones = ['', 'um', 'dois', 'três', 'quatro', 'cinco', 'seis', 'sete', 'oito', 'nove'];
+    const teens = ['dez', 'onze', 'doze', 'treze', 'catorze', 'quinze', 'dezesseis', 'dezessete', 'dezoito', 'dezenove'];
+    const tens = ['', '', 'vinte', 'trinta', 'quarenta', 'cinquenta', 'sessenta', 'setenta', 'oitenta', 'noventa'];
+    const hundreds = ['', 'cento', 'duzentos', 'trezentos', 'quatrocentos', 'quinhentos', 'seiscentos', 'setecentos', 'oitocentos', 'novecentos'];
+
+    const integerPart = Math.floor(value);
+    const decimalPart = Math.round((value - integerPart) * 100);
+
+    let result = '';
+
+    if (integerPart >= 1000000) {
+      const millions = Math.floor(integerPart / 1000000);
+      result += `${millions === 1 ? 'um milhão' : millions + ' milhões'} `;
+      integerPart %= 1000000;
+    }
+
+    if (integerPart >= 1000) {
+      const thousands = Math.floor(integerPart / 1000);
+      if (thousands === 1) {
+        result += 'mil ';
+      } else {
+        result += `${thousands} mil `;
+      }
+      integerPart %= 1000;
+    }
+
+    if (integerPart >= 100) {
+      if (integerPart === 100) {
+        result += 'cem ';
+      } else {
+        result += hundreds[Math.floor(integerPart / 100)] + ' ';
+      }
+      integerPart %= 100;
+    }
+
+    if (integerPart >= 20) {
+      result += tens[Math.floor(integerPart / 10)];
+      if (integerPart % 10 > 0) {
+        result += ' e ' + ones[integerPart % 10];
+      }
+    } else if (integerPart >= 10) {
+      result += teens[integerPart - 10];
+    } else if (integerPart > 0) {
+      result += ones[integerPart];
+    }
+
+    result += ' kwanzas';
+
+    if (decimalPart > 0) {
+      result += ` e ${decimalPart} cêntimos`;
+    }
+
+    return result.charAt(0).toUpperCase() + result.slice(1);
   }
 
   private async addCompanyHeader(pdf: jsPDF, primaryColor: number[], darkColor: number[]): Promise<void> {
