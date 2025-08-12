@@ -148,58 +148,77 @@ export class PdfService {
     doc.text('PJ', x - 8, y + 5);
   }
 
-  private drawCompanyClientSection(doc: jsPDF, invoiceData: any, y: number, contentWidth: number, margin: number, colors: any): number {
-    // Fundo da seção
+  private drawDataSection(doc: jsPDF, invoiceData: any, y: number, contentWidth: number, margin: number, colors: any): number {
+    // === INFORMAÇÕES DA EMPRESA ===
     doc.setFillColor(colors.light[0], colors.light[1], colors.light[2]);
-    doc.rect(margin, y, contentWidth, 45, 'F');
+    doc.rect(margin, y, contentWidth / 2 - 5, 50, 'F');
 
-    // Bordas elegantes
-    doc.setDrawColor(colors.secondary[0], colors.secondary[1], colors.secondary[2]);
+    doc.setDrawColor(colors.primary[0], colors.primary[1], colors.primary[2]);
     doc.setLineWidth(1);
-    doc.rect(margin, y, contentWidth, 45);
+    doc.rect(margin, y, contentWidth / 2 - 5, 50);
 
-    // Coluna da empresa
-    doc.setTextColor(colors.primary[0], colors.primary[1], colors.primary[2]);
+    // Cabeçalho da empresa
+    doc.setFillColor(colors.primary[0], colors.primary[1], colors.primary[2]);
+    doc.rect(margin, y, contentWidth / 2 - 5, 12, 'F');
+
+    doc.setTextColor(colors.white[0], colors.white[1], colors.white[2]);
     doc.setFontSize(11);
     doc.setFont('helvetica', 'bold');
-    doc.text('🏢 DADOS DA EMPRESA', margin + 8, y + 12);
+    doc.text('EMPRESA', margin + 8, y + 8);
 
+    // Dados da empresa
     doc.setTextColor(colors.dark[0], colors.dark[1], colors.dark[2]);
     doc.setFontSize(9);
     doc.setFont('helvetica', 'normal');
+
     const empresaInfo = [
-      `📍 ${invoiceData.empresa.endereco}`,
-      `🌍 ${invoiceData.empresa.cidade}`,
-      `📞 ${invoiceData.empresa.telefone}`,
-      `✉️  ${invoiceData.empresa.email}`,
-      `🆔 NIF: ${invoiceData.empresa.nif}`
+      invoiceData.empresa.nome,
+      invoiceData.empresa.endereco,
+      invoiceData.empresa.cidade,
+      `Tel: ${invoiceData.empresa.telefone}`,
+      `NIF: ${invoiceData.empresa.nif}`
     ];
 
     empresaInfo.forEach((info, index) => {
-      doc.text(info, margin + 8, y + 20 + (index * 5));
+      doc.text(info, margin + 8, y + 20 + (index * 6));
     });
 
-    // Linha divisória vertical
-    doc.setDrawColor(colors.primary[0], colors.primary[1], colors.primary[2]);
-    doc.setLineWidth(2);
-    doc.line(margin + (contentWidth / 2), y + 5, margin + (contentWidth / 2), y + 40);
+    // === INFORMAÇÕES DO CLIENTE ===
+    const clienteX = margin + contentWidth / 2 + 5;
+    doc.setFillColor(colors.light[0], colors.light[1], colors.light[2]);
+    doc.rect(clienteX, y, contentWidth / 2 - 5, 50, 'F');
 
-    // Coluna do cliente
-    const clienteX = margin + (contentWidth / 2) + 8;
-    doc.setTextColor(colors.primary[0], colors.primary[1], colors.primary[2]);
+    doc.setDrawColor(colors.secondary[0], colors.secondary[1], colors.secondary[2]);
+    doc.setLineWidth(1);
+    doc.rect(clienteX, y, contentWidth / 2 - 5, 50);
+
+    // Cabeçalho do cliente
+    doc.setFillColor(colors.secondary[0], colors.secondary[1], colors.secondary[2]);
+    doc.rect(clienteX, y, contentWidth / 2 - 5, 12, 'F');
+
+    doc.setTextColor(colors.white[0], colors.white[1], colors.white[2]);
     doc.setFontSize(11);
     doc.setFont('helvetica', 'bold');
-    doc.text('👤 FATURADO PARA', clienteX, y + 12);
+    doc.text('CLIENTE', clienteX + 8, y + 8);
 
+    // Dados do cliente
     doc.setTextColor(colors.dark[0], colors.dark[1], colors.dark[2]);
     doc.setFontSize(9);
     doc.setFont('helvetica', 'normal');
-    doc.text(`Cliente: ${invoiceData.fatura.cliente}`, clienteX, y + 20);
-    doc.text(`Vendedor: ${invoiceData.fatura.vendedor}`, clienteX, y + 26);
-    doc.text(`Data: ${invoiceData.fatura.data}`, clienteX, y + 32);
-    doc.text(`Pagamento: ${invoiceData.fatura.formaPagamento}`, clienteX, y + 38);
 
-    return y + 50;
+    const clienteInfo = [
+      `Nome: ${invoiceData.fatura.cliente}`,
+      `Vendedor: ${invoiceData.fatura.vendedor}`,
+      `Data: ${invoiceData.fatura.data}`,
+      `Vencimento: ${invoiceData.fatura.dataVencimento || 'À vista'}`,
+      `Pagamento: ${invoiceData.fatura.formaPagamento}`
+    ];
+
+    clienteInfo.forEach((info, index) => {
+      doc.text(info, clienteX + 8, y + 20 + (index * 6));
+    });
+
+    return y + 60;
   }
 
   private drawInvoiceDetails(doc: jsPDF, invoiceData: any, y: number, contentWidth: number, margin: number, colors: any): number {
@@ -220,7 +239,7 @@ export class PdfService {
       [`📅 Data de Emissão:`, invoiceData.fatura.data],
       [`⏰ Data de Vencimento:`, invoiceData.fatura.dataVencimento || 'À vista'],
       [`🏷️  Série:`, invoiceData.fatura.serie],
-      [`💰 Moeda:`, invoiceData.fatura.moeda]
+      [`��� Moeda:`, invoiceData.fatura.moeda]
     ];
 
     detalhes.forEach((detalhe, index) => {
