@@ -37,7 +37,8 @@ import { SwiperModule } from 'swiper/angular';
     CartModalComponent,
     CheckoutComponent,
     OrderSuccessComponent,
-    OrderTrackingComponent
+    OrderTrackingComponent,
+    MyOrdersComponent
   ],
   imports: [
     BrowserModule,
