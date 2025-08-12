@@ -88,97 +88,33 @@ export class PdfService {
     });
   }
 
-  private drawPremiumLogo(doc: jsPDF, x: number, y: number, colors: any): void {
-    // Círculo externo
-    doc.setFillColor(colors.white[0], colors.white[1], colors.white[2]);
-    doc.circle(x, y, 18);
+  private drawCompanyInfo(doc: jsPDF, invoiceData: any, y: number, margin: number, colors: any): number {
+    // Informações da empresa - estilo minimalista
+    doc.setTextColor(colors.lightText[0], colors.lightText[1], colors.lightText[2]);
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'normal');
 
-    // Círculo interno principal
-    doc.setFillColor(colors.secondary[0], colors.secondary[1], colors.secondary[2]);
-    doc.circle(x, y, 15);
+    doc.text('Peças Automotivas Premium', margin, y);
+    doc.text('Luanda, Angola', margin, y + 8);
+    doc.text('contato@pjlimitada.com', margin, y + 16);
 
-    // Círculo interno menor
-    doc.setFillColor(colors.accent[0], colors.accent[1], colors.accent[2]);
-    doc.circle(x, y, 12);
-
-    // Texto PJ
-    doc.setTextColor(colors.white[0], colors.white[1], colors.white[2]);
-    doc.setFontSize(18);
-    doc.setFont('helvetica', 'bold');
-    doc.text('PJ', x - 10, y + 6);
+    return y + 24;
   }
 
-  private drawDataSection(doc: jsPDF, invoiceData: any, y: number, contentWidth: number, margin: number, colors: any): number {
-    // === INFORMAÇÕES DA EMPRESA ===
-    doc.setFillColor(colors.light[0], colors.light[1], colors.light[2]);
-    doc.rect(margin, y, contentWidth / 2 - 5, 50, 'F');
-
-    doc.setDrawColor(colors.primary[0], colors.primary[1], colors.primary[2]);
-    doc.setLineWidth(1);
-    doc.rect(margin, y, contentWidth / 2 - 5, 50);
-
-    // Cabeçalho da empresa
-    doc.setFillColor(colors.primary[0], colors.primary[1], colors.primary[2]);
-    doc.rect(margin, y, contentWidth / 2 - 5, 12, 'F');
-
-    doc.setTextColor(colors.white[0], colors.white[1], colors.white[2]);
-    doc.setFontSize(11);
+  private drawBillTo(doc: jsPDF, invoiceData: any, y: number, margin: number, colors: any): number {
+    // Título "Faturar a:"
+    doc.setTextColor(colors.text[0], colors.text[1], colors.text[2]);
+    doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
-    doc.text('EMPRESA', margin + 8, y + 8);
+    doc.text('Faturar a:', margin, y);
 
-    // Dados da empresa
-    doc.setTextColor(colors.dark[0], colors.dark[1], colors.dark[2]);
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
-
-    const empresaInfo = [
-      invoiceData.empresa.nome,
-      invoiceData.empresa.endereco,
-      invoiceData.empresa.cidade,
-      `Tel: ${invoiceData.empresa.telefone}`,
-      `NIF: ${invoiceData.empresa.nif}`
-    ];
-
-    empresaInfo.forEach((info, index) => {
-      doc.text(info, margin + 8, y + 20 + (index * 6));
-    });
-
-    // === INFORMAÇÕES DO CLIENTE ===
-    const clienteX = margin + contentWidth / 2 + 5;
-    doc.setFillColor(colors.light[0], colors.light[1], colors.light[2]);
-    doc.rect(clienteX, y, contentWidth / 2 - 5, 50, 'F');
-
-    doc.setDrawColor(colors.secondary[0], colors.secondary[1], colors.secondary[2]);
-    doc.setLineWidth(1);
-    doc.rect(clienteX, y, contentWidth / 2 - 5, 50);
-
-    // Cabeçalho do cliente
-    doc.setFillColor(colors.secondary[0], colors.secondary[1], colors.secondary[2]);
-    doc.rect(clienteX, y, contentWidth / 2 - 5, 12, 'F');
-
-    doc.setTextColor(colors.white[0], colors.white[1], colors.white[2]);
+    // Nome do cliente
+    doc.setTextColor(colors.text[0], colors.text[1], colors.text[2]);
     doc.setFontSize(11);
-    doc.setFont('helvetica', 'bold');
-    doc.text('CLIENTE', clienteX + 8, y + 8);
-
-    // Dados do cliente
-    doc.setTextColor(colors.dark[0], colors.dark[1], colors.dark[2]);
-    doc.setFontSize(9);
     doc.setFont('helvetica', 'normal');
+    doc.text(invoiceData.fatura.cliente, margin, y + 12);
 
-    const clienteInfo = [
-      `Nome: ${invoiceData.fatura.cliente}`,
-      `Vendedor: ${invoiceData.fatura.vendedor}`,
-      `Data: ${invoiceData.fatura.data}`,
-      `Vencimento: ${invoiceData.fatura.dataVencimento || 'À vista'}`,
-      `Pagamento: ${invoiceData.fatura.formaPagamento}`
-    ];
-
-    clienteInfo.forEach((info, index) => {
-      doc.text(info, clienteX + 8, y + 20 + (index * 6));
-    });
-
-    return y + 60;
+    return y + 20;
   }
 
   private drawModernItemsTable(doc: jsPDF, invoiceData: any, y: number, contentWidth: number, margin: number, colors: any): number {
