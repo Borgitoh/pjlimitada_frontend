@@ -582,7 +582,7 @@ export class SalesComponent implements OnInit, OnDestroy {
     return currentY;
   }
 
-  private addFinancialSummary(pdf: jsPDF, data: any, primaryColor: number[], textColor: number[]): void {
+  private addFinancialSummary(pdf: jsPDF, data: any, primaryColor: [number, number, number], textColor: [number, number, number]): void {
     const yStart = 220; // Posição fixa para o resumo
 
     // Box do resumo
