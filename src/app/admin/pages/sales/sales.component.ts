@@ -3,8 +3,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AdminService } from '../../services/admin.service';
 import { Sale, SaleItem, Product, User, TableColumn, TableAction } from '../../models/admin.models';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+import { PdfService } from '../../../services/pdf.service';
 
 @Component({
   selector: 'app-sales',
@@ -664,7 +663,7 @@ export class SalesComponent implements OnInit, OnDestroy {
     pdf.setTextColor(...textColor);
     pdf.setFontSize(12);
     pdf.setFont('helvetica', 'bold');
-    pdf.text('INFORMA��ÕES DA FATURA', 22, yPosition + 6);
+    pdf.text('INFORMAÇÕES DA FATURA', 22, yPosition + 6);
 
     pdf.setFont('helvetica', 'normal');
     pdf.setFontSize(10);
