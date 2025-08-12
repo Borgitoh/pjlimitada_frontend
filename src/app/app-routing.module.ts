@@ -13,8 +13,8 @@ import { OrderTrackingComponent } from './components/order-tracking/order-tracki
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'veiculos', component: ListagemComponent },
-  { path: 'veiculos/:id', component: DetalhesComponent },
+  // { path: 'veiculos', component: ListagemComponent },
+  // { path: 'veiculos/:id', component: DetalhesComponent },
   { path: 'pecas', component: PecasComponent },
   { path: 'bodykits', component: BodykitsComponent },
   { path: 'pecas/:id', component: DetalhesComponent },

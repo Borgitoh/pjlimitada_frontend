@@ -73,15 +73,6 @@
                     class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pj-cyan focus:border-transparent"
                     placeholder="(11) 99999-9999">
                 </div>
-                <div>
-                  <label for="cpf" class="block text-sm font-medium text-gray-700 mb-1">CPF *</label>
-                  <input
-                    id="cpf"
-                    formControlName="cpf"
-                    type="text"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pj-cyan focus:border-transparent"
-                    placeholder="000.000.000-00">
-                </div>
               </div>
             </form>
           </div>
@@ -92,7 +83,7 @@
             <form [formGroup]="addressForm" class="space-y-4">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label for="cep" class="block text-sm font-medium text-gray-700 mb-1">CEP *</label>
+                  <label for="cep" class="block text-sm font-medium text-gray-700 mb-1">Provincia *</label>
                   <input
                     id="cep"
                     formControlName="cep"
@@ -119,48 +110,6 @@
                   type="text"
                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pj-cyan focus:border-transparent"
                   placeholder="Rua, avenida, etc.">
-              </div>
-              <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div>
-                  <label for="numero" class="block text-sm font-medium text-gray-700 mb-1">Número *</label>
-                  <input
-                    id="numero"
-                    formControlName="numero"
-                    type="text"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pj-cyan focus:border-transparent"
-                    placeholder="123">
-                </div>
-                <div>
-                  <label for="complemento" class="block text-sm font-medium text-gray-700 mb-1">Complemento</label>
-                  <input
-                    id="complemento"
-                    formControlName="complemento"
-                    type="text"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pj-cyan focus:border-transparent"
-                    placeholder="Apto 101">
-                </div>
-                <div>
-                  <label for="bairro" class="block text-sm font-medium text-gray-700 mb-1">Bairro *</label>
-                  <input
-                    id="bairro"
-                    formControlName="bairro"
-                    type="text"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pj-cyan focus:border-transparent"
-                    placeholder="Centro">
-                </div>
-                <div>
-                  <label for="estado" class="block text-sm font-medium text-gray-700 mb-1">Estado *</label>
-                  <select
-                    id="estado"
-                    formControlName="estado"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pj-cyan focus:border-transparent">
-                    <option value="">UF</option>
-                    <option value="SP">SP</option>
-                    <option value="RJ">RJ</option>
-                    <option value="MG">MG</option>
-                    <!-- Add more states as needed -->
-                  </select>
-                </div>
               </div>
             </form>
           </div>

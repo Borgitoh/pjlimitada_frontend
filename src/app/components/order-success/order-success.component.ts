@@ -33,7 +33,7 @@ export class OrderSuccessComponent implements OnInit {
     }
 
     // Load payment-specific data
-    if (this.paymentMethod === 'pix') {
+    if (this.paymentMethod === 'express') {
       this.pixData = this.checkoutService.generatePixPayment(this.order.total);
     } else if (this.paymentMethod === 'bank_transfer') {
       this.bankInfo = this.checkoutService.getBankTransferInfo();

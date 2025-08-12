@@ -41,17 +41,12 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       nome: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       telefone: ['', [Validators.required]],
-      cpf: ['', [Validators.required]]
     });
 
     this.addressForm = this.fb.group({
       cep: ['', [Validators.required]],
       endereco: ['', [Validators.required]],
-      numero: ['', [Validators.required]],
-      complemento: [''],
-      bairro: ['', [Validators.required]],
       cidade: ['', [Validators.required]],
-      estado: ['', [Validators.required]]
     });
   }
 

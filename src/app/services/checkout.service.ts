@@ -63,6 +63,8 @@ export class CheckoutService {
 
   private addToAdminSales(order: Order, checkoutData: CheckoutData): void {
     // Convert e-commerce order to admin sale format
+    console.log(order);
+    
     const adminSale = {
       id: order.id,
       date: order.createdAt,
@@ -75,6 +77,7 @@ export class CheckoutService {
         unitPrice: item.preco,
         total: item.preco * item.quantidade
       })),
+      status: order.status,
       subtotal: order.total,
       discount: 0,
       total: order.total,
@@ -110,14 +113,14 @@ export class CheckoutService {
         id: 'express',
         name: 'Pagamento Express',
         description: 'Cartão de crédito/débito - Aprovação instantânea',
-        icon: 'credit-card',
+        icon: 'smartphone',
         processingTime: 'Imediato'
       },
       {
-        id: 'pix',
-        name: 'PIX',
+        id: 'referencia',
+        name: 'Pagamento por referência',
         description: 'Transferência instantânea via PIX',
-        icon: 'smartphone',
+        icon: 'credit-card',
         processingTime: 'Até 1 hora'
       },
       {
@@ -147,7 +150,7 @@ export class CheckoutService {
 
   getBankTransferInfo() {
     return {
-      bankName: 'Banco do Brasil',
+      bankName: 'Banco BAI',
       agency: '1234-5',
       account: '12345-6',
       accountType: 'Conta Corrente',
@@ -155,7 +158,6 @@ export class CheckoutService {
       companyName: 'PJ Limitada LTDA',
       instructions: [
         'Faça a transferência para os dados bancários acima',
-        'Use seu CPF/CNPJ como identificação',
         'Envie o comprovante para confirmação',
         'Prazo para pagamento: 3 dias úteis'
       ]

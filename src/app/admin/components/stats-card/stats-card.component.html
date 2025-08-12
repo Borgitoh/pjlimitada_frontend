@@ -3,7 +3,7 @@
     <div class="flex-1 min-w-0">
       <p class="text-xs sm:text-sm font-medium text-gray-600 mb-1 truncate">{{title}}</p>
       <p class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">{{value | number}}</p>
-      <div class="flex items-center mt-1 sm:mt-2" *ngIf="change !== undefined">
+      <div class="flex items-center text-center mt-1 sm:mt-2" *ngIf="change !== undefined">
         <svg
           class="h-3 w-3 sm:h-4 sm:w-4 mr-1 flex-shrink-0"
           [class.text-green-500]="change >= 0"
