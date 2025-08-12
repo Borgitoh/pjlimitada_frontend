@@ -11,7 +11,6 @@ import { CheckoutComponent } from './components/checkout/checkout.component';
 import { OrderSuccessComponent } from './components/order-success/order-success.component';
 import { OrderTrackingComponent } from './components/order-tracking/order-tracking.component';
 import { MyOrdersComponent } from './components/my-orders/my-orders.component';
-import { DemoInvoiceComponent } from './demo-invoice.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -27,7 +26,6 @@ const routes: Routes = [
   { path: 'order-success', component: OrderSuccessComponent },
   { path: 'rastreamento', component: OrderTrackingComponent },
   { path: 'meus-pedidos', component: MyOrdersComponent },
-  { path: 'demo-fatura', component: DemoInvoiceComponent },
   {
     path: 'admin',
     loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)
