@@ -9,51 +9,46 @@ export class PdfService {
   generateInvoicePdf(invoiceData: any): void {
     const doc = new jsPDF();
 
-    // Configurações de página e cores
-    const margin = 15;
+    // Configurações de página e cores modernas
+    const margin = 20;
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
     const contentWidth = pageWidth - (margin * 2);
 
-    // Paleta de cores profissional
+    // Paleta de cores corporativa moderna
     const colors = {
-      primary: [25, 47, 89],      // Azul escuro elegante
-      secondary: [52, 168, 83],   // Verde moderno
-      accent: [234, 67, 53],      // Vermelho elegante
-      dark: [33, 37, 41],         // Cinza escuro
-      light: [248, 249, 250],     // Cinza claro
+      primary: [13, 148, 136],    // Teal moderno
+      secondary: [99, 102, 241],  // Indigo elegante
+      accent: [245, 158, 11],     // Âmbar para destaques
+      success: [34, 197, 94],     // Verde sucesso
+      dark: [31, 41, 55],         // Cinza escuro
+      light: [249, 250, 251],     // Cinza muito claro
+      medium: [156, 163, 175],    // Cinza médio
       white: [255, 255, 255]
     };
 
     let y = margin;
 
-    // === CABEÇALHO PREMIUM ===
-    this.drawPremiumHeader(doc, invoiceData, y, contentWidth, margin, colors);
-    y += 55;
+    // === CABEÇALHO CORPORATIVO MODERNO ===
+    this.drawModernCorporateHeader(doc, invoiceData, y, contentWidth, margin, colors);
+    y += 70;
 
-    // === INFORMAÇÕES ORGANIZADAS ===
-    y = this.drawCompanyClientSection(doc, invoiceData, y, contentWidth, margin, colors);
-    y += 15;
-
-    // === DETALHES DA FATURA ===
-    y = this.drawInvoiceDetails(doc, invoiceData, y, contentWidth, margin, colors);
+    // === SEÇÃO DE DADOS EMPRESA/CLIENTE ===
+    y = this.drawDataSection(doc, invoiceData, y, contentWidth, margin, colors);
     y += 20;
 
-    // === TABELA PREMIUM ===
-    y = this.drawPremiumTable(doc, invoiceData, y, contentWidth, margin, colors);
+    // === TABELA DE ITENS PREMIUM ===
+    y = this.drawModernItemsTable(doc, invoiceData, y, contentWidth, margin, colors);
     y += 15;
 
-    // === RESUMO FINANCEIRO ===
-    y = this.drawFinancialSummary(doc, invoiceData, y, contentWidth, margin, colors);
-    y += 20;
+    // === RESUMO FINANCEIRO DESTACADO ===
+    y = this.drawModernFinancialSummary(doc, invoiceData, y, contentWidth, margin, colors);
+    y += 25;
 
-    // === OBSERVAÇÕES E TERMOS ===
-    y = this.drawNotesSection(doc, invoiceData, y, contentWidth, margin, colors);
+    // === RODAPÉ CORPORATIVO ===
+    this.drawCorporateFooter(doc, pageHeight, contentWidth, margin, colors, invoiceData);
 
-    // === RODAPÉ PROFISSIONAL ===
-    this.drawProfessionalFooter(doc, pageHeight, contentWidth, margin, colors);
-
-    // Salvar com nome único
+    // Salvar com nome profissional
     const timestamp = new Date().toISOString().slice(0, 10);
     const fileName = `PJ_Limitada_Fatura_${invoiceData.fatura.numero}_${timestamp}.pdf`;
     doc.save(fileName);
