@@ -239,7 +239,7 @@ export class PdfService {
       [`📅 Data de Emissão:`, invoiceData.fatura.data],
       [`⏰ Data de Vencimento:`, invoiceData.fatura.dataVencimento || 'À vista'],
       [`🏷️  Série:`, invoiceData.fatura.serie],
-      [`��� Moeda:`, invoiceData.fatura.moeda]
+      [`💰 Moeda:`, invoiceData.fatura.moeda]
     ];
 
     detalhes.forEach((detalhe, index) => {
@@ -255,45 +255,45 @@ export class PdfService {
     return y + 20;
   }
 
-  private drawPremiumTable(doc: jsPDF, invoiceData: any, y: number, contentWidth: number, margin: number, colors: any): number {
-    // Título da tabela
-    doc.setFillColor(colors.secondary[0], colors.secondary[1], colors.secondary[2]);
-    doc.rect(margin, y, contentWidth, 10, 'F');
+  private drawModernItemsTable(doc: jsPDF, invoiceData: any, y: number, contentWidth: number, margin: number, colors: any): number {
+    // Título da seção
+    doc.setFillColor(colors.dark[0], colors.dark[1], colors.dark[2]);
+    doc.rect(margin, y, contentWidth, 15, 'F');
+
+    doc.setTextColor(colors.white[0], colors.white[1], colors.white[2]);
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.text('ITENS DA FATURA', margin + 10, y + 10);
+
+    y += 17;
+
+    // Cabeçalho da tabela
+    doc.setFillColor(colors.primary[0], colors.primary[1], colors.primary[2]);
+    doc.rect(margin, y, contentWidth, 15, 'F');
 
     doc.setTextColor(colors.white[0], colors.white[1], colors.white[2]);
     doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
-    doc.text('🛒 ITENS FATURADOS', margin + 8, y + 7);
 
-    y += 12;
-
-    // Cabeçalho da tabela
-    doc.setFillColor(colors.primary[0], colors.primary[1], colors.primary[2]);
-    doc.rect(margin, y, contentWidth, 12, 'F');
-
-    doc.setTextColor(colors.white[0], colors.white[1], colors.white[2]);
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'bold');
-
-    const colunas = ['#', 'DESCRIÇÃO DO PRODUTO', 'QTD', 'PREÇO UNIT.', 'TOTAL'];
-    const larguras = [15, 90, 25, 35, 35];
-    let currentX = margin + 3;
+    const colunas = ['ITEM', 'DESCRIÇÃO', 'QTD', 'PREÇO UNIT.', 'TOTAL'];
+    const larguras = [20, 85, 25, 35, 35];
+    let currentX = margin;
 
     colunas.forEach((coluna, index) => {
       if (index === 0 || index === 2 || index === 3 || index === 4) {
         const textWidth = doc.getTextWidth(coluna);
-        doc.text(coluna, currentX + (larguras[index] - textWidth) / 2, y + 8);
+        doc.text(coluna, currentX + (larguras[index] - textWidth) / 2, y + 10);
       } else {
-        doc.text(coluna, currentX + 3, y + 8);
+        doc.text(coluna, currentX + 5, y + 10);
       }
       currentX += larguras[index];
     });
 
-    y += 12;
+    y += 15;
 
     // Linhas da tabela
     invoiceData.itens.forEach((item: any, index: number) => {
-      const alturaLinha = 10;
+      const alturaLinha = 12;
 
       // Fundo alternado
       if (index % 2 === 0) {
@@ -301,32 +301,32 @@ export class PdfService {
         doc.rect(margin, y, contentWidth, alturaLinha, 'F');
       }
 
-      // Bordas
-      doc.setDrawColor(220, 220, 220);
-      doc.setLineWidth(0.2);
-      doc.line(margin, y + alturaLinha, margin + contentWidth, y + alturaLinha);
+      // Bordas horizontais
+      doc.setDrawColor(colors.medium[0], colors.medium[1], colors.medium[2]);
+      doc.setLineWidth(0.3);
+      doc.line(margin, y, margin + contentWidth, y);
 
       doc.setTextColor(colors.dark[0], colors.dark[1], colors.dark[2]);
-      doc.setFontSize(8);
+      doc.setFontSize(9);
       doc.setFont('helvetica', 'normal');
 
-      currentX = margin + 3;
+      currentX = margin;
       const dados = [
         (index + 1).toString().padStart(2, '0'),
-        item.nome.length > 45 ? item.nome.substring(0, 45) + '...' : item.nome,
+        item.nome.length > 40 ? item.nome.substring(0, 40) + '...' : item.nome,
         item.quantidade.toString(),
         `${item.precoUnitario.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} Kz`,
         `${item.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} Kz`
       ];
 
       dados.forEach((dado, colIndex) => {
-        const yPos = y + 7;
+        const yPos = y + 8;
 
         if (colIndex === 0 || colIndex === 2 || colIndex === 3 || colIndex === 4) {
           const textWidth = doc.getTextWidth(dado);
           doc.text(dado, currentX + (larguras[colIndex] - textWidth) / 2, yPos);
         } else {
-          doc.text(dado, currentX + 3, yPos);
+          doc.text(dado, currentX + 5, yPos);
         }
 
         currentX += larguras[colIndex];
@@ -335,12 +335,22 @@ export class PdfService {
       y += alturaLinha;
     });
 
-    // Borda final da tabela
-    doc.setDrawColor(colors.primary[0], colors.primary[1], colors.primary[2]);
+    // Linha final da tabela
+    doc.setDrawColor(colors.dark[0], colors.dark[1], colors.dark[2]);
     doc.setLineWidth(1);
-    doc.rect(margin, y - (invoiceData.itens.length * 10) - 24, contentWidth, (invoiceData.itens.length * 10) + 24);
+    doc.line(margin, y, margin + contentWidth, y);
 
-    return y + 5;
+    // Bordas verticais da tabela
+    doc.setDrawColor(colors.medium[0], colors.medium[1], colors.medium[2]);
+    doc.setLineWidth(0.5);
+    currentX = margin;
+    larguras.forEach(largura => {
+      doc.line(currentX, y - (invoiceData.itens.length * 12) - 15, currentX, y);
+      currentX += largura;
+    });
+    doc.line(currentX, y - (invoiceData.itens.length * 12) - 15, currentX, y);
+
+    return y + 10;
   }
 
   private drawFinancialSummary(doc: jsPDF, invoiceData: any, y: number, contentWidth: number, margin: number, colors: any): number {
