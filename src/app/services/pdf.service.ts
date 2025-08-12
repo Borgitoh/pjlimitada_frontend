@@ -11,48 +11,48 @@ export class PdfService {
   generateInvoicePdf(invoiceData: any): void {
     const doc = new jsPDF();
 
-    // Configurações de página e cores modernas
-    const margin = 20;
+    // Configurações minimalistas - seguindo modelo SMILODON
+    const margin = 25;
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
     const contentWidth = pageWidth - (margin * 2);
 
-    // Paleta de cores corporativa moderna
+    // Cores minimalistas e profissionais
     const colors = {
-      primary: [13, 148, 136],    // Teal moderno
-      secondary: [99, 102, 241],  // Indigo elegante
-      accent: [245, 158, 11],     // Âmbar para destaques
-      success: [34, 197, 94],     // Verde sucesso
-      dark: [31, 41, 55],         // Cinza escuro
-      light: [249, 250, 251],     // Cinza muito claro
-      medium: [156, 163, 175],    // Cinza médio
-      white: [255, 255, 255]
+      primary: [52, 73, 156],     // Azul profissional como SMILODON
+      text: [75, 85, 99],         // Cinza escuro para texto
+      lightText: [107, 114, 128], // Cinza claro para subtextos
+      border: [229, 231, 235],    // Bordas sutis
+      background: [249, 250, 251] // Fundo muito sutil
     };
 
     let y = margin;
 
-    // === CABEÇALHO CORPORATIVO MODERNO ===
-    this.drawModernCorporateHeader(doc, invoiceData, y, contentWidth, margin, colors);
-    y += 70;
+    // === CABEÇALHO LIMPO ESTILO SMILODON ===
+    this.drawCleanHeader(doc, invoiceData, y, contentWidth, margin, colors);
+    y += 50;
 
-    // === SEÇÃO DE DADOS EMPRESA/CLIENTE ===
-    y = this.drawDataSection(doc, invoiceData, y, contentWidth, margin, colors);
+    // === DADOS DA EMPRESA (simples) ===
+    y = this.drawCompanyInfo(doc, invoiceData, y, margin, colors);
+    y += 40;
+
+    // === FATURAR PARA ===
+    y = this.drawBillTo(doc, invoiceData, y, margin, colors);
+    y += 30;
+
+    // === TABELA LIMPA DE PRODUTOS ===
+    y = this.drawCleanTable(doc, invoiceData, y, contentWidth, margin, colors);
     y += 20;
 
-    // === TABELA DE ITENS PREMIUM ===
-    y = this.drawModernItemsTable(doc, invoiceData, y, contentWidth, margin, colors);
-    y += 15;
+    // === RESUMO FINANCEIRO ALINHADO ===
+    y = this.drawCleanSummary(doc, invoiceData, y, contentWidth, margin, colors);
+    y += 30;
 
-    // === RESUMO FINANCEIRO DESTACADO ===
-    y = this.drawModernFinancialSummary(doc, invoiceData, y, contentWidth, margin, colors);
-    y += 25;
+    // === MENSAGEM DE AGRADECIMENTO ===
+    this.drawThankYouMessage(doc, y, margin, colors);
 
-    // === RODAPÉ CORPORATIVO ===
-    this.drawCorporateFooter(doc, pageHeight, contentWidth, margin, colors, invoiceData);
-
-    // Salvar com nome profissional
-    const timestamp = new Date().toISOString().slice(0, 10);
-    const fileName = `PJ_Limitada_Fatura_${invoiceData.fatura.numero}_${timestamp}.pdf`;
+    // Salvar com nome limpo
+    const fileName = `Fatura_${invoiceData.fatura.numero}.pdf`;
     doc.save(fileName);
   }
 
