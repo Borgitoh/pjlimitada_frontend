@@ -56,7 +56,7 @@
             <div class="flex-1 min-w-0">
               <h4 class="text-sm font-medium text-gray-900 truncate">{{item.nome}}</h4>
               <p class="text-xs text-gray-500">{{item.marca}} • {{item.categoria}}</p>
-              <p class="text-sm font-semibold text-pj-cyan">R$ {{item.preco | number:'1.2-2'}}</p>
+              <p class="text-sm font-semibold text-pj-cyan">KZ {{item.preco | number:'1.2-2'}}</p>
             </div>
             
             <!-- Quantity Controls -->
@@ -99,11 +99,11 @@
         <div class="space-y-2 mb-4">
           <div class="flex justify-between text-sm">
             <span class="text-gray-600">Subtotal:</span>
-            <span class="font-medium">R$ {{cartSummary.subtotal | number:'1.2-2'}}</span>
+            <span class="font-medium">KZ {{cartSummary.subtotal | number:'1.2-2'}}</span>
           </div>
           <div class="flex justify-between text-base font-semibold">
             <span class="text-gray-900">Total:</span>
-            <span class="text-pj-cyan">R$ {{cartSummary.total | number:'1.2-2'}}</span>
+            <span class="text-pj-cyan">KZ {{cartSummary.total | number:'1.2-2'}}</span>
           </div>
         </div>
         
