@@ -80,7 +80,7 @@
             </div>
             
             <div class="space-y-2 text-sm text-gray-600">
-              <p><strong>Valor:</strong> R$ {{order?.total | number:'1.2-2'}}</p>
+              <p><strong>Valor:</strong> KZ {{order?.total | number:'1.2-2'}}</p>
               <p><strong>Validade:</strong> 30 minutos</p>
             </div>
             
@@ -115,7 +115,7 @@
             <div>
               <p><strong>CNPJ:</strong> {{bankInfo?.cnpj}}</p>
               <p><strong>Empresa:</strong> {{bankInfo?.companyName}}</p>
-              <p><strong>Valor:</strong> R$ {{order?.total | number:'1.2-2'}}</p>
+              <p><strong>Valor:</strong> KZ {{order?.total | number:'1.2-2'}}</p>
             </div>
           </div>
         </div>
@@ -142,14 +142,14 @@
             <h4 class="font-medium text-gray-900">{{item.nome}}</h4>
             <p class="text-sm text-gray-600">{{item.marca}} • Qtd: {{item.quantidade}}</p>
           </div>
-          <p class="font-semibold text-gray-900">R$ {{(item.preco * item.quantidade) | number:'1.2-2'}}</p>
+          <p class="font-semibold text-gray-900">KZ {{(item.preco * item.quantidade) | number:'1.2-2'}}</p>
         </div>
       </div>
       
       <div class="border-t border-gray-200 pt-4 mt-4">
         <div class="flex justify-between text-lg font-semibold">
           <span>Total:</span>
-          <span class="text-pj-cyan">R$ {{order?.total | number:'1.2-2'}}</span>
+          <span class="text-pj-cyan">KZ {{order?.total | number:'1.2-2'}}</span>
         </div>
       </div>
     </div>
