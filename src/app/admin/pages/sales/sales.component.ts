@@ -122,6 +122,25 @@ export class SalesComponent implements OnInit, OnDestroy {
     alert(`Função de impressão seria implementada aqui para a venda #${sale.id}`);
   }
 
+  downloadInvoice(sale: Sale): void {
+    // Gerar dados da fatura
+    const invoiceData = this.generateInvoiceData(sale);
+
+    // Criar conteúdo HTML da fatura
+    const invoiceHtml = this.generateInvoiceHtml(invoiceData);
+
+    // Criar e baixar arquivo
+    const blob = new Blob([invoiceHtml], { type: 'text/html;charset=utf-8' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `fatura_${sale.id}_${new Date(sale.date).toISOString().split('T')[0]}.html`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  }
+
   closeModal(): void {
     this.isModalOpen = false;
     this.resetForm();
