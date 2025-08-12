@@ -18,6 +18,7 @@ import { CartModalComponent } from './components/cart-modal/cart-modal.component
 import { CheckoutComponent } from './components/checkout/checkout.component';
 import { OrderSuccessComponent } from './components/order-success/order-success.component';
 import { OrderTrackingComponent } from './components/order-tracking/order-tracking.component';
+import { MyOrdersComponent } from './components/my-orders/my-orders.component';
 import { SwiperModule } from 'swiper/angular';
 
 @NgModule({
