@@ -74,7 +74,7 @@ export class PhoneMaskDirective {
     }
 
     // Previne que o usuário apague o prefixo +244
-    if ((event.keyCode === 8 || event.keyCode === 46) && input.selectionStart <= 4) {
+    if ((event.keyCode === 8 || event.keyCode === 46) && input.selectionStart !== null && input.selectionStart <= 4) {
       event.preventDefault();
       return;
     }
