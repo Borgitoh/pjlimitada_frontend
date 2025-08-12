@@ -187,86 +187,53 @@ export class PdfService {
     return y + 10;
   }
 
-  private drawModernFinancialSummary(doc: jsPDF, invoiceData: any, y: number, contentWidth: number, margin: number, colors: any): number {
-    const resumoX = margin + contentWidth - 130;
-    const resumoWidth = 120;
+  private drawCleanSummary(doc: jsPDF, invoiceData: any, y: number, contentWidth: number, margin: number, colors: any): number {
+    // Resumo financeiro alinhado à direita - estilo SMILODON
+    const resumoX = margin + contentWidth - 120;
 
-    // Fundo do resumo com gradiente
-    doc.setFillColor(colors.light[0], colors.light[1], colors.light[2]);
-    doc.rect(resumoX, y, resumoWidth, 55, 'F');
-
-    // Borda elegante
-    doc.setDrawColor(colors.primary[0], colors.primary[1], colors.primary[2]);
-    doc.setLineWidth(2);
-    doc.rect(resumoX, y, resumoWidth, 55);
-
-    // Cabeçalho do resumo
-    doc.setFillColor(colors.primary[0], colors.primary[1], colors.primary[2]);
-    doc.rect(resumoX, y, resumoWidth, 15, 'F');
-
-    doc.setTextColor(colors.white[0], colors.white[1], colors.white[2]);
+    doc.setTextColor(colors.text[0], colors.text[1], colors.text[2]);
     doc.setFontSize(11);
-    doc.setFont('helvetica', 'bold');
-    doc.text('RESUMO FINANCEIRO', resumoX + 10, y + 10);
+    doc.setFont('helvetica', 'normal');
 
-    y += 18;
+    // Subtotal
+    doc.text('Subtotal:', resumoX, y);
+    const subtotalText = `${invoiceData.resumo.subtotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} Kz`;
+    const subtotalWidth = doc.getTextWidth(subtotalText);
+    doc.text(subtotalText, resumoX + 120 - subtotalWidth, y);
 
-    // Itens do resumo
-    doc.setTextColor(colors.dark[0], colors.dark[1], colors.dark[2]);
-    doc.setFontSize(10);
+    // IVA (se houver)
+    if (invoiceData.resumo.impostos && invoiceData.resumo.impostos > 0) {
+      doc.text('IVA (18%):', resumoX, y + 10);
+      const ivaText = `${invoiceData.resumo.impostos.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} Kz`;
+      const ivaWidth = doc.getTextWidth(ivaText);
+      doc.text(ivaText, resumoX + 120 - ivaWidth, y + 10);
+      y += 10;
+    }
 
-    const resumoItens = [
-      ['Subtotal:', `${invoiceData.resumo.subtotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} Kz`],
-      ['Desconto:', `${(invoiceData.resumo.desconto || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })} Kz`]
-    ];
-
-    resumoItens.forEach((item, index) => {
-      const itemY = y + (index * 10);
-
-      // Linha separadora sutil
-      if (index > 0) {
-        doc.setDrawColor(colors.medium[0], colors.medium[1], colors.medium[2]);
-        doc.setLineWidth(0.3);
-        doc.line(resumoX + 5, itemY - 5, resumoX + resumoWidth - 5, itemY - 5);
-      }
-
-      doc.setFont('helvetica', 'normal');
-      doc.text(item[0], resumoX + 8, itemY);
-      doc.setFont('helvetica', 'bold');
-      doc.text(item[1], resumoX + 60, itemY);
-    });
-
-    // Linha antes do total
-    doc.setDrawColor(colors.primary[0], colors.primary[1], colors.primary[2]);
-    doc.setLineWidth(1);
-    doc.line(resumoX + 5, y + 25, resumoX + resumoWidth - 5, y + 25);
+    // Linha separadora
+    doc.setDrawColor(colors.border[0], colors.border[1], colors.border[2]);
+    doc.setLineWidth(0.5);
+    doc.line(resumoX, y + 15, resumoX + 120, y + 15);
 
     // Total em destaque
-    doc.setFillColor(colors.success[0], colors.success[1], colors.success[2]);
-    doc.rect(resumoX, y + 27, resumoWidth, 18, 'F');
-
-    doc.setTextColor(colors.white[0], colors.white[1], colors.white[2]);
+    doc.setTextColor(colors.text[0], colors.text[1], colors.text[2]);
     doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
-    doc.text('TOTAL:', resumoX + 8, y + 36);
-    doc.setFontSize(14);
-    doc.text(`${invoiceData.resumo.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} Kz`, resumoX + 8, y + 42);
+    doc.text('Total:', resumoX, y + 25);
 
-    // Valor por extenso em caixa
-    y += 65;
-    doc.setFillColor(colors.white[0], colors.white[1], colors.white[2]);
-    doc.setDrawColor(colors.medium[0], colors.medium[1], colors.medium[2]);
-    doc.setLineWidth(1);
-    doc.rect(margin, y, contentWidth, 18, 'FD');
+    const totalText = `${invoiceData.resumo.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} Kz`;
+    const totalWidth = doc.getTextWidth(totalText);
+    doc.text(totalText, resumoX + 120 - totalWidth, y + 25);
 
-    doc.setTextColor(colors.dark[0], colors.dark[1], colors.dark[2]);
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'bold');
-    doc.text('VALOR POR EXTENSO:', margin + 8, y + 8);
+    return y + 35;
+  }
+
+  private drawThankYouMessage(doc: jsPDF, y: number, margin: number, colors: any): void {
+    // Mensagem de agradecimento - estilo SMILODON
+    doc.setTextColor(colors.lightText[0], colors.lightText[1], colors.lightText[2]);
+    doc.setFontSize(11);
     doc.setFont('helvetica', 'normal');
-    doc.text(invoiceData.resumo.totalPorExtenso || 'Valor não convertido para extenso', margin + 8, y + 14);
-
-    return y + 25;
+    doc.text('Obrigado pela preferência!', margin, y);
   }
 
   private drawCorporateFooter(doc: jsPDF, pageHeight: number, contentWidth: number, margin: number, colors: any, invoiceData: any): void {
