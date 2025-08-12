@@ -474,7 +474,7 @@ export class SalesComponent implements OnInit, OnDestroy {
     return result.charAt(0).toUpperCase() + result.slice(1);
   }
 
-  private async addCompanyHeader(pdf: jsPDF, primaryColor: number[], darkColor: number[]): Promise<void> {
+  private async addCompanyHeader(pdf: jsPDF, primaryColor: [number, number, number], darkColor: [number, number, number]): Promise<void> {
     // Background header
     pdf.setFillColor(...primaryColor);
     pdf.rect(0, 0, 210, 50, 'F');
