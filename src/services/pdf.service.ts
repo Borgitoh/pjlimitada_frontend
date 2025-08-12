@@ -435,60 +435,69 @@ export class PdfService {
     return y + 25;
   }
 
-  private drawNotesSection(doc: jsPDF, invoiceData: any, y: number, contentWidth: number, margin: number, colors: any): number {
+  private drawCorporateFooter(doc: jsPDF, pageHeight: number, contentWidth: number, margin: number, colors: any, invoiceData: any): void {
+    const footerY = pageHeight - 40;
+
+    // Observações (se existirem)
     if (invoiceData.observacoes) {
       doc.setTextColor(colors.primary[0], colors.primary[1], colors.primary[2]);
       doc.setFontSize(10);
       doc.setFont('helvetica', 'bold');
-      doc.text('📝 OBSERVAÇÕES:', margin, y);
+      doc.text('OBSERVAÇÕES:', margin, footerY - 25);
 
-      y += 8;
       doc.setTextColor(colors.dark[0], colors.dark[1], colors.dark[2]);
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(8);
 
       const linhas = doc.splitTextToSize(invoiceData.observacoes, contentWidth - 20);
-      linhas.forEach((linha: string) => {
-        doc.text(linha, margin, y);
-        y += 4;
+      linhas.forEach((linha: string, index: number) => {
+        doc.text(linha, margin, footerY - 18 + (index * 4));
       });
     }
 
-    return y + 10;
-  }
-
-  private drawProfessionalFooter(doc: jsPDF, pageHeight: number, contentWidth: number, margin: number, colors: any): void {
-    const footerY = pageHeight - 25;
-
-    // Linha decorativa
-    doc.setDrawColor(colors.secondary[0], colors.secondary[1], colors.secondary[2]);
+    // Linha decorativa superior
+    doc.setDrawColor(colors.primary[0], colors.primary[1], colors.primary[2]);
     doc.setLineWidth(2);
-    doc.line(margin, footerY - 5, margin + contentWidth, footerY - 5);
+    doc.line(margin, footerY - 2, margin + contentWidth, footerY - 2);
 
     // Fundo do rodapé
-    doc.setFillColor(colors.light[0], colors.light[1], colors.light[2]);
-    doc.rect(margin, footerY, contentWidth, 20, 'F');
+    doc.setFillColor(colors.dark[0], colors.dark[1], colors.dark[2]);
+    doc.rect(margin, footerY, contentWidth, 35, 'F');
 
-    // Informações legais
-    doc.setTextColor(colors.dark[0], colors.dark[1], colors.dark[2]);
+    // Faixa colorida superior
+    doc.setFillColor(colors.primary[0], colors.primary[1], colors.primary[2]);
+    doc.rect(margin, footerY, contentWidth, 3, 'F');
+
+    // Informações legais principais
+    doc.setTextColor(colors.white[0], colors.white[1], colors.white[2]);
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'bold');
+    doc.text('PJ LIMITADA - PEÇAS AUTOMOTIVAS', margin + 10, footerY + 12);
+
     doc.setFontSize(7);
     doc.setFont('helvetica', 'normal');
+    doc.text('Sociedade por Quotas | NIF: 5417048598 | Registro Comercial: 123456789', margin + 10, footerY + 17);
+    doc.text('Av. Marginal, Edifício Torres Dipanda, 15º Andar - Luanda, Angola', margin + 10, footerY + 21);
+    doc.text('Tel: +244 923 456 789 | Email: contato@pjlimitada.com', margin + 10, footerY + 25);
 
-    const textoLegal = `PJ LIMITADA - Sociedade por Quotas | NIF: 5417048598 | Registro Comercial: 123456789`;
-    const textoEndereco = `Av. Marginal, Edifício Torres Dipanda, 15º Andar - Luanda, Angola`;
-
-    doc.text(textoLegal, margin + 5, footerY + 6);
-    doc.text(textoEndereco, margin + 5, footerY + 10);
-
-    // Data de geração
-    doc.setFont('helvetica', 'italic');
+    // Informações de geração (lado direito)
     const agora = new Date();
-    const textoGeracao = `Documento gerado em ${agora.toLocaleDateString('pt-BR')} às ${agora.toLocaleTimeString('pt-BR')}`;
-    doc.text(textoGeracao, margin + 5, footerY + 16);
+    const textoGeracao = `Gerado: ${agora.toLocaleDateString('pt-BR')} ${agora.toLocaleTimeString('pt-BR')}`;
+    const hash = Math.random().toString(36).substring(2, 12).toUpperCase();
 
-    // Hash de verificação
-    const hash = Math.random().toString(36).substring(2, 15).toUpperCase();
+    doc.setFont('helvetica', 'italic');
+    doc.setFontSize(7);
+    doc.text(textoGeracao, margin + contentWidth - 80, footerY + 17);
+    doc.text(`Hash: ${hash}`, margin + contentWidth - 80, footerY + 21);
+
+    // Selo de autenticidade
+    doc.setFillColor(colors.success[0], colors.success[1], colors.success[2]);
+    doc.circle(margin + contentWidth - 20, footerY + 20, 8);
+
+    doc.setTextColor(colors.white[0], colors.white[1], colors.white[2]);
+    doc.setFontSize(6);
     doc.setFont('helvetica', 'bold');
-    doc.text(`Hash: ${hash}`, margin + contentWidth - 60, footerY + 16);
+    doc.text('✓', margin + contentWidth - 23, footerY + 22);
+    doc.text('VÁLIDO', margin + contentWidth - 28, footerY + 28);
   }
 }
