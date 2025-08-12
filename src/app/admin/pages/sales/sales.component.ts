@@ -542,7 +542,7 @@ export class SalesComponent implements OnInit, OnDestroy {
     pdf.text(`${data.fatura.cliente}`, 22, yPosition + 12);
   }
 
-  private addItemsTable(pdf: jsPDF, data: any, primaryColor: number[], lightGray: number[], textColor: number[], yPosition: number): number {
+  private addItemsTable(pdf: jsPDF, data: any, primaryColor: [number, number, number], lightGray: [number, number, number], textColor: [number, number, number], yPosition: number): number {
     // Cabeçalho da tabela
     pdf.setFillColor(...primaryColor);
     pdf.rect(20, yPosition, 170, 8, 'F');
