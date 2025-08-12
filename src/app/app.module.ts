@@ -19,6 +19,7 @@ import { CheckoutComponent } from './components/checkout/checkout.component';
 import { OrderSuccessComponent } from './components/order-success/order-success.component';
 import { OrderTrackingComponent } from './components/order-tracking/order-tracking.component';
 import { MyOrdersComponent } from './components/my-orders/my-orders.component';
+import { PhoneMaskDirective } from './directives/phone-mask.directive';
 import { SwiperModule } from 'swiper/angular';
 
 @NgModule({
