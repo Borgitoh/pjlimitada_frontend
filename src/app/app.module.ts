@@ -41,7 +41,8 @@ import { SwiperModule } from 'swiper/angular';
     OrderSuccessComponent,
     OrderTrackingComponent,
     MyOrdersComponent,
-    PhoneMaskDirective
+    PhoneMaskDirective,
+    CurrencyMaskDirective
   ],
   imports: [
     BrowserModule,
