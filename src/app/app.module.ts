@@ -20,6 +20,7 @@ import { OrderSuccessComponent } from './components/order-success/order-success.
 import { OrderTrackingComponent } from './components/order-tracking/order-tracking.component';
 import { MyOrdersComponent } from './components/my-orders/my-orders.component';
 import { PhoneMaskDirective } from './directives/phone-mask.directive';
+import { CurrencyMaskDirective } from './directives/currency-mask.directive';
 import { SwiperModule } from 'swiper/angular';
 
 @NgModule({
