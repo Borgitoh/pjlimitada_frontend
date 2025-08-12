@@ -54,47 +54,82 @@ export class PdfService {
     doc.save(fileName);
   }
 
-  private drawPremiumHeader(doc: jsPDF, invoiceData: any, y: number, contentWidth: number, margin: number, colors: any): void {
-    // Fundo gradiente simulado com duas cores
+  private drawModernCorporateHeader(doc: jsPDF, invoiceData: any, y: number, contentWidth: number, margin: number, colors: any): void {
+    // Fundo principal com gradiente simulado
     doc.setFillColor(colors.primary[0], colors.primary[1], colors.primary[2]);
-    doc.rect(margin, y, contentWidth, 45, 'F');
+    doc.rect(margin, y, contentWidth, 55, 'F');
 
     // Faixa decorativa superior
     doc.setFillColor(colors.secondary[0], colors.secondary[1], colors.secondary[2]);
-    doc.rect(margin, y, contentWidth, 3, 'F');
+    doc.rect(margin, y, contentWidth, 4, 'F');
 
-    // Logo PJ elaborado e moderno
-    this.drawModernLogo(doc, margin + 15, y + 22.5, colors.white);
+    // Faixa decorativa inferior
+    doc.setFillColor(colors.accent[0], colors.accent[1], colors.accent[2]);
+    doc.rect(margin, y + 51, contentWidth, 4, 'F');
 
-    // Informações da empresa no cabeçalho
+    // Logo corporativo premium
+    this.drawPremiumLogo(doc, margin + 20, y + 27, colors);
+
+    // Informações da empresa - lado esquerdo
     doc.setTextColor(colors.white[0], colors.white[1], colors.white[2]);
-    doc.setFontSize(14);
+    doc.setFontSize(22);
     doc.setFont('helvetica', 'bold');
-    doc.text('PJ LIMITADA', margin + 55, y + 18);
-
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
-    doc.text('Peças Automotivas & Soluções Funcionais', margin + 55, y + 26);
-    doc.text('Luanda, Angola | NIF: 5417048598', margin + 55, y + 32);
-
-    // Seção FATURA com design moderno
-    const faturaX = margin + contentWidth - 85;
-    doc.setFillColor(colors.white[0], colors.white[1], colors.white[2]);
-    doc.roundedRect(faturaX, y + 8, 75, 30, 4, 4, 'F');
-
-    doc.setTextColor(colors.primary[0], colors.primary[1], colors.primary[2]);
-    doc.setFontSize(18);
-    doc.setFont('helvetica', 'bold');
-    doc.text('FATURA', faturaX + 15, y + 22);
+    doc.text('PJ LIMITADA', margin + 65, y + 20);
 
     doc.setFontSize(10);
     doc.setFont('helvetica', 'normal');
-    doc.text('COMMERCIAL INVOICE', faturaX + 8, y + 28);
+    doc.text('PEÇAS AUTOMOTIVAS PREMIUM', margin + 65, y + 28);
+    doc.text('Av. Marginal, Edifício Torres Dipanda', margin + 65, y + 36);
+    doc.text('Luanda, Angola | Tel: +244 923 456 789', margin + 65, y + 43);
 
+    // Caixa da fatura - lado direito
+    const faturaX = margin + contentWidth - 120;
+    doc.setFillColor(colors.white[0], colors.white[1], colors.white[2]);
+    doc.roundedRect(faturaX, y + 10, 110, 35, 5, 5, 'F');
+
+    // Sombra da caixa
+    doc.setFillColor(0, 0, 0, 0.1);
+    doc.roundedRect(faturaX + 2, y + 12, 110, 35, 5, 5, 'F');
+    doc.setFillColor(colors.white[0], colors.white[1], colors.white[2]);
+    doc.roundedRect(faturaX, y + 10, 110, 35, 5, 5, 'F');
+
+    doc.setTextColor(colors.primary[0], colors.primary[1], colors.primary[2]);
+    doc.setFontSize(24);
+    doc.setFont('helvetica', 'bold');
+    doc.text('FATURA', faturaX + 25, y + 24);
+
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.text('COMMERCIAL INVOICE', faturaX + 20, y + 30);
+
+    // Número da fatura em destaque
+    doc.setFillColor(colors.secondary[0], colors.secondary[1], colors.secondary[2]);
+    doc.roundedRect(faturaX + 10, y + 32, 90, 10, 2, 2, 'F');
+
+    doc.setTextColor(colors.white[0], colors.white[1], colors.white[2]);
     doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
-    doc.setTextColor(colors.secondary[0], colors.secondary[1], colors.secondary[2]);
-    doc.text(`Nº ${invoiceData.fatura.numero}`, faturaX + 20, y + 35);
+    doc.text(`Nº ${invoiceData.fatura.numero}`, faturaX + 30, y + 40);
+  }
+
+  private drawPremiumLogo(doc: jsPDF, x: number, y: number, colors: any): void {
+    // Círculo externo
+    doc.setFillColor(colors.white[0], colors.white[1], colors.white[2]);
+    doc.circle(x, y, 18);
+
+    // Círculo interno principal
+    doc.setFillColor(colors.secondary[0], colors.secondary[1], colors.secondary[2]);
+    doc.circle(x, y, 15);
+
+    // Círculo interno menor
+    doc.setFillColor(colors.accent[0], colors.accent[1], colors.accent[2]);
+    doc.circle(x, y, 12);
+
+    // Texto PJ
+    doc.setTextColor(colors.white[0], colors.white[1], colors.white[2]);
+    doc.setFontSize(18);
+    doc.setFont('helvetica', 'bold');
+    doc.text('PJ', x - 10, y + 6);
   }
 
   private drawModernLogo(doc: jsPDF, x: number, y: number, color: number[]): void {
