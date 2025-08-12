@@ -329,4 +329,128 @@ export class SalesComponent implements OnInit, OnDestroy {
       total: 0
     };
   }
+
+  private generateInvoiceData(sale: Sale) {
+    return {
+      empresa: {
+        nome: 'PJ Limitada',
+        endereco: 'Rua das Peças Automotivas, 123',
+        cidade: 'Luanda, Angola',
+        telefone: '+244 923 456 789',
+        email: 'contato@pjlimitada.com',
+        nif: '123456789'
+      },
+      fatura: {
+        numero: sale.id,
+        data: new Date(sale.date).toLocaleDateString('pt-BR'),
+        vendedor: sale.sellerName,
+        cliente: sale.customerName || 'Cliente Geral',
+        formaPagamento: this.getPaymentMethodLabel(sale.paymentMethod)
+      },
+      itens: sale.items.map(item => ({
+        nome: item.productName,
+        quantidade: item.quantity,
+        precoUnitario: item.unitPrice,
+        total: item.total
+      })),
+      resumo: {
+        subtotal: sale.subtotal,
+        desconto: sale.discount || 0,
+        total: sale.total
+      },
+      observacoes: sale.notes || ''
+    };
+  }
+
+  private generateInvoiceHtml(data: any): string {
+    return `
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fatura - ${data.fatura.numero}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+        .invoice-header { text-align: center; margin-bottom: 30px; }
+        .company-info { text-align: center; margin-bottom: 20px; }
+        .invoice-info { display: flex; justify-content: space-between; margin-bottom: 30px; }
+        .invoice-details, .client-info { flex: 1; }
+        .items-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        .items-table th, .items-table td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
+        .items-table th { background-color: #f5f5f5; }
+        .summary { text-align: right; margin-top: 20px; }
+        .total { font-size: 18px; font-weight: bold; }
+        @media print { body { margin: 0; } }
+    </style>
+</head>
+<body>
+    <div class="invoice-header">
+        <h1>FATURA</h1>
+    </div>
+
+    <div class="company-info">
+        <h2>${data.empresa.nome}</h2>
+        <p>${data.empresa.endereco}</p>
+        <p>${data.empresa.cidade}</p>
+        <p>Tel: ${data.empresa.telefone} | Email: ${data.empresa.email}</p>
+        <p>NIF: ${data.empresa.nif}</p>
+    </div>
+
+    <div class="invoice-info">
+        <div class="invoice-details">
+            <h3>Detalhes da Fatura</h3>
+            <p><strong>Número:</strong> ${data.fatura.numero}</p>
+            <p><strong>Data:</strong> ${data.fatura.data}</p>
+            <p><strong>Vendedor:</strong> ${data.fatura.vendedor}</p>
+            <p><strong>Forma de Pagamento:</strong> ${data.fatura.formaPagamento}</p>
+        </div>
+        <div class="client-info">
+            <h3>Cliente</h3>
+            <p><strong>Nome:</strong> ${data.fatura.cliente}</p>
+        </div>
+    </div>
+
+    <table class="items-table">
+        <thead>
+            <tr>
+                <th>Produto/Serviço</th>
+                <th>Quantidade</th>
+                <th>Preço Unitário</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${data.itens.map(item => `
+                <tr>
+                    <td>${item.nome}</td>
+                    <td>${item.quantidade}</td>
+                    <td>KZ ${item.precoUnitario.toFixed(2)}</td>
+                    <td>KZ ${item.total.toFixed(2)}</td>
+                </tr>
+            `).join('')}
+        </tbody>
+    </table>
+
+    <div class="summary">
+        <p><strong>Subtotal:</strong> KZ ${data.resumo.subtotal.toFixed(2)}</p>
+        ${data.resumo.desconto > 0 ? `<p><strong>Desconto:</strong> KZ ${data.resumo.desconto.toFixed(2)}</p>` : ''}
+        <p class="total"><strong>Total:</strong> KZ ${data.resumo.total.toFixed(2)}</p>
+    </div>
+
+    ${data.observacoes ? `
+    <div style="margin-top: 30px;">
+        <h3>Observações</h3>
+        <p>${data.observacoes}</p>
+    </div>
+    ` : ''}
+
+    <div style="margin-top: 50px; text-align: center; font-size: 12px; color: #666;">
+        <p>Obrigado pela sua preferência!</p>
+        <p>Esta fatura foi gerada automaticamente pelo sistema PJ Limitada</p>
+    </div>
+</body>
+</html>
+    `;
+  }
 }
