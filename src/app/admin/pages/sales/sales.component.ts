@@ -421,7 +421,7 @@ export class SalesComponent implements OnInit, OnDestroy {
             </tr>
         </thead>
         <tbody>
-            ${data.itens.map(item => `
+            ${data.itens.map((item: any) => `
                 <tr>
                     <td>${item.nome}</td>
                     <td>${item.quantidade}</td>
