@@ -193,62 +193,109 @@ export class PdfService {
   }
 
   private drawItemsTable(doc: jsPDF, invoiceData: any, y: number, contentWidth: number, margin: number, primaryColor: any, backgroundColor: any): number {
-    // Cabeçalho da tabela
+    // Título da seção
+    doc.setFillColor(245, 245, 245);
+    doc.rect(margin, y, contentWidth, 10, 'F');
+    doc.setTextColor(0, 0, 0);
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.text('ITENS DA FATURA', margin + 5, y + 7);
+    y += 10;
+
+    // Cabeçalho da tabela com gradiente
     doc.setFillColor(primaryColor.r, primaryColor.g, primaryColor.b);
-    doc.rect(margin, y, contentWidth, 12, 'F');
-    
+    doc.rect(margin, y, contentWidth, 15, 'F');
+
+    // Sombra do cabeçalho
+    doc.setFillColor(primaryColor.r - 30, primaryColor.g - 30, primaryColor.b - 30);
+    doc.rect(margin, y + 13, contentWidth, 2, 'F');
+
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
-    
-    // Colunas da tabela
-    const headers = ['CÓDIGO', 'DESCRIÇÃO', 'QTD', 'UNIDADE', 'PREÇO UNIT.', 'TOTAL'];
-    const colWidths = [25, 70, 20, 25, 30, 30];
-    let currentX = margin + 5;
-    
+
+    // Colunas da tabela com melhor espaçamento
+    const headers = ['#', 'CÓDIGO', 'DESCRIÇÃO DO PRODUTO', 'QTD', 'UND', 'PREÇO UNIT.', 'TOTAL'];
+    const colWidths = [12, 22, 65, 15, 15, 30, 35];
+    let currentX = margin + 3;
+
     headers.forEach((header, index) => {
-      doc.text(header, currentX, y + 8);
+      // Centralizar números e valores
+      if (index === 0 || index === 3 || index === 4 || index === 5 || index === 6) {
+        const textWidth = doc.getTextWidth(header);
+        doc.text(header, currentX + (colWidths[index] - textWidth) / 2, y + 10);
+      } else {
+        doc.text(header, currentX + 2, y + 10);
+      }
       currentX += colWidths[index];
     });
 
-    y += 12;
+    y += 15;
 
-    // Linhas da tabela
+    // Linhas da tabela com bordas
     invoiceData.itens.forEach((item: any, index: number) => {
+      const rowHeight = 12;
+
       // Alternar cor de fundo
       if (index % 2 === 0) {
         doc.setFillColor(backgroundColor.r, backgroundColor.g, backgroundColor.b);
-        doc.rect(margin, y, contentWidth, 10, 'F');
+        doc.rect(margin, y, contentWidth, rowHeight, 'F');
       }
+
+      // Bordas laterais
+      doc.setDrawColor(220, 220, 220);
+      doc.setLineWidth(0.3);
+      currentX = margin;
+      colWidths.forEach(width => {
+        doc.line(currentX, y, currentX, y + rowHeight);
+        currentX += width;
+      });
+      doc.line(currentX, y, currentX, y + rowHeight); // Última borda
 
       doc.setTextColor(0, 0, 0);
       doc.setFontSize(9);
       doc.setFont('helvetica', 'normal');
 
-      currentX = margin + 5;
+      currentX = margin + 3;
       const rowData = [
+        (index + 1).toString(),
         item.codigo,
-        item.nome.length > 30 ? item.nome.substring(0, 30) + '...' : item.nome,
+        item.nome.length > 35 ? item.nome.substring(0, 35) + '...' : item.nome,
         item.quantidade.toString(),
         item.unidade,
-        `${item.precoUnitario.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} Kz`,
-        `${item.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} Kz`
+        `${item.precoUnitario.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`,
+        `${item.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`
       ];
 
       rowData.forEach((data, colIndex) => {
-        doc.text(data, currentX, y + 7);
+        const yPos = y + 8;
+
+        // Centralizar números e valores
+        if (colIndex === 0 || colIndex === 3 || colIndex === 4 || colIndex === 5 || colIndex === 6) {
+          const textWidth = doc.getTextWidth(data);
+          doc.text(data, currentX + (colWidths[colIndex] - textWidth) / 2, yPos);
+        } else {
+          doc.text(data, currentX + 2, yPos);
+        }
+
         currentX += colWidths[colIndex];
       });
 
-      y += 10;
+      y += rowHeight;
     });
 
-    // Borda da tabela
-    doc.setDrawColor(200, 200, 200);
-    doc.setLineWidth(0.5);
-    doc.rect(margin, y - (invoiceData.itens.length * 10) - 12, contentWidth, (invoiceData.itens.length * 10) + 12);
+    // Bordas da tabela
+    doc.setDrawColor(180, 180, 180);
+    doc.setLineWidth(1);
+    const tableHeight = (invoiceData.itens.length * 12) + 25;
+    doc.rect(margin, y - tableHeight, contentWidth, tableHeight);
 
-    return y + 10;
+    // Linha horizontal inferior
+    doc.setDrawColor(220, 220, 220);
+    doc.setLineWidth(0.5);
+    doc.line(margin, y, margin + contentWidth, y);
+
+    return y + 5;
   }
 
   private drawFinancialSummary(doc: jsPDF, invoiceData: any, y: number, contentWidth: number, margin: number, primaryColor: any, accentColor: any): number {
