@@ -124,23 +124,54 @@ export class SalesComponent implements OnInit, OnDestroy {
     alert(`Função de impressão seria implementada aqui para a venda #${sale.id}`);
   }
 
-  downloadInvoice(sale: Sale): void {
-    // Gerar dados da fatura
-    const invoiceData = this.generateInvoiceData(sale);
+  async downloadInvoice(sale: Sale): Promise<void> {
+    try {
+      // Gerar dados da fatura
+      const invoiceData = this.generateInvoiceData(sale);
 
-    // Criar conteúdo HTML da fatura
-    const invoiceHtml = this.generateInvoiceHtml(invoiceData);
+      // Criar PDF usando jsPDF
+      const pdf = new jsPDF('p', 'mm', 'a4');
 
-    // Criar e baixar arquivo
-    const blob = new Blob([invoiceHtml], { type: 'text/html;charset=utf-8' });
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `fatura_${sale.id}_${new Date(sale.date).toISOString().split('T')[0]}.html`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
+      // Configurações de cores
+      const primaryColor = [0, 188, 212]; // PJ Cyan
+      const darkColor = [0, 96, 100];
+      const lightGray = [245, 245, 245];
+      const textColor = [33, 33, 33];
+
+      // Header com logo e informações da empresa
+      await this.addCompanyHeader(pdf, primaryColor, darkColor);
+
+      // Título da fatura
+      pdf.setFillColor(...primaryColor);
+      pdf.rect(20, 60, 170, 15, 'F');
+      pdf.setTextColor(255, 255, 255);
+      pdf.setFontSize(16);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('FATURA DE VENDA', 105, 70, { align: 'center' });
+
+      // Informações da fatura
+      this.addInvoiceInfo(pdf, invoiceData, textColor, 85);
+
+      // Informações do cliente
+      this.addClientInfo(pdf, invoiceData, textColor, 110);
+
+      // Tabela de itens
+      this.addItemsTable(pdf, invoiceData, primaryColor, lightGray, textColor, 135);
+
+      // Resumo financeiro
+      this.addFinancialSummary(pdf, invoiceData, primaryColor, textColor);
+
+      // Rodapé
+      this.addFooter(pdf, primaryColor, textColor);
+
+      // Baixar o PDF
+      const fileName = `Fatura_${sale.id}_${new Date(sale.date).toLocaleDateString('pt-BR').replace(/\//g, '-')}.pdf`;
+      pdf.save(fileName);
+
+    } catch (error) {
+      console.error('Erro ao gerar PDF:', error);
+      alert('Erro ao gerar a fatura. Tente novamente.');
+    }
   }
 
   closeModal(): void {
