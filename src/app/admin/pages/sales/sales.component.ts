@@ -473,6 +473,162 @@ export class SalesComponent implements OnInit, OnDestroy {
     return result.charAt(0).toUpperCase() + result.slice(1);
   }
 
+  private addCompanyHeaderSimple(pdf: jsPDF, data: any): void {
+    // Background header
+    pdf.setFillColor(0, 188, 212);
+    pdf.rect(0, 0, 210, 50, 'F');
+
+    // Logo placeholder (círculo com PJ)
+    pdf.setFillColor(255, 255, 255);
+    pdf.circle(35, 25, 15, 'F');
+    pdf.setTextColor(0, 96, 100);
+    pdf.setFontSize(16);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('PJ', 35, 30, { align: 'center' });
+
+    // Company info
+    pdf.setTextColor(255, 255, 255);
+    pdf.setFontSize(20);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('PJ LIMITADA', 60, 20);
+
+    pdf.setFontSize(12);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text('Peças Automotivas Premium', 60, 30);
+    pdf.text('Luanda, Angola', 60, 38);
+    pdf.text('Tel: +244 923 456 789 | Email: contato@pjlimitada.com', 60, 46);
+  }
+
+  private addInvoiceInfoSimple(pdf: jsPDF, data: any, yPosition: number): void {
+    // Box para informações da fatura
+    pdf.setDrawColor(200, 200, 200);
+    pdf.setLineWidth(0.5);
+    pdf.rect(20, yPosition, 80, 20);
+
+    pdf.setTextColor(33, 33, 33);
+    pdf.setFontSize(12);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('INFORMAÇÕES DA FATURA', 22, yPosition + 6);
+
+    pdf.setFont('helvetica', 'normal');
+    pdf.setFontSize(10);
+    pdf.text(`Número: ${data.fatura.numero}`, 22, yPosition + 12);
+    pdf.text(`Data: ${data.fatura.data}`, 22, yPosition + 16);
+
+    // Box para vendedor
+    pdf.rect(110, yPosition, 80, 20);
+    pdf.setFont('helvetica', 'bold');
+    pdf.setFontSize(12);
+    pdf.text('VENDEDOR', 112, yPosition + 6);
+
+    pdf.setFont('helvetica', 'normal');
+    pdf.setFontSize(10);
+    pdf.text(`${data.fatura.vendedor}`, 112, yPosition + 12);
+    pdf.text(`Pagamento: ${data.fatura.formaPagamento}`, 112, yPosition + 16);
+  }
+
+  private addClientInfoSimple(pdf: jsPDF, data: any, yPosition: number): void {
+    pdf.setDrawColor(200, 200, 200);
+    pdf.rect(20, yPosition, 170, 15);
+
+    pdf.setTextColor(33, 33, 33);
+    pdf.setFontSize(12);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('CLIENTE', 22, yPosition + 6);
+
+    pdf.setFont('helvetica', 'normal');
+    pdf.setFontSize(11);
+    pdf.text(`${data.fatura.cliente}`, 22, yPosition + 12);
+  }
+
+  private addItemsTableSimple(pdf: jsPDF, data: any, yPosition: number): number {
+    // Cabeçalho da tabela
+    pdf.setFillColor(0, 188, 212);
+    pdf.rect(20, yPosition, 170, 8, 'F');
+
+    pdf.setTextColor(255, 255, 255);
+    pdf.setFontSize(10);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('PRODUTO/SERVIÇO', 22, yPosition + 5);
+    pdf.text('QTD', 110, yPosition + 5);
+    pdf.text('PREÇO UNIT.', 130, yPosition + 5);
+    pdf.text('TOTAL', 170, yPosition + 5);
+
+    let currentY = yPosition + 8;
+
+    // Itens da tabela
+    data.itens.forEach((item: any, index: number) => {
+      if (index % 2 === 0) {
+        pdf.setFillColor(245, 245, 245);
+        pdf.rect(20, currentY, 170, 8, 'F');
+      }
+
+      pdf.setTextColor(33, 33, 33);
+      pdf.setFontSize(9);
+      pdf.setFont('helvetica', 'normal');
+
+      // Quebrar texto longo do produto
+      const splitTitle = pdf.splitTextToSize(item.nome, 85);
+      pdf.text(splitTitle, 22, currentY + 5);
+
+      pdf.text(item.quantidade.toString(), 110, currentY + 5);
+      pdf.text(`KZ ${item.precoUnitario.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`, 130, currentY + 5);
+      pdf.text(`KZ ${item.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`, 170, currentY + 5);
+
+      currentY += 8;
+    });
+
+    return currentY;
+  }
+
+  private addFinancialSummarySimple(pdf: jsPDF, data: any): void {
+    const yStart = 220; // Posição fixa para o resumo
+
+    // Box do resumo
+    pdf.setDrawColor(0, 188, 212);
+    pdf.setLineWidth(1);
+    pdf.rect(130, yStart, 60, 30);
+
+    pdf.setTextColor(33, 33, 33);
+    pdf.setFontSize(10);
+    pdf.setFont('helvetica', 'normal');
+
+    let yPos = yStart + 8;
+    pdf.text(`Subtotal: KZ ${data.resumo.subtotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`, 132, yPos);
+
+    if (data.resumo.desconto > 0) {
+      yPos += 6;
+      pdf.text(`Desconto: KZ ${data.resumo.desconto.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`, 132, yPos);
+    }
+
+    // Total em destaque
+    yPos += 8;
+    pdf.setFillColor(0, 188, 212);
+    pdf.rect(130, yPos - 4, 60, 10, 'F');
+
+    pdf.setTextColor(255, 255, 255);
+    pdf.setFont('helvetica', 'bold');
+    pdf.setFontSize(12);
+    pdf.text(`TOTAL: KZ ${data.resumo.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`, 160, yPos + 2, { align: 'center' });
+  }
+
+  private addFooterSimple(pdf: jsPDF): void {
+    const yFooter = 270;
+
+    // Linha decorativa
+    pdf.setDrawColor(0, 188, 212);
+    pdf.setLineWidth(2);
+    pdf.line(20, yFooter, 190, yFooter);
+
+    // Texto do rodapé
+    pdf.setTextColor(33, 33, 33);
+    pdf.setFontSize(8);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text('Obrigado pela sua preferência!', 105, yFooter + 8, { align: 'center' });
+    pdf.text('PJ Limitada - Peças Automotivas Premium | www.pjlimitada.com', 105, yFooter + 14, { align: 'center' });
+    pdf.text(`Fatura gerada em ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}`, 105, yFooter + 20, { align: 'center' });
+  }
+
   private async addCompanyHeader(pdf: jsPDF, primaryColor: [number, number, number], darkColor: [number, number, number]): Promise<void> {
     // Background header
     pdf.setFillColor(...primaryColor);
@@ -508,7 +664,7 @@ export class SalesComponent implements OnInit, OnDestroy {
     pdf.setTextColor(...textColor);
     pdf.setFontSize(12);
     pdf.setFont('helvetica', 'bold');
-    pdf.text('INFORMAÇÕES DA FATURA', 22, yPosition + 6);
+    pdf.text('INFORMA��ÕES DA FATURA', 22, yPosition + 6);
 
     pdf.setFont('helvetica', 'normal');
     pdf.setFontSize(10);
