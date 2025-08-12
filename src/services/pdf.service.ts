@@ -57,35 +57,52 @@ export class PdfService {
   }
 
   private drawHeader(doc: jsPDF, invoiceData: any, y: number, contentWidth: number, margin: number, primaryColor: any): void {
-    // Fundo do cabeçalho
+    // Fundo do cabeçalho com gradiente simulado
     doc.setFillColor(primaryColor.r, primaryColor.g, primaryColor.b);
     doc.rect(margin, y, contentWidth, 45, 'F');
 
-    // Logo (simulado com texto estilizado)
+    // Efeito de sombra no cabeçalho
+    doc.setFillColor(primaryColor.r - 20, primaryColor.g - 20, primaryColor.b - 20);
+    doc.rect(margin, y + 43, contentWidth, 2, 'F');
+
+    // Logo PJ mais elaborado
     doc.setFontSize(32);
     doc.setTextColor(255, 255, 255);
     doc.setFont('helvetica', 'bold');
     doc.text('PJ', margin + 10, y + 25);
-    
-    // Circle around logo
+
+    // Circle around logo com efeito 3D
     doc.setDrawColor(255, 255, 255);
     doc.setLineWidth(3);
     doc.circle(margin + 20, y + 20, 15);
+    doc.setDrawColor(220, 220, 220);
+    doc.setLineWidth(1);
+    doc.circle(margin + 20, y + 20, 17);
 
-    // Título FATURA
+    // Informações da empresa no cabeçalho
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.text('LIMITADA', margin + 45, y + 15);
+    doc.text('Peças Automotivas', margin + 45, y + 25);
+    doc.text('Luanda, Angola', margin + 45, y + 35);
+
+    // Título FATURA com estilo moderno
     doc.setFontSize(28);
     doc.setFont('helvetica', 'bold');
     doc.text('FATURA', margin + contentWidth - 80, y + 20);
-    
+
     // Subtítulo
     doc.setFontSize(12);
     doc.setFont('helvetica', 'normal');
-    doc.text('INVOICE', margin + contentWidth - 50, y + 32);
+    doc.text('COMMERCIAL INVOICE', margin + contentWidth - 90, y + 32);
 
-    // Número da fatura em destaque
+    // Número da fatura com caixa de destaque
+    doc.setFillColor(255, 255, 255);
+    doc.rect(margin + contentWidth - 90, y + 35, 80, 8, 'F');
+    doc.setTextColor(primaryColor.r, primaryColor.g, primaryColor.b);
     doc.setFontSize(14);
     doc.setFont('helvetica', 'bold');
-    doc.text(`Nº ${invoiceData.fatura.numero}`, margin + contentWidth - 80, y + 42);
+    doc.text(`Nº ${invoiceData.fatura.numero}`, margin + contentWidth - 85, y + 42);
   }
 
   private drawCompanyAndClientInfo(doc: jsPDF, invoiceData: any, y: number, contentWidth: number, margin: number, backgroundColor: any): number {
