@@ -98,8 +98,9 @@ export class CurrencyMaskDirective {
     }
 
     // Permite apenas um sinal de menos no início
-    if ((event.keyCode === 109 || event.keyCode === 189) && 
-        (!this.allowNegative || event.target.selectionStart !== 0)) {
+    const target = event.target as HTMLInputElement;
+    if ((event.keyCode === 109 || event.keyCode === 189) &&
+        (!this.allowNegative || !target || target.selectionStart !== 0)) {
       event.preventDefault();
     }
   }
