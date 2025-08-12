@@ -528,7 +528,7 @@ export class SalesComponent implements OnInit, OnDestroy {
     pdf.text(`Pagamento: ${data.fatura.formaPagamento}`, 112, yPosition + 16);
   }
 
-  private addClientInfo(pdf: jsPDF, data: any, textColor: number[], yPosition: number): void {
+  private addClientInfo(pdf: jsPDF, data: any, textColor: [number, number, number], yPosition: number): void {
     pdf.setDrawColor(200, 200, 200);
     pdf.rect(20, yPosition, 170, 15);
 
