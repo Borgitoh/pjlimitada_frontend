@@ -353,70 +353,86 @@ export class PdfService {
     return y + 10;
   }
 
-  private drawFinancialSummary(doc: jsPDF, invoiceData: any, y: number, contentWidth: number, margin: number, colors: any): number {
-    const resumoX = margin + contentWidth - 110;
-    const resumoWidth = 100;
+  private drawModernFinancialSummary(doc: jsPDF, invoiceData: any, y: number, contentWidth: number, margin: number, colors: any): number {
+    const resumoX = margin + contentWidth - 130;
+    const resumoWidth = 120;
 
-    // Caixa do resumo
+    // Fundo do resumo com gradiente
     doc.setFillColor(colors.light[0], colors.light[1], colors.light[2]);
-    doc.rect(resumoX, y, resumoWidth, 45, 'F');
+    doc.rect(resumoX, y, resumoWidth, 55, 'F');
 
+    // Borda elegante
     doc.setDrawColor(colors.primary[0], colors.primary[1], colors.primary[2]);
-    doc.setLineWidth(1);
-    doc.rect(resumoX, y, resumoWidth, 45);
+    doc.setLineWidth(2);
+    doc.rect(resumoX, y, resumoWidth, 55);
 
-    // Título
+    // Cabeçalho do resumo
     doc.setFillColor(colors.primary[0], colors.primary[1], colors.primary[2]);
-    doc.rect(resumoX, y, resumoWidth, 10, 'F');
-
-    doc.setTextColor(colors.white[0], colors.white[1], colors.white[2]);
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'bold');
-    doc.text('💰 RESUMO FINANCEIRO', resumoX + 5, y + 7);
-
-    y += 12;
-
-    // Linhas do resumo
-    doc.setTextColor(colors.dark[0], colors.dark[1], colors.dark[2]);
-    doc.setFontSize(9);
-
-    const resumoItens = [
-      ['Subtotal:', `${invoiceData.resumo.subtotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} Kz`],
-      ['Desconto:', `${invoiceData.resumo.desconto.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} Kz`]
-    ];
-
-    resumoItens.forEach((item, index) => {
-      const itemY = y + 5 + (index * 8);
-      doc.setFont('helvetica', 'normal');
-      doc.text(item[0], resumoX + 5, itemY);
-      doc.setFont('helvetica', 'bold');
-      doc.text(item[1], resumoX + 45, itemY);
-    });
-
-    // Total destacado
-    doc.setFillColor(colors.secondary[0], colors.secondary[1], colors.secondary[2]);
-    doc.rect(resumoX, y + 20, resumoWidth, 13, 'F');
+    doc.rect(resumoX, y, resumoWidth, 15, 'F');
 
     doc.setTextColor(colors.white[0], colors.white[1], colors.white[2]);
     doc.setFontSize(11);
     doc.setFont('helvetica', 'bold');
-    doc.text('TOTAL GERAL:', resumoX + 5, y + 29);
-    doc.text(`${invoiceData.resumo.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} Kz`, resumoX + 45, y + 29);
+    doc.text('RESUMO FINANCEIRO', resumoX + 10, y + 10);
 
-    // Valor por extenso
-    y += 50;
+    y += 18;
+
+    // Itens do resumo
+    doc.setTextColor(colors.dark[0], colors.dark[1], colors.dark[2]);
+    doc.setFontSize(10);
+
+    const resumoItens = [
+      ['Subtotal:', `${invoiceData.resumo.subtotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} Kz`],
+      ['Desconto:', `${(invoiceData.resumo.desconto || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })} Kz`]
+    ];
+
+    resumoItens.forEach((item, index) => {
+      const itemY = y + (index * 10);
+
+      // Linha separadora sutil
+      if (index > 0) {
+        doc.setDrawColor(colors.medium[0], colors.medium[1], colors.medium[2]);
+        doc.setLineWidth(0.3);
+        doc.line(resumoX + 5, itemY - 5, resumoX + resumoWidth - 5, itemY - 5);
+      }
+
+      doc.setFont('helvetica', 'normal');
+      doc.text(item[0], resumoX + 8, itemY);
+      doc.setFont('helvetica', 'bold');
+      doc.text(item[1], resumoX + 60, itemY);
+    });
+
+    // Linha antes do total
+    doc.setDrawColor(colors.primary[0], colors.primary[1], colors.primary[2]);
+    doc.setLineWidth(1);
+    doc.line(resumoX + 5, y + 25, resumoX + resumoWidth - 5, y + 25);
+
+    // Total em destaque
+    doc.setFillColor(colors.success[0], colors.success[1], colors.success[2]);
+    doc.rect(resumoX, y + 27, resumoWidth, 18, 'F');
+
+    doc.setTextColor(colors.white[0], colors.white[1], colors.white[2]);
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.text('TOTAL:', resumoX + 8, y + 36);
+    doc.setFontSize(14);
+    doc.text(`${invoiceData.resumo.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} Kz`, resumoX + 8, y + 42);
+
+    // Valor por extenso em caixa
+    y += 65;
     doc.setFillColor(colors.white[0], colors.white[1], colors.white[2]);
-    doc.setDrawColor(colors.secondary[0], colors.secondary[1], colors.secondary[2]);
-    doc.rect(margin, y, contentWidth, 12, 'FD');
+    doc.setDrawColor(colors.medium[0], colors.medium[1], colors.medium[2]);
+    doc.setLineWidth(1);
+    doc.rect(margin, y, contentWidth, 18, 'FD');
 
     doc.setTextColor(colors.dark[0], colors.dark[1], colors.dark[2]);
-    doc.setFontSize(8);
-    doc.setFont('helvetica', 'italic');
-    doc.text('Valor por extenso:', margin + 5, y + 5);
+    doc.setFontSize(9);
     doc.setFont('helvetica', 'bold');
-    doc.text(invoiceData.resumo.totalPorExtenso || 'Valor não convertido', margin + 5, y + 9);
+    doc.text('VALOR POR EXTENSO:', margin + 8, y + 8);
+    doc.setFont('helvetica', 'normal');
+    doc.text(invoiceData.resumo.totalPorExtenso || 'Valor não convertido para extenso', margin + 8, y + 14);
 
-    return y + 15;
+    return y + 25;
   }
 
   private drawNotesSection(doc: jsPDF, invoiceData: any, y: number, contentWidth: number, margin: number, colors: any): number {
