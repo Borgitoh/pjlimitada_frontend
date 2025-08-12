@@ -178,12 +178,11 @@
           <input
             id="cost"
             name="cost"
-            type="number"
-            step="0.01"
-            min="0"
+            type="text"
+            appCurrencyMask
             [(ngModel)]="currentProduct.cost"
             class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pj-cyan focus:border-transparent"
-            placeholder="0.00">
+            placeholder="KZ 0,00">
         </div>
 
         <!-- Stock -->
