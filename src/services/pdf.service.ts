@@ -324,7 +324,7 @@ export class PdfService {
     doc.setTextColor(0, 0, 0);
     doc.setFontSize(10);
 
-    const summaryItems = [
+    const summaryItems: Array<[string, string, boolean]> = [
       ['Subtotal:', `${invoiceData.resumo.subtotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} Kz`, false],
       ['Desconto:', `- ${invoiceData.resumo.desconto.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} Kz`, true],
       ['Impostos (IVA):', `${invoiceData.resumo.impostos.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} Kz`, false]
