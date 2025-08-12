@@ -500,7 +500,7 @@ export class SalesComponent implements OnInit, OnDestroy {
     pdf.text('Tel: +244 923 456 789 | Email: contato@pjlimitada.com', 60, 46);
   }
 
-  private addInvoiceInfo(pdf: jsPDF, data: any, textColor: number[], yPosition: number): void {
+  private addInvoiceInfo(pdf: jsPDF, data: any, textColor: [number, number, number], yPosition: number): void {
     // Box para informações da fatura
     pdf.setDrawColor(200, 200, 200);
     pdf.setLineWidth(0.5);
