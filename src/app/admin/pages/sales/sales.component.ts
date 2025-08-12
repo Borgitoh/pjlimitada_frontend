@@ -131,43 +131,8 @@ export class SalesComponent implements OnInit, OnDestroy {
       // Gerar dados da fatura
       const invoiceData = this.generateInvoiceData(sale);
 
-      // Criar PDF usando jsPDF
-      const pdf = new jsPDF('p', 'mm', 'a4');
-
-      // Configurações de cores
-      const primaryColor = [0, 188, 212]; // PJ Cyan
-      const darkColor = [0, 96, 100];
-      const textColor = [33, 33, 33];
-
-      // Header com logo e informações da empresa
-      this.addCompanyHeaderSimple(pdf, invoiceData);
-
-      // Título da fatura
-      pdf.setFillColor(0, 188, 212);
-      pdf.rect(20, 60, 170, 15, 'F');
-      pdf.setTextColor(255, 255, 255);
-      pdf.setFontSize(16);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text('FATURA DE VENDA', 105, 70, { align: 'center' });
-
-      // Informações da fatura
-      this.addInvoiceInfoSimple(pdf, invoiceData, 85);
-
-      // Informações do cliente
-      this.addClientInfoSimple(pdf, invoiceData, 110);
-
-      // Tabela de itens
-      this.addItemsTableSimple(pdf, invoiceData, 135);
-
-      // Resumo financeiro
-      this.addFinancialSummarySimple(pdf, invoiceData);
-
-      // Rodapé
-      this.addFooterSimple(pdf);
-
-      // Baixar o PDF
-      const fileName = `Fatura_${sale.id}_${new Date(sale.date).toLocaleDateString('pt-BR').replace(/\//g, '-')}.pdf`;
-      pdf.save(fileName);
+      // Usar o serviço de PDF para gerar a fatura
+      this.pdfService.generateInvoicePdf(invoiceData);
 
     } catch (error) {
       console.error('Erro ao gerar PDF:', error);
