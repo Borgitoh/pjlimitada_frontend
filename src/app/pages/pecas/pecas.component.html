@@ -63,14 +63,14 @@
       <!-- Preço Mínimo -->
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-2">Preço Min.</label>
-        <input type="number" [(ngModel)]="filtros.precoMin" (input)="aplicarFiltros()" placeholder="0"
+        <input type="text" appCurrencyMask [(ngModel)]="filtros.precoMin" (input)="aplicarFiltros()" placeholder="KZ 0,00"
           class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
       </div>
 
       <!-- Preço Máximo -->
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-2">Preço Max.</label>
-        <input type="number" [(ngModel)]="filtros.precoMax" (input)="aplicarFiltros()" placeholder="10000"
+        <input type="text" appCurrencyMask [(ngModel)]="filtros.precoMax" (input)="aplicarFiltros()" placeholder="KZ 10.000,00"
           class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
       </div>
     </div>
