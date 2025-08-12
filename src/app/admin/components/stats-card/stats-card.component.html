@@ -1,0 +1,41 @@
+<div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 sm:p-6 hover:shadow-md transition-shadow duration-200">
+  <div class="flex items-center justify-between">
+    <div class="flex-1 min-w-0">
+      <p class="text-xs sm:text-sm font-medium text-gray-600 mb-1 truncate">{{title}}</p>
+      <p class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">{{value | number}}</p>
+      <div class="flex items-center text-center mt-1 sm:mt-2" *ngIf="change !== undefined">
+        <svg
+          class="h-3 w-3 sm:h-4 sm:w-4 mr-1 flex-shrink-0"
+          [class.text-green-500]="change >= 0"
+          [class.text-red-500]="change < 0"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            [attr.d]="change >= 0 ? 'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6' : 'M13 17h8m0 0V9m0 8l-8-8-4 4-6-6'" />
+        </svg>
+        <span
+          class="text-xs sm:text-sm font-medium"
+          [class.text-green-600]="change >= 0"
+          [class.text-red-600]="change < 0">
+          {{change >= 0 ? '+' : ''}}{{change | number:'1.1-1'}}%
+        </span>
+        <span class="text-xs sm:text-sm text-gray-500 ml-1 hidden sm:inline">vs. período anterior</span>
+      </div>
+      <p class="text-xs sm:text-sm text-gray-500 mt-1 truncate" *ngIf="subtitle">{{subtitle}}</p>
+    </div>
+
+    <div class="ml-3 sm:ml-4 flex-shrink-0">
+      <div
+        class="h-10 w-10 sm:h-12 sm:w-12 rounded-lg flex items-center justify-center"
+        [ngClass]="iconBgClass">
+        <svg class="h-5 w-5 sm:h-6 sm:w-6" [ngClass]="iconColorClass" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="icon" />
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
