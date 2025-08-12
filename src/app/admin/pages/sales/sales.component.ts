@@ -124,7 +124,7 @@ export class SalesComponent implements OnInit, OnDestroy {
     alert(`Função de impressão seria implementada aqui para a venda #${sale.id}`);
   }
 
-  async downloadInvoice(sale: Sale): Promise<void> {
+  downloadInvoice(sale: Sale): void {
     try {
       // Gerar dados da fatura
       const invoiceData = this.generateInvoiceData(sale);
@@ -133,16 +133,15 @@ export class SalesComponent implements OnInit, OnDestroy {
       const pdf = new jsPDF('p', 'mm', 'a4');
 
       // Configurações de cores
-      const primaryColor: [number, number, number] = [0, 188, 212]; // PJ Cyan
-      const darkColor: [number, number, number] = [0, 96, 100];
-      const lightGray: [number, number, number] = [245, 245, 245];
-      const textColor: [number, number, number] = [33, 33, 33];
+      const primaryColor = [0, 188, 212]; // PJ Cyan
+      const darkColor = [0, 96, 100];
+      const textColor = [33, 33, 33];
 
       // Header com logo e informações da empresa
-      await this.addCompanyHeader(pdf, primaryColor, darkColor);
+      this.addCompanyHeaderSimple(pdf, invoiceData);
 
       // Título da fatura
-      pdf.setFillColor(...primaryColor);
+      pdf.setFillColor(0, 188, 212);
       pdf.rect(20, 60, 170, 15, 'F');
       pdf.setTextColor(255, 255, 255);
       pdf.setFontSize(16);
@@ -150,19 +149,19 @@ export class SalesComponent implements OnInit, OnDestroy {
       pdf.text('FATURA DE VENDA', 105, 70, { align: 'center' });
 
       // Informações da fatura
-      this.addInvoiceInfo(pdf, invoiceData, textColor, 85);
+      this.addInvoiceInfoSimple(pdf, invoiceData, 85);
 
       // Informações do cliente
-      this.addClientInfo(pdf, invoiceData, textColor, 110);
+      this.addClientInfoSimple(pdf, invoiceData, 110);
 
       // Tabela de itens
-      this.addItemsTable(pdf, invoiceData, primaryColor, lightGray, textColor, 135);
+      this.addItemsTableSimple(pdf, invoiceData, 135);
 
       // Resumo financeiro
-      this.addFinancialSummary(pdf, invoiceData, primaryColor, textColor);
+      this.addFinancialSummarySimple(pdf, invoiceData);
 
       // Rodapé
-      this.addFooter(pdf, primaryColor, textColor);
+      this.addFooterSimple(pdf);
 
       // Baixar o PDF
       const fileName = `Fatura_${sale.id}_${new Date(sale.date).toLocaleDateString('pt-BR').replace(/\//g, '-')}.pdf`;
