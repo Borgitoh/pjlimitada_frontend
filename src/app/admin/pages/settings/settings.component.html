@@ -85,9 +85,11 @@
         <input
           id="companyPhone"
           type="tel"
+          appPhoneMask
           [(ngModel)]="settings.companyPhone"
           (ngModelChange)="markAsChanged()"
           name="companyPhone"
+          placeholder="+244 923 456 789"
           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pj-cyan focus:border-transparent">
       </div>
     </form>
