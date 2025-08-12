@@ -395,95 +395,159 @@ export class SalesComponent implements OnInit, OnDestroy {
     };
   }
 
-  private generateInvoiceHtml(data: any): string {
-    return `
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fatura - ${data.fatura.numero}</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
-        .invoice-header { text-align: center; margin-bottom: 30px; }
-        .company-info { text-align: center; margin-bottom: 20px; }
-        .invoice-info { display: flex; justify-content: space-between; margin-bottom: 30px; }
-        .invoice-details, .client-info { flex: 1; }
-        .items-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-        .items-table th, .items-table td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
-        .items-table th { background-color: #f5f5f5; }
-        .summary { text-align: right; margin-top: 20px; }
-        .total { font-size: 18px; font-weight: bold; }
-        @media print { body { margin: 0; } }
-    </style>
-</head>
-<body>
-    <div class="invoice-header">
-        <h1>FATURA</h1>
-    </div>
+  private async addCompanyHeader(pdf: jsPDF, primaryColor: number[], darkColor: number[]): Promise<void> {
+    // Background header
+    pdf.setFillColor(...primaryColor);
+    pdf.rect(0, 0, 210, 50, 'F');
 
-    <div class="company-info">
-        <h2>${data.empresa.nome}</h2>
-        <p>${data.empresa.endereco}</p>
-        <p>${data.empresa.cidade}</p>
-        <p>Tel: ${data.empresa.telefone} | Email: ${data.empresa.email}</p>
-        <p>NIF: ${data.empresa.nif}</p>
-    </div>
+    // Logo placeholder (círculo com PJ)
+    pdf.setFillColor(255, 255, 255);
+    pdf.circle(35, 25, 15, 'F');
+    pdf.setTextColor(...darkColor);
+    pdf.setFontSize(16);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('PJ', 35, 30, { align: 'center' });
 
-    <div class="invoice-info">
-        <div class="invoice-details">
-            <h3>Detalhes da Fatura</h3>
-            <p><strong>Número:</strong> ${data.fatura.numero}</p>
-            <p><strong>Data:</strong> ${data.fatura.data}</p>
-            <p><strong>Vendedor:</strong> ${data.fatura.vendedor}</p>
-            <p><strong>Forma de Pagamento:</strong> ${data.fatura.formaPagamento}</p>
-        </div>
-        <div class="client-info">
-            <h3>Cliente</h3>
-            <p><strong>Nome:</strong> ${data.fatura.cliente}</p>
-        </div>
-    </div>
+    // Company info
+    pdf.setTextColor(255, 255, 255);
+    pdf.setFontSize(20);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('PJ LIMITADA', 60, 20);
 
-    <table class="items-table">
-        <thead>
-            <tr>
-                <th>Produto/Serviço</th>
-                <th>Quantidade</th>
-                <th>Preço Unitário</th>
-                <th>Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            ${data.itens.map((item: any) => `
-                <tr>
-                    <td>${item.nome}</td>
-                    <td>${item.quantidade}</td>
-                    <td>KZ ${item.precoUnitario.toFixed(2)}</td>
-                    <td>KZ ${item.total.toFixed(2)}</td>
-                </tr>
-            `).join('')}
-        </tbody>
-    </table>
+    pdf.setFontSize(12);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text('Peças Automotivas Premium', 60, 30);
+    pdf.text('Luanda, Angola', 60, 38);
+    pdf.text('Tel: +244 923 456 789 | Email: contato@pjlimitada.com', 60, 46);
+  }
 
-    <div class="summary">
-        <p><strong>Subtotal:</strong> KZ ${data.resumo.subtotal.toFixed(2)}</p>
-        ${data.resumo.desconto > 0 ? `<p><strong>Desconto:</strong> KZ ${data.resumo.desconto.toFixed(2)}</p>` : ''}
-        <p class="total"><strong>Total:</strong> KZ ${data.resumo.total.toFixed(2)}</p>
-    </div>
+  private addInvoiceInfo(pdf: jsPDF, data: any, textColor: number[], yPosition: number): void {
+    // Box para informações da fatura
+    pdf.setDrawColor(200, 200, 200);
+    pdf.setLineWidth(0.5);
+    pdf.rect(20, yPosition, 80, 20);
 
-    ${data.observacoes ? `
-    <div style="margin-top: 30px;">
-        <h3>Observações</h3>
-        <p>${data.observacoes}</p>
-    </div>
-    ` : ''}
+    pdf.setTextColor(...textColor);
+    pdf.setFontSize(12);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('INFORMAÇÕES DA FATURA', 22, yPosition + 6);
 
-    <div style="margin-top: 50px; text-align: center; font-size: 12px; color: #666;">
-        <p>Obrigado pela sua preferência!</p>
-        <p>Esta fatura foi gerada automaticamente pelo sistema PJ Limitada</p>
-    </div>
-</body>
-</html>
-    `;
+    pdf.setFont('helvetica', 'normal');
+    pdf.setFontSize(10);
+    pdf.text(`Número: ${data.fatura.numero}`, 22, yPosition + 12);
+    pdf.text(`Data: ${data.fatura.data}`, 22, yPosition + 16);
+
+    // Box para vendedor
+    pdf.rect(110, yPosition, 80, 20);
+    pdf.setFont('helvetica', 'bold');
+    pdf.setFontSize(12);
+    pdf.text('VENDEDOR', 112, yPosition + 6);
+
+    pdf.setFont('helvetica', 'normal');
+    pdf.setFontSize(10);
+    pdf.text(`${data.fatura.vendedor}`, 112, yPosition + 12);
+    pdf.text(`Pagamento: ${data.fatura.formaPagamento}`, 112, yPosition + 16);
+  }
+
+  private addClientInfo(pdf: jsPDF, data: any, textColor: number[], yPosition: number): void {
+    pdf.setDrawColor(200, 200, 200);
+    pdf.rect(20, yPosition, 170, 15);
+
+    pdf.setTextColor(...textColor);
+    pdf.setFontSize(12);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('CLIENTE', 22, yPosition + 6);
+
+    pdf.setFont('helvetica', 'normal');
+    pdf.setFontSize(11);
+    pdf.text(`${data.fatura.cliente}`, 22, yPosition + 12);
+  }
+
+  private addItemsTable(pdf: jsPDF, data: any, primaryColor: number[], lightGray: number[], textColor: number[], yPosition: number): number {
+    // Cabeçalho da tabela
+    pdf.setFillColor(...primaryColor);
+    pdf.rect(20, yPosition, 170, 8, 'F');
+
+    pdf.setTextColor(255, 255, 255);
+    pdf.setFontSize(10);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('PRODUTO/SERVIÇO', 22, yPosition + 5);
+    pdf.text('QTD', 110, yPosition + 5);
+    pdf.text('PREÇO UNIT.', 130, yPosition + 5);
+    pdf.text('TOTAL', 170, yPosition + 5);
+
+    let currentY = yPosition + 8;
+
+    // Itens da tabela
+    data.itens.forEach((item: any, index: number) => {
+      if (index % 2 === 0) {
+        pdf.setFillColor(...lightGray);
+        pdf.rect(20, currentY, 170, 8, 'F');
+      }
+
+      pdf.setTextColor(...textColor);
+      pdf.setFontSize(9);
+      pdf.setFont('helvetica', 'normal');
+
+      // Quebrar texto longo do produto
+      const splitTitle = pdf.splitTextToSize(item.nome, 85);
+      pdf.text(splitTitle, 22, currentY + 5);
+
+      pdf.text(item.quantidade.toString(), 110, currentY + 5);
+      pdf.text(`KZ ${item.precoUnitario.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`, 130, currentY + 5);
+      pdf.text(`KZ ${item.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`, 170, currentY + 5);
+
+      currentY += 8;
+    });
+
+    return currentY;
+  }
+
+  private addFinancialSummary(pdf: jsPDF, data: any, primaryColor: number[], textColor: number[]): void {
+    const yStart = 220; // Posição fixa para o resumo
+
+    // Box do resumo
+    pdf.setDrawColor(...primaryColor);
+    pdf.setLineWidth(1);
+    pdf.rect(130, yStart, 60, 30);
+
+    pdf.setTextColor(...textColor);
+    pdf.setFontSize(10);
+    pdf.setFont('helvetica', 'normal');
+
+    let yPos = yStart + 8;
+    pdf.text(`Subtotal: KZ ${data.resumo.subtotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`, 132, yPos);
+
+    if (data.resumo.desconto > 0) {
+      yPos += 6;
+      pdf.text(`Desconto: KZ ${data.resumo.desconto.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`, 132, yPos);
+    }
+
+    // Total em destaque
+    yPos += 8;
+    pdf.setFillColor(...primaryColor);
+    pdf.rect(130, yPos - 4, 60, 10, 'F');
+
+    pdf.setTextColor(255, 255, 255);
+    pdf.setFont('helvetica', 'bold');
+    pdf.setFontSize(12);
+    pdf.text(`TOTAL: KZ ${data.resumo.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`, 160, yPos + 2, { align: 'center' });
+  }
+
+  private addFooter(pdf: jsPDF, primaryColor: number[], textColor: number[]): void {
+    const yFooter = 270;
+
+    // Linha decorativa
+    pdf.setDrawColor(...primaryColor);
+    pdf.setLineWidth(2);
+    pdf.line(20, yFooter, 190, yFooter);
+
+    // Texto do rodapé
+    pdf.setTextColor(...textColor);
+    pdf.setFontSize(8);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text('Obrigado pela sua preferência!', 105, yFooter + 8, { align: 'center' });
+    pdf.text('PJ Limitada - Peças Automotivas Premium | www.pjlimitada.com', 105, yFooter + 14, { align: 'center' });
+    pdf.text(`Fatura gerada em ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}`, 105, yFooter + 20, { align: 'center' });
   }
 }
