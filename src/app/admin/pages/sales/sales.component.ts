@@ -3,6 +3,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AdminService } from '../../services/admin.service';
 import { Sale, SaleItem, Product, User, TableColumn, TableAction } from '../../models/admin.models';
+import { PdfService } from '../../../services/pdf.service';
 
 @Component({
   selector: 'app-sales',
@@ -64,6 +65,12 @@ export class SalesComponent implements OnInit, OnDestroy {
       action: (sale: Sale) => this.viewSale(sale)
     },
     {
+      label: 'Baixar Fatura',
+      icon: 'M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2z',
+      type: 'success',
+      action: (sale: Sale) => this.downloadInvoice(sale)
+    },
+    {
       label: 'Imprimir',
       icon: 'M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z',
       type: 'secondary',
@@ -71,7 +78,10 @@ export class SalesComponent implements OnInit, OnDestroy {
     }
   ];
 
-  constructor(private adminService: AdminService) {}
+  constructor(
+    private adminService: AdminService,
+    private pdfService: PdfService
+  ) {}
 
   ngOnInit(): void {
     this.loadSales();
@@ -114,6 +124,20 @@ export class SalesComponent implements OnInit, OnDestroy {
 
   printSale(sale: Sale): void {
     alert(`Função de impressão seria implementada aqui para a venda #${sale.id}`);
+  }
+
+  downloadInvoice(sale: Sale): void {
+    try {
+      // Gerar dados da fatura
+      const invoiceData = this.generateInvoiceData(sale);
+
+      // Usar o serviço de PDF para gerar a fatura
+      this.pdfService.generateInvoicePdf(invoiceData);
+
+    } catch (error) {
+      console.error('Erro ao gerar PDF:', error);
+      alert('Erro ao gerar a fatura. Tente novamente.');
+    }
   }
 
   closeModal(): void {
@@ -304,4 +328,117 @@ export class SalesComponent implements OnInit, OnDestroy {
       total: 0
     };
   }
+
+  private generateInvoiceData(sale: Sale) {
+    const currentDate = new Date();
+    const saleDate = new Date(sale.date);
+
+    return {
+      empresa: {
+        nome: 'PJ Limitada',
+        endereco: 'Avenida Marginal, Edifício Torres Dipanda, 15º Andar',
+        cidade: 'Luanda, Angola',
+        telefone: '+244 923 456 789',
+        email: 'contato@pjlimitada.com',
+        website: 'www.pjlimitada.com',
+        nif: '5417048598',
+        registro: 'Registro Comercial: 123456789'
+      },
+      fatura: {
+        numero: `FAT-${sale.id}`,
+        serie: '001',
+        data: saleDate.toLocaleDateString('pt-BR'),
+        dataVencimento: new Date(saleDate.getTime() + (30 * 24 * 60 * 60 * 1000)).toLocaleDateString('pt-BR'),
+        vendedor: sale.sellerName,
+        cliente: sale.customerName || 'Cliente Geral',
+        formaPagamento: this.getPaymentMethodLabel(sale.paymentMethod),
+        moeda: 'Kwanza (KZ)'
+      },
+      itens: sale.items.map((item, index) => ({
+        codigo: `${index + 1}`.padStart(3, '0'),
+        nome: item.productName,
+        descricao: `Peça automotiva de alta qualidade`,
+        quantidade: item.quantity,
+        unidade: 'UN',
+        precoUnitario: item.unitPrice,
+        total: item.total,
+        categoria: 'Peças Automotivas'
+      })),
+      resumo: {
+        subtotal: sale.subtotal,
+        desconto: sale.discount || 0,
+        impostos: 0, // Angola pode ter IVA
+        total: sale.total,
+        totalPorExtenso: this.numberToWords(sale.total)
+      },
+      observacoes: sale.notes || 'Garantia de 6 meses em todas as peças. Válido apenas com apresentação desta fatura.',
+      condicoes: [
+        'Pagamento conforme condições acordadas',
+        'Mercadoria viajam por conta e risco do comprador',
+        'Não nos responsabilizamos por avarias após a entrega',
+        'Garantia válida apenas com apresentação desta fatura'
+      ]
+    };
+  }
+
+  private numberToWords(value: number): string {
+    // Implementação simples para converter número em palavras (português)
+    if (value === 0) return 'Zero kwanzas';
+
+    const ones = ['', 'um', 'dois', 'três', 'quatro', 'cinco', 'seis', 'sete', 'oito', 'nove'];
+    const teens = ['dez', 'onze', 'doze', 'treze', 'catorze', 'quinze', 'dezesseis', 'dezessete', 'dezoito', 'dezenove'];
+    const tens = ['', '', 'vinte', 'trinta', 'quarenta', 'cinquenta', 'sessenta', 'setenta', 'oitenta', 'noventa'];
+    const hundreds = ['', 'cento', 'duzentos', 'trezentos', 'quatrocentos', 'quinhentos', 'seiscentos', 'setecentos', 'oitocentos', 'novecentos'];
+
+    let integerPart = Math.floor(value);
+    const decimalPart = Math.round((value - integerPart) * 100);
+
+    let result = '';
+
+    if (integerPart >= 1000000) {
+      const millions = Math.floor(integerPart / 1000000);
+      result += `${millions === 1 ? 'um milhão' : millions + ' milhões'} `;
+      integerPart %= 1000000;
+    }
+
+    if (integerPart >= 1000) {
+      const thousands = Math.floor(integerPart / 1000);
+      if (thousands === 1) {
+        result += 'mil ';
+      } else {
+        result += `${thousands} mil `;
+      }
+      integerPart %= 1000;
+    }
+
+    if (integerPart >= 100) {
+      if (integerPart === 100) {
+        result += 'cem ';
+      } else {
+        result += hundreds[Math.floor(integerPart / 100)] + ' ';
+      }
+      integerPart %= 100;
+    }
+
+    if (integerPart >= 20) {
+      result += tens[Math.floor(integerPart / 10)];
+      if (integerPart % 10 > 0) {
+        result += ' e ' + ones[integerPart % 10];
+      }
+    } else if (integerPart >= 10) {
+      result += teens[integerPart - 10];
+    } else if (integerPart > 0) {
+      result += ones[integerPart];
+    }
+
+    result += ' kwanzas';
+
+    if (decimalPart > 0) {
+      result += ` e ${decimalPart} cêntimos`;
+    }
+
+    return result.charAt(0).toUpperCase() + result.slice(1);
+  }
+
+
 }

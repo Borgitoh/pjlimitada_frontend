@@ -115,7 +115,7 @@ export interface TableColumn {
 export interface TableAction {
   label: string;
   icon: string;
-  type: 'primary' | 'secondary' | 'danger';
+  type: 'primary' | 'secondary' | 'danger' | 'success';
   action: (item: any) => void;
 }
 

@@ -222,7 +222,7 @@ export class ReportsComponent implements OnInit, OnDestroy {
       labels: Object.keys(salesByDate).slice(-7), // Last 7 days
       datasets: [
         {
-          label: 'Vendas (R$)',
+          label: 'Vendas (KZ)',
           data: Object.values(salesByDate).slice(-7),
           borderColor: '#00bcd4',
           backgroundColor: 'rgba(0, 188, 212, 0.1)',

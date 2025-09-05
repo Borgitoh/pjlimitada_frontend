@@ -70,8 +70,9 @@
                     id="telefone"
                     formControlName="telefone"
                     type="tel"
+                    appPhoneMask
                     class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pj-cyan focus:border-transparent"
-                    placeholder="(11) 99999-9999">
+                    placeholder="+244 923 456 789">
                 </div>
               </div>
             </form>
@@ -201,7 +202,7 @@
                 <p class="text-sm font-medium text-gray-900 truncate">{{item.nome}}</p>
                 <p class="text-xs text-gray-500">Qtd: {{item.quantidade}}</p>
               </div>
-              <p class="text-sm font-semibold text-gray-900">R$ {{(item.preco * item.quantidade) | number:'1.2-2'}}</p>
+              <p class="text-sm font-semibold text-gray-900">KZ {{(item.preco * item.quantidade) | number:'1.2-2'}}</p>
             </div>
           </div>
 
@@ -209,7 +210,7 @@
           <div class="border-t border-gray-200 pt-4 space-y-2">
             <div class="flex justify-between text-sm">
               <span class="text-gray-600">Subtotal:</span>
-              <span class="font-medium">R$ {{cartSummary.subtotal | number:'1.2-2'}}</span>
+              <span class="font-medium">KZ {{cartSummary.subtotal | number:'1.2-2'}}</span>
             </div>
             <div class="flex justify-between text-sm">
               <span class="text-gray-600">Frete:</span>
@@ -217,7 +218,7 @@
             </div>
             <div class="flex justify-between text-base font-semibold border-t border-gray-200 pt-2">
               <span class="text-gray-900">Total:</span>
-              <span class="text-pj-cyan">R$ {{cartSummary.total | number:'1.2-2'}}</span>
+              <span class="text-pj-cyan">KZ {{cartSummary.total | number:'1.2-2'}}</span>
             </div>
           </div>
 

@@ -19,7 +19,7 @@
         </div>
         <div class="ml-4">
           <p class="text-sm font-medium text-gray-600">Vendas Hoje</p>
-          <p class="text-2xl font-bold text-gray-900">R$ {{todaySales | number:'1.2-2'}}</p>
+          <p class="text-2xl font-bold text-gray-900">KZ {{todaySales | number:'1.2-2'}}</p>
         </div>
       </div>
     </div>
@@ -49,7 +49,7 @@
         </div>
         <div class="ml-4">
           <p class="text-sm font-medium text-gray-600">Vendas Mês</p>
-          <p class="text-2xl font-bold text-gray-900">R$ {{monthSales | number:'1.2-2'}}</p>
+          <p class="text-2xl font-bold text-gray-900">KZ {{monthSales | number:'1.2-2'}}</p>
         </div>
       </div>
     </div>
@@ -64,7 +64,7 @@
         </div>
         <div class="ml-4">
           <p class="text-sm font-medium text-gray-600">Ticket Médio</p>
-          <p class="text-2xl font-bold text-gray-900">R$ {{averageTicket | number:'1.2-2'}}</p>
+          <p class="text-2xl font-bold text-gray-900">KZ {{averageTicket | number:'1.2-2'}}</p>
         </div>
       </div>
     </div>
@@ -239,7 +239,7 @@
                 class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pj-cyan focus:border-transparent">
                 <option value="">Selecione um produto</option>
                 <option *ngFor="let product of availableProducts" [value]="product.id">
-                  {{product.name}} - R$ {{product.price | number:'1.2-2'}}
+                  {{product.name}} - KZ {{product.price | number:'1.2-2'}}
                 </option>
               </select>
             </div>
@@ -258,8 +258,8 @@
             <div class="w-32">
               <label class="block text-sm font-medium text-gray-700 mb-1">Preço Unit.</label>
               <input
-                type="number"
-                step="0.01"
+                type="text"
+                appCurrencyMask
                 [(ngModel)]="item.unitPrice"
                 (ngModelChange)="updateItemTotal(i)"
                 name="unitPrice_{{i}}"
@@ -269,7 +269,7 @@
             <div class="w-32">
               <label class="block text-sm font-medium text-gray-700 mb-1">Total</label>
               <div class="px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm font-medium">
-                R$ {{item.total | number:'1.2-2'}}
+                KZ {{item.total | number:'1.2-2'}}
               </div>
             </div>
 
@@ -289,14 +289,13 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-gray-200">
         <div>
           <label for="discount" class="block text-sm font-medium text-gray-700 mb-1">
-            Desconto (R$)
+            Desconto (KZ)
           </label>
           <input
             id="discount"
             name="discount"
-            type="number"
-            step="0.01"
-            min="0"
+            type="text"
+            appCurrencyMask
             [(ngModel)]="currentSale.discount"
             (ngModelChange)="updateSaleTotal()"
             class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pj-cyan focus:border-transparent">
@@ -322,7 +321,7 @@
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-1">Total da Venda</label>
           <div class="px-3 py-2 bg-pj-cyan text-white rounded-lg text-lg font-bold">
-            R$ {{currentSale.total | number:'1.2-2'}}
+            KZ {{currentSale.total | number:'1.2-2'}}
           </div>
         </div>
       </div>

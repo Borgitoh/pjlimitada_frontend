@@ -173,14 +173,14 @@
               <h4 class="font-medium text-gray-900">{{item.nome}}</h4>
               <p class="text-sm text-gray-600">{{item.marca}} • Qtd: {{item.quantidade}}</p>
             </div>
-            <p class="font-semibold text-gray-900">R$ {{(item.preco * item.quantidade) | number:'1.2-2'}}</p>
+            <p class="font-semibold text-gray-900">KZ {{(item.preco * item.quantidade) | number:'1.2-2'}}</p>
           </div>
         </div>
 
         <div class="border-t border-gray-200 pt-4 mt-4">
           <div class="flex justify-between text-lg font-semibold">
             <span>Total:</span>
-            <span class="text-pj-cyan">R$ {{selectedOrder.total | number:'1.2-2'}}</span>
+            <span class="text-pj-cyan">KZ {{selectedOrder.total | number:'1.2-2'}}</span>
           </div>
         </div>
       </div>

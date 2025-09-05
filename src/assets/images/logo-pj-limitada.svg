@@ -1,0 +1,19 @@
+<svg width="200" height="80" viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="40" cy="40" r="35" fill="#00bcd4" stroke="#006064" stroke-width="2"/>
+  
+  <!-- Company initials -->
+  <text x="40" y="30" font-family="Arial Black, sans-serif" font-size="24" font-weight="bold" fill="white" text-anchor="middle">PJ</text>
+  <text x="40" y="52" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">LIMITADA</text>
+  
+  <!-- Company name -->
+  <text x="90" y="25" font-family="Arial Black, sans-serif" font-size="18" font-weight="bold" fill="#006064">PJ LIMITADA</text>
+  <text x="90" y="42" font-family="Arial, sans-serif" font-size="12" fill="#00838f">Peças Automotivas</text>
+  <text x="90" y="56" font-family="Arial, sans-serif" font-size="10" fill="#00acc1">Angola • Luanda</text>
+  
+  <!-- Decorative elements -->
+  <rect x="90" y="62" width="100" height="2" fill="#00bcd4"/>
+  <circle cx="95" cy="68" r="2" fill="#00bcd4"/>
+  <circle cx="105" cy="68" r="2" fill="#00acc1"/>
+  <circle cx="115" cy="68" r="2" fill="#00838f"/>
+</svg>
