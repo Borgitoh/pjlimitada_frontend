@@ -18,7 +18,7 @@ export const SERVICOS: Servico[] = [
     preco: 2500,
     duracao: '2-3 dias',
     categoria: 'Instalação',
-    imagem: 'https://images.unsplash.com/photo-1552657328-5f6f8d9c0ba3?w=500&h=300&fit=crop&q=80',
+    imagem: 'https://images.unsplash.com/photo-1517836357463-d25ddfcbf042?w=500&h=300&fit=crop&q=80',
     estoque: 10,
     ativo: true
   },
