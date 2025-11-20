@@ -68,15 +68,15 @@ export class CartService {
     this.updateCart();
   }
 
-  removeFromCart(id: number, tipo: 'peca' | 'bodykit'): void {
-    this.cartItems = this.cartItems.filter(item => 
+  removeFromCart(id: number, tipo: 'peca' | 'bodykit' | 'servico'): void {
+    this.cartItems = this.cartItems.filter(item =>
       !(item.id === id && item.tipo === tipo)
     );
     this.updateCart();
   }
 
-  updateQuantity(id: number, tipo: 'peca' | 'bodykit', quantidade: number): void {
-    const itemIndex = this.cartItems.findIndex(item => 
+  updateQuantity(id: number, tipo: 'peca' | 'bodykit' | 'servico', quantidade: number): void {
+    const itemIndex = this.cartItems.findIndex(item =>
       item.id === id && item.tipo === tipo
     );
 
