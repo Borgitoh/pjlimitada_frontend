@@ -99,11 +99,11 @@ export class CartService {
     return [...this.cartItems];
   }
 
-  isInCart(id: number, tipo: 'peca' | 'bodykit'): boolean {
+  isInCart(id: number, tipo: 'peca' | 'bodykit' | 'servico'): boolean {
     return this.cartItems.some(item => item.id === id && item.tipo === tipo);
   }
 
-  getCartItemQuantity(id: number, tipo: 'peca' | 'bodykit'): number {
+  getCartItemQuantity(id: number, tipo: 'peca' | 'bodykit' | 'servico'): number {
     const item = this.cartItems.find(item => item.id === id && item.tipo === tipo);
     return item ? item.quantidade : 0;
   }
