@@ -14,6 +14,7 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { PecasComponent } from './pages/pecas/pecas.component';
 import { BodykitsComponent } from './pages/bodykits/bodykits.component';
+import { SolicitarServicosComponent } from './pages/solicitar-servicos/solicitar-servicos.component';
 import { CartModalComponent } from './components/cart-modal/cart-modal.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
 import { OrderSuccessComponent } from './components/order-success/order-success.component';
