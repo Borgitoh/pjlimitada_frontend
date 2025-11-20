@@ -55,8 +55,11 @@
             <!-- Product Info -->
             <div class="flex-1 min-w-0">
               <h4 class="text-sm font-medium text-gray-900 truncate">{{item.nome}}</h4>
-              <p class="text-xs text-gray-500">{{item.marca}} • {{item.categoria}}</p>
-              <p class="text-sm font-semibold text-pj-cyan">KZ {{item.preco | number:'1.2-2'}}</p>
+              <p class="text-xs text-gray-500">
+                <span *ngIf="item.tipo === 'servico'">{{item.duracao}}</span>
+                <span *ngIf="item.tipo !== 'servico'">{{item.marca}} • {{item.categoria}}</span>
+              </p>
+              <p class="text-sm font-semibold text-pj-cyan">R$ {{item.preco | number:'1.2-2'}}</p>
             </div>
             
             <!-- Quantity Controls -->
