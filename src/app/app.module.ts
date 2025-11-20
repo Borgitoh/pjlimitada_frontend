@@ -37,6 +37,7 @@ import { SwiperModule } from 'swiper/angular';
     RegisterComponent,
     PecasComponent,
     BodykitsComponent,
+    SolicitarServicosComponent,
     CartModalComponent,
     CheckoutComponent,
     OrderSuccessComponent,
