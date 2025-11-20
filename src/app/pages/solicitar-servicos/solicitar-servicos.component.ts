@@ -22,11 +22,15 @@ export class SolicitarServicosComponent implements OnInit {
   totalOrcamento = 0;
   formularioSubmetido = false;
   mensagemSucesso = false;
+  today!: string;
 
   constructor(
     private fb: FormBuilder,
     private cartService: CartService
-  ) {}
+  ) {
+    const today = new Date();
+    this.today = today.toISOString().split('T')[0];
+  }
 
   ngOnInit() {
     this.inicializarFormulario();
