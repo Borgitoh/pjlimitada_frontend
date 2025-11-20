@@ -150,6 +150,53 @@
   </div>
 </section>
 
+<!-- Serviços Disponíveis -->
+<section class="py-16 bg-gray-900">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-3xl md:text-4xl font-bold text-center text-white mb-12">
+      Serviços Especializados
+    </h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+      <div *ngFor="let servico of servicosDestaque"
+           class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300 group flex flex-col h-full">
+        <div class="relative overflow-hidden h-48">
+          <img [src]="servico.imagem" [alt]="servico.nome"
+               class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+          <div class="absolute top-4 right-4">
+            <span class="bg-pj-cyan text-white px-2 py-1 rounded-full text-xs font-semibold">
+              {{servico.categoria}}
+            </span>
+          </div>
+        </div>
+        <div class="p-6 flex flex-col flex-1">
+          <h4 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-pj-cyan transition line-clamp-2">
+            {{servico.nome}}
+          </h4>
+          <p class="text-gray-600 text-sm mb-3 flex-1">{{servico.descricao}}</p>
+          <div class="space-y-3 mt-auto">
+            <div class="flex justify-between items-center">
+              <span class="text-2xl font-bold text-pj-cyan">R$ {{servico.preco}}</span>
+              <span class="text-xs text-gray-500 font-medium">{{servico.duracao}}</span>
+            </div>
+            <button
+              *ngIf="servico.estoque > 0"
+              (click)="addServicoToCart(servico)"
+              class="w-full bg-gradient-pj-primary hover:opacity-90 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-200 transform hover:scale-105">
+              Adicionar ao Carrinho
+            </button>
+            <button
+              *ngIf="servico.estoque === 0"
+              disabled
+              class="w-full bg-gray-300 text-gray-500 px-4 py-2 rounded-lg font-semibold cursor-not-allowed">
+              Sem Disponibilidade
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- Estatísticas -->
 <section class="py-16 gradient-pj-primary text-white">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
