@@ -7,10 +7,11 @@ export interface CartItem {
   preco: number;
   imagem: string;
   quantidade: number;
-  tipo: 'peca' | 'bodykit';
+  tipo: 'peca' | 'bodykit' | 'servico';
   categoria?: string;
   marca?: string;
   estoque: number;
+  duracao?: string;
 }
 
 export interface CartSummary {
