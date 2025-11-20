@@ -35,8 +35,8 @@ export class CartService {
     this.loadCartFromStorage();
   }
 
-  addToCart(item: any, tipo: 'peca' | 'bodykit', quantidade: number = 1): void {
-    const existingItemIndex = this.cartItems.findIndex(cartItem => 
+  addToCart(item: any, tipo: 'peca' | 'bodykit' | 'servico', quantidade: number = 1): void {
+    const existingItemIndex = this.cartItems.findIndex(cartItem =>
       cartItem.id === item.id && cartItem.tipo === tipo
     );
 
@@ -58,7 +58,8 @@ export class CartService {
           tipo: tipo,
           categoria: item.categoria,
           marca: item.marca,
-          estoque: item.estoque
+          estoque: item.estoque,
+          duracao: item.duracao
         };
         this.cartItems.push(cartItem);
       }
