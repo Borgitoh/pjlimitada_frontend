@@ -62,7 +62,7 @@ export const SERVICOS: Servico[] = [
     preco: 1800,
     duracao: '1 dia',
     categoria: 'Performance',
-    imagem: 'https://images.unsplash.com/photo-1553882900-f2b06423b100?w=500&h=300&fit=crop&q=80',
+    imagem: 'https://images.unsplash.com/photo-1552820728-8ac41f1ce891?w=500&h=300&fit=crop&q=80',
     estoque: 12,
     ativo: true
   }
