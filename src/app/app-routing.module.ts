@@ -21,6 +21,7 @@ const routes: Routes = [
   { path: 'bodykits', component: BodykitsComponent },
   { path: 'pecas/:id', component: DetalhesComponent },
   { path: 'bodykits/:id', component: DetalhesComponent },
+  { path: 'solicitar-servicos', component: SolicitarServicosComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'checkout', component: CheckoutComponent },
