@@ -7,10 +7,11 @@ export interface CartItem {
   preco: number;
   imagem: string;
   quantidade: number;
-  tipo: 'peca' | 'bodykit';
+  tipo: 'peca' | 'bodykit' | 'servico';
   categoria?: string;
   marca?: string;
   estoque: number;
+  duracao?: string;
 }
 
 export interface CartSummary {
@@ -34,8 +35,8 @@ export class CartService {
     this.loadCartFromStorage();
   }
 
-  addToCart(item: any, tipo: 'peca' | 'bodykit', quantidade: number = 1): void {
-    const existingItemIndex = this.cartItems.findIndex(cartItem => 
+  addToCart(item: any, tipo: 'peca' | 'bodykit' | 'servico', quantidade: number = 1): void {
+    const existingItemIndex = this.cartItems.findIndex(cartItem =>
       cartItem.id === item.id && cartItem.tipo === tipo
     );
 
@@ -57,7 +58,8 @@ export class CartService {
           tipo: tipo,
           categoria: item.categoria,
           marca: item.marca,
-          estoque: item.estoque
+          estoque: item.estoque,
+          duracao: item.duracao
         };
         this.cartItems.push(cartItem);
       }
@@ -66,15 +68,15 @@ export class CartService {
     this.updateCart();
   }
 
-  removeFromCart(id: number, tipo: 'peca' | 'bodykit'): void {
-    this.cartItems = this.cartItems.filter(item => 
+  removeFromCart(id: number, tipo: 'peca' | 'bodykit' | 'servico'): void {
+    this.cartItems = this.cartItems.filter(item =>
       !(item.id === id && item.tipo === tipo)
     );
     this.updateCart();
   }
 
-  updateQuantity(id: number, tipo: 'peca' | 'bodykit', quantidade: number): void {
-    const itemIndex = this.cartItems.findIndex(item => 
+  updateQuantity(id: number, tipo: 'peca' | 'bodykit' | 'servico', quantidade: number): void {
+    const itemIndex = this.cartItems.findIndex(item =>
       item.id === id && item.tipo === tipo
     );
 
@@ -97,11 +99,11 @@ export class CartService {
     return [...this.cartItems];
   }
 
-  isInCart(id: number, tipo: 'peca' | 'bodykit'): boolean {
+  isInCart(id: number, tipo: 'peca' | 'bodykit' | 'servico'): boolean {
     return this.cartItems.some(item => item.id === id && item.tipo === tipo);
   }
 
-  getCartItemQuantity(id: number, tipo: 'peca' | 'bodykit'): number {
+  getCartItemQuantity(id: number, tipo: 'peca' | 'bodykit' | 'servico'): number {
     const item = this.cartItems.find(item => item.id === id && item.tipo === tipo);
     return item ? item.quantidade : 0;
   }

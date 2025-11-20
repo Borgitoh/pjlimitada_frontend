@@ -5,6 +5,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { UsersComponent } from './pages/users/users.component';
 import { BrandsComponent } from './pages/brands/brands.component';
 import { ProductsComponent } from './pages/products/products.component';
+import { ServicesComponent } from './pages/services/services.component';
 import { SalesComponent } from './pages/sales/sales.component';
 import { OrdersComponent } from './pages/orders/orders.component';
 import { ReportsComponent } from './pages/reports/reports.component';
@@ -20,6 +21,7 @@ const routes: Routes = [
       { path: 'users', component: UsersComponent },
       { path: 'brands', component: BrandsComponent },
       { path: 'products', component: ProductsComponent },
+      { path: 'services', component: ServicesComponent },
       { path: 'sales', component: SalesComponent },
       { path: 'orders', component: OrdersComponent },
       { path: 'reports', component: ReportsComponent },
