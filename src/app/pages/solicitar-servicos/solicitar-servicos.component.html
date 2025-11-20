@@ -99,7 +99,7 @@
                 formControlName="dataPreferida"
                 type="date"
                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pj-cyan focus:border-transparent"
-                [min]="new Date().toISOString().split('T')[0]">
+                [min]="today">
               <span *ngIf="formularioSubmetido && solicitacaoForm.get('dataPreferida')?.errors" class="text-red-600 text-sm mt-1 block">
                 Data é obrigatória
               </span>
