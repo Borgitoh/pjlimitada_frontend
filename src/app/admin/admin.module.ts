@@ -9,6 +9,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { UsersComponent } from './pages/users/users.component';
 import { BrandsComponent } from './pages/brands/brands.component';
 import { ProductsComponent } from './pages/products/products.component';
+import { ServicesComponent } from './pages/services/services.component';
 import { SalesComponent } from './pages/sales/sales.component';
 import { OrdersComponent } from './pages/orders/orders.component';
 import { ReportsComponent } from './pages/reports/reports.component';
@@ -26,6 +27,7 @@ import { ModalComponent } from './components/modal/modal.component';
     UsersComponent,
     BrandsComponent,
     ProductsComponent,
+    ServicesComponent,
     SalesComponent,
     OrdersComponent,
     ReportsComponent,
