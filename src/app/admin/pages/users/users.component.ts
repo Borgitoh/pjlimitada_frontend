@@ -169,8 +169,22 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   confirmDelete(): void {
     if (this.userToDelete) {
-      this.users = this.users.filter(u => u.id !== this.userToDelete!.id);
-      this.closeDeleteModal();
+      const payload = {
+       
+        active: false,
+      
+      };
+
+      this.authService.updateUser(Number(this.userToDelete.id), payload)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (updated: any) => {
+           this.closeDeleteModal();
+            this.loadUsers();
+          },
+          error: (err) => console.error(err)
+        });
+      
     }
   }
 
