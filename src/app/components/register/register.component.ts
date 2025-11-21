@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service.service';
 
 @Component({
   selector: 'app-register',
@@ -14,11 +15,11 @@ export class RegisterComponent {
   confirmPassword: string = '';
   acceptTerms: boolean = false;
   acceptNewsletter: boolean = false;
-  
+
   showPassword: boolean = false;
   showConfirmPassword: boolean = false;
   isLoading: boolean = false;
-  
+
   errorMessage: string = '';
   successMessage: string = '';
   nameError: string = '';
@@ -27,7 +28,8 @@ export class RegisterComponent {
   confirmPasswordError: string = '';
   termsError: string = '';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router,
+    private authService: AuthService) { }
 
   togglePassword() {
     this.showPassword = !this.showPassword;
@@ -39,21 +41,21 @@ export class RegisterComponent {
 
   getPasswordStrength(): number {
     let strength = 0;
-    
+
     if (this.password.length >= 8) strength++;
     if (/[a-z]/.test(this.password)) strength++;
     if (/[A-Z]/.test(this.password)) strength++;
     if (/[0-9]/.test(this.password)) strength++;
     if (/[^A-Za-z0-9]/.test(this.password)) strength++;
-    
+
     return Math.min(strength, 4);
   }
 
   getPasswordStrengthClass(index: number): string {
     const strength = this.getPasswordStrength();
-    
+
     if (index >= strength) return 'bg-gray-200';
-    
+
     if (strength <= 1) return 'bg-red-500';
     if (strength <= 2) return 'bg-yellow-500';
     if (strength <= 3) return 'bg-blue-500';
@@ -62,7 +64,7 @@ export class RegisterComponent {
 
   getPasswordStrengthText(): string {
     const strength = this.getPasswordStrength();
-    
+
     if (!this.password) return '';
     if (strength <= 1) return 'Senha muito fraca';
     if (strength <= 2) return 'Senha fraca';
@@ -72,7 +74,7 @@ export class RegisterComponent {
 
   getPasswordStrengthTextClass(): string {
     const strength = this.getPasswordStrength();
-    
+
     if (!this.password) return 'text-gray-500';
     if (strength <= 1) return 'text-red-500';
     if (strength <= 2) return 'text-yellow-500';
@@ -155,43 +157,29 @@ export class RegisterComponent {
     this.isLoading = true;
     this.clearErrors();
 
-    try {
-      // Simular chamada de API
-      await this.simulateApiCall();
-      
-      // Simular validação de email único
-      if (this.email === 'admin@pjlimitada.com') {
-        this.errorMessage = 'Este e-mail já está cadastrado';
-        return;
-      }
-      
-      // Registro bem-sucedido
-      this.successMessage = 'Conta criada com sucesso! Redirecionando...';
-      
-      // Simular salvamento
-      localStorage.setItem('user', JSON.stringify({
-        name: this.name,
-        email: this.email,
-        phone: this.phone,
-        newsletter: this.acceptNewsletter,
-        createdAt: new Date().toISOString()
-      }));
-      
-      // Redirecionar após sucesso
-      setTimeout(() => {
-        this.router.navigate(['/login']);
-      }, 2000);
-      
-    } catch (error) {
-      this.errorMessage = 'Erro ao criar conta. Tente novamente.';
-    } finally {
-      this.isLoading = false;
-    }
-  }
-
-  private simulateApiCall(): Promise<void> {
-    return new Promise((resolve) => {
-      setTimeout(resolve, 1500); // Simular delay de rede
+    const payload = {
+      name: this.name,
+      email: this.email,
+      phone: this.phone,
+      password: this.password,
+      role: 'cliente'
+    };
+      this.authService.register(payload).subscribe({
+      next: (res: any) => {
+        this.successMessage = 'Conta criada com sucesso! Redirecionando...';
+        setTimeout(() => this.router.navigate(['/login']), 2000);
+      },
+      error: (err) => {
+        if (err.status === 422 && err.error.errors) {
+          const errors = err.error.errors;
+          this.nameError = errors.name ? errors.name[0] : '';
+          this.emailError = errors.email ? errors.email[0] : '';
+          this.passwordError = errors.password ? errors.password[0] : '';
+        } else {
+          this.errorMessage = 'Erro ao criar conta. Tente novamente.';
+        }
+      },
+      complete: () => this.isLoading = false
     });
   }
 }

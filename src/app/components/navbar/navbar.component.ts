@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { CartService, CartSummary } from '../../services/cart.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -19,10 +20,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
     total: 0,
     itemCount: 0
   };
+  user: any = null;
 
   private destroy$ = new Subject<void>();
 
-  constructor(private cartService: CartService) {}
+  constructor(private cartService: CartService, private router: Router) { }
 
   ngOnInit(): void {
     this.cartService.cart$
@@ -30,6 +32,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
       .subscribe(summary => {
         this.cartSummary = summary;
       });
+
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      this.user = JSON.parse(userData);
+    }
   }
 
   ngOnDestroy(): void {
@@ -59,5 +66,18 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   closeCartModal() {
     this.cartModalOpen = false;
+  }
+
+  isAdmin() {
+    return this.user && ['admin', 'gestor', 'master', 'vendedor'].includes(this.user.role);
+  }
+
+  isCliente() {
+    return this.user && this.user.role === 'cliente';
+  }
+  logout() {
+    localStorage.removeItem('user');
+    this.user = null;
+    this.router.navigate(['/login']);
   }
 }

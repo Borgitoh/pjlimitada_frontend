@@ -2,8 +2,7 @@
   <!-- Page Header -->
   <div class="flex flex-col space-y-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
     <div>
-      <h1 class="text-2xl font-bold text-gray-900">Gestão de Usuários</h1>
-      <p class="text-gray-600">Gerencie usuários, permissões e controle de acesso</p>
+            <p class="text-gray-600">Gerencie usuários, permissões e controle de acesso</p>
     </div>
   </div>
 
@@ -11,6 +10,7 @@
   <app-table
     title="Usuários do Sistema"
     [data]="users"
+    [spinner]="isLoading"
     [columns]="tableColumns"
     [actions]="tableActions"
     (add)="openUserModal()"
@@ -25,7 +25,8 @@
     size="md"
     [confirmDisabled]="!isFormValid()"
     (closed)="closeModal()"
-    (confirmed)="saveUser()">
+    (confirmed)="saveUser()"
+    >
 
     <form #userForm="ngForm" class="space-y-4">
       <!-- Name -->
@@ -80,8 +81,8 @@
           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pj-cyan focus:border-transparent">
           <option value="">Selecione um cargo</option>
           <option value="admin">Administrador</option>
-          <option value="manager">Gerente</option>
-          <option value="seller">Vendedor</option>
+          <option value="gestor">Gerente</option>
+          <option value="vendedor">Vendedor</option>
         </select>
       </div>
 
@@ -122,10 +123,10 @@
           <div *ngIf="currentUser.role === 'admin'">
             <strong>Administrador:</strong> Acesso total ao sistema, incluindo gestão de usuários e configurações.
           </div>
-          <div *ngIf="currentUser.role === 'manager'">
+          <div *ngIf="currentUser.role === 'gestor'">
             <strong>Gerente:</strong> Gestão de produtos, vendas, relatórios e marcas.
           </div>
-          <div *ngIf="currentUser.role === 'seller'">
+          <div *ngIf="currentUser.role === 'vendedor'">
             <strong>Vendedor:</strong> Apenas registro de vendas e visualização de produtos.
           </div>
         </div>

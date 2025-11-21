@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service.service';
 
 @Component({
   selector: 'app-login',
@@ -12,12 +13,12 @@ export class LoginComponent {
   rememberMe: boolean = false;
   showPassword: boolean = false;
   isLoading: boolean = false;
-  
+
   errorMessage: string = '';
   emailError: string = '';
   passwordError: string = '';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authService: AuthService) { }
 
   togglePassword() {
     this.showPassword = !this.showPassword;
@@ -66,29 +67,37 @@ export class LoginComponent {
 
     this.isLoading = true;
     this.clearErrors();
+    const payload = {
+      login: this.email,
+      password: this.password
+    };
 
-    try {
-      // Simular chamada de API
-      await this.simulateApiCall();
-      
-      // Simular validação
-      if (this.email === 'admin@pjlimitada.com' && this.password === 'admin123') {
-        // Login bem-sucedido
+    this.authService.login(payload).subscribe({
+      next: (res: any) => {
+        // Supondo que a API retorne usuário e token
         localStorage.setItem('user', JSON.stringify({
-          email: this.email,
-          name: 'Administrador',
+          name: res.user.name,
+          email: res.user.email,
+          token: res.token,
+          role: res.user.role,
           rememberMe: this.rememberMe
         }));
-        
-        this.router.navigate(['/']);
-      } else {
-        this.errorMessage = 'E-mail ou senha incorretos';
-      }
-    } catch (error) {
-      this.errorMessage = 'Erro ao fazer login. Tente novamente.';
-    } finally {
-      this.isLoading = false;
-    }
+
+        this.router.navigate(['/']); // redireciona após login
+      },
+      error: (err) => {
+        if (err.status === 422 && err.error.errors) {
+          this.emailError = err.error.errors.email ? err.error.errors.email[0] : '';
+          this.passwordError = err.error.errors.password ? err.error.errors.password[0] : '';
+        } else if (err.status === 401) {
+          this.errorMessage = 'E-mail ou senha incorretos';
+        } else {
+          this.errorMessage = 'Erro ao fazer login. Tente novamente.';
+        }
+        this.isLoading = false;
+      },
+      complete: () => this.isLoading = false
+    });
   }
 
   private simulateApiCall(): Promise<void> {

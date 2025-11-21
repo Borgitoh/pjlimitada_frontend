@@ -24,6 +24,8 @@ export class ModalComponent {
   @Output() confirmed = new EventEmitter<void>();
 
   @HostListener('document:keydown.escape', ['$event'])
+
+  isLoading:boolean = false;
   onEscapeKey(event: KeyboardEvent): void {
     if (this.isOpen) {
       this.close();
@@ -57,6 +59,7 @@ export class ModalComponent {
   }
 
   confirm(): void {
+    this.isLoading = true;
     if (!this.confirmDisabled) {
       this.confirmed.emit();
     }

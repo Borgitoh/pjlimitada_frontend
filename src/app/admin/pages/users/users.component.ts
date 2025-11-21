@@ -3,6 +3,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AdminService } from '../../services/admin.service';
 import { User, TableColumn, TableAction } from '../../models/admin.models';
+import { AuthService } from 'src/app/services/auth.service.service';
 
 @Component({
   selector: 'app-users',
@@ -10,8 +11,9 @@ import { User, TableColumn, TableAction } from '../../models/admin.models';
   styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnInit, OnDestroy {
-  users: User[] = [];
+  users: any[] = [];
   currentUser: any = {
+    id: null,
     name: '',
     email: '',
     role: '',
@@ -24,6 +26,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   editMode = false;
   modalTitle = '';
   userToDelete: User | null = null;
+  isLoading: boolean = false;
 
   private destroy$ = new Subject<void>();
 
@@ -32,7 +35,7 @@ export class UsersComponent implements OnInit, OnDestroy {
     { key: 'email', label: 'E-mail', sortable: true, type: 'text' },
     { key: 'roleLabel', label: 'Cargo', sortable: true, type: 'text' },
     { key: 'active', label: 'Status', type: 'status' },
-    { key: 'lastLogin', label: 'Último Login', type: 'date', sortable: true },
+    { key: 'last_login', label: 'Último Login', type: 'date', sortable: true },
     { key: 'actions', label: 'Ações', type: 'actions', width: '120px' }
   ];
 
@@ -51,7 +54,7 @@ export class UsersComponent implements OnInit, OnDestroy {
     }
   ];
 
-  constructor(private adminService: AdminService) {}
+  constructor(private adminService: AdminService, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.loadUsers();
@@ -111,30 +114,57 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   saveUser(): void {
     if (!this.isFormValid()) return;
-
     if (this.editMode) {
-      // Update existing user
-      const userIndex = this.users.findIndex(u => u.id === this.currentUser.id);
-      if (userIndex !== -1) {
-        this.users[userIndex] = {
-          ...this.currentUser,
-          lastLogin: this.users[userIndex].lastLogin
-        };
-      }
-    } else {
-      // Create new user
-      const newUser: User = {
-        id: Date.now().toString(),
+      // UPDATE NO LARAVEL
+      const payload = {
         name: this.currentUser.name,
         email: this.currentUser.email,
         role: this.currentUser.role,
         active: this.currentUser.active,
-        createdAt: new Date()
+        password: this.currentUser.password ? this.currentUser.password : undefined
       };
-      this.users.push(newUser);
-    }
 
-    this.closeModal();
+      this.authService.updateUser(this.currentUser.id, payload)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (updated: any) => {
+            // Atualiza localmente
+            const idx = this.users.findIndex(u => u.id === updated.user.id);
+            if (idx !== -1) {
+              this.users[idx] = {
+                ...updated.user,
+                roleLabel: this.getRoleLabel(updated.user.role)
+              };
+            }
+
+            this.closeModal();
+            this.isLoading = true;
+            this.loadUsers();
+          },
+          error: (err) => console.error(err)
+        });
+
+    } else {
+      const payload = {
+        name: this.currentUser.name,
+        email: this.currentUser.email,
+        role: this.currentUser.role,
+        active: this.currentUser.active,
+        password: this.currentUser.password
+      };
+
+      this.authService.register(payload).subscribe(newUser => {
+        this.users.push({
+          ...newUser,
+          roleLabel: this.getRoleLabel(newUser.role)
+        });
+
+        this.closeModal();
+        this.isLoading = true;
+        this.loadUsers();
+      });
+      return;
+    }
   }
 
   confirmDelete(): void {
@@ -147,20 +177,35 @@ export class UsersComponent implements OnInit, OnDestroy {
   getRoleLabel(role: string): string {
     const labels: { [key: string]: string } = {
       'admin': 'Administrador',
-      'manager': 'Gerente',
-      'seller': 'Vendedor'
+      'gestor': 'Gerente',
+      'vendedor': 'Vendedor'
     };
     return labels[role] || role;
   }
 
   private loadUsers(): void {
-    this.adminService.getUsers()
+    this.isLoading = true;
+
+    this.authService.getUsers()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(users => {
-        this.users = users.map(user => ({
-          ...user,
-          roleLabel: this.getRoleLabel(user.role)
-        })) as any;
+      .subscribe({
+        next: (res: any) => {
+
+          if (res.users === null || res.users.length === 0) {
+
+            this.isLoading = false;
+            return;
+          }
+          this.users = res.users.map((user: any) => ({
+            ...user,
+            roleLabel: this.getRoleLabel(user.role)
+          }));
+          this.isLoading = false;
+        },
+        error: (err) => {
+          console.error(err);
+          this.isLoading = false;
+        }
       });
   }
 

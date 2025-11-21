@@ -13,6 +13,7 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() actions: TableAction[] = [];
   @Input() searchable: boolean = true;
   @Input() showAddButton: boolean = true;
+  @Input() spinner: boolean = false;
   @Input() addButtonText: string = 'Adicionar';
   @Input() emptyMessage: string = 'Nenhum item cadastrado';
   @Input() pageSize: number = 10;

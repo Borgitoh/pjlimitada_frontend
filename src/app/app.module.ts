@@ -22,6 +22,8 @@ import { MyOrdersComponent } from './components/my-orders/my-orders.component';
 import { PhoneMaskDirective } from './directives/phone-mask.directive';
 import { CurrencyMaskDirective } from './directives/currency-mask.directive';
 import { SwiperModule } from 'swiper/angular';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -49,9 +51,16 @@ import { SwiperModule } from 'swiper/angular';
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    SwiperModule
+    SwiperModule,
+    HttpClientModule,
   ],
-  providers: [],
+ providers: [
+  { 
+    provide: HTTP_INTERCEPTORS, 
+    useClass: AuthInterceptor, 
+    multi: true 
+  }
+],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
