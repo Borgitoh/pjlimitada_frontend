@@ -1,0 +1,220 @@
+<div class="space-y-6">
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-3xl font-bold text-gray-900">Gerenciar Serviços</h1>
+      <p class="text-gray-600 mt-2">Adicione, edite e gerencie os serviços oferecidos</p>
+    </div>
+    <button
+      (click)="openServicoModal()"
+      class="px-6 py-2 bg-gradient-pj-primary text-white rounded-lg hover:opacity-90 transition-opacity flex items-center space-x-2 font-medium">
+      <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+      </svg>
+      <span>Novo Serviço</span>
+    </button>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div class="bg-white p-6 rounded-lg shadow">
+      <div class="text-sm text-gray-500 font-medium">Total de Serviços</div>
+      <div class="text-3xl font-bold text-gray-900 mt-2">{{ getTotalServicos() }}</div>
+    </div>
+    <div class="bg-white p-6 rounded-lg shadow">
+      <div class="text-sm text-gray-500 font-medium">Valor Total em Estoque</div>
+      <div class="text-3xl font-bold text-gray-900 mt-2">{{ getTotalValor() | currency }}</div>
+    </div>
+    <div class="bg-white p-6 rounded-lg shadow">
+      <div class="text-sm text-gray-500 font-medium">Estoque Baixo</div>
+      <div class="text-3xl font-bold text-red-600 mt-2">{{ getLowStockCount() }}</div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="bg-white p-6 rounded-lg shadow">
+    <h3 class="font-semibold text-gray-900 mb-4">Filtros</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Categoria</label>
+        <select
+          [(ngModel)]="selectedCategory"
+          (change)="filterServicos()"
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pj-cyan">
+          <option value="">Todas as categorias</option>
+          <option *ngFor="let categoria of categorias" [value]="categoria">{{ categoria }}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Services Table -->
+  <div class="bg-white rounded-lg shadow overflow-hidden">
+    <table class="w-full">
+      <thead class="bg-gray-50 border-b border-gray-200">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider">Serviço</th>
+          <th class="px-6 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider">Categoria</th>
+          <th class="px-6 py-3 text-left text-xs font-semibold text-gray-900 uppercase tracking-wider">Duração</th>
+          <th class="px-6 py-3 text-right text-xs font-semibold text-gray-900 uppercase tracking-wider">Preço</th>
+          <th class="px-6 py-3 text-center text-xs font-semibold text-gray-900 uppercase tracking-wider">Estoque</th>
+          <th class="px-6 py-3 text-center text-xs font-semibold text-gray-900 uppercase tracking-wider">Status</th>
+          <th class="px-6 py-3 text-right text-xs font-semibold text-gray-900 uppercase tracking-wider">Ações</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200">
+        <tr *ngFor="let servico of servicosFiltrados" class="hover:bg-gray-50 transition-colors">
+          <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ servico.nome }}</td>
+          <td class="px-6 py-4 text-sm text-gray-600">
+            <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">{{ servico.categoria }}</span>
+          </td>
+          <td class="px-6 py-4 text-sm text-gray-600">{{ servico.duracao }}</td>
+          <td class="px-6 py-4 text-sm font-semibold text-gray-900 text-right">{{ servico.preco | currency }}</td>
+          <td class="px-6 py-4 text-sm text-center">
+            <span [class.text-red-600]="servico.estoque < 5" class="font-medium">{{ servico.estoque }}</span>
+          </td>
+          <td class="px-6 py-4 text-center">
+            <button
+              (click)="toggleServico(servico)"
+              [class]="servico.ativo ? 'px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold cursor-pointer' : 'px-3 py-1 bg-red-100 text-red-800 rounded-full text-xs font-semibold cursor-pointer'">
+              {{ servico.ativo ? 'Ativo' : 'Inativo' }}
+            </button>
+          </td>
+          <td class="px-6 py-4 text-right text-sm space-x-2 flex justify-end">
+            <button
+              (click)="editServico(servico)"
+              class="px-3 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors text-xs font-semibold">
+              Editar
+            </button>
+            <button
+              (click)="updateStock(servico)"
+              class="px-3 py-1 bg-orange-100 text-orange-700 rounded hover:bg-orange-200 transition-colors text-xs font-semibold">
+              Estoque
+            </button>
+            <button
+              (click)="deleteServico(servico)"
+              class="px-3 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors text-xs font-semibold">
+              Excluir
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Empty State -->
+    <div *ngIf="servicosFiltrados.length === 0" class="p-12 text-center">
+      <svg class="h-12 w-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+      </svg>
+      <p class="text-gray-600 text-lg font-medium">Nenhum serviço encontrado</p>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div *ngIf="isModalOpen" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-lg shadow-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
+      <!-- Modal Header -->
+      <div class="sticky top-0 bg-white border-b border-gray-200 p-6">
+        <div class="flex items-center justify-between">
+          <h2 class="text-xl font-bold text-gray-900">{{ modalTitle }}</h2>
+          <button
+            (click)="closeModal()"
+            class="text-gray-400 hover:text-gray-600 transition-colors">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-6 space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Nome do Serviço *</label>
+          <input
+            [(ngModel)]="currentServico.nome"
+            type="text"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pj-cyan"
+            placeholder="Ex: Instalação de Bodykits">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Descrição *</label>
+          <textarea
+            [(ngModel)]="currentServico.descricao"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pj-cyan"
+            placeholder="Descrição detalhada do serviço"
+            rows="3"></textarea>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Categoria *</label>
+            <select
+              [(ngModel)]="currentServico.categoria"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pj-cyan">
+              <option value="">Selecionar</option>
+              <option *ngFor="let categoria of categorias" [value]="categoria">{{ categoria }}</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Preço (R$) *</label>
+            <input
+              [(ngModel)]="currentServico.preco"
+              type="number"
+              min="0"
+              step="0.01"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pj-cyan">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Duração *</label>
+            <input
+              [(ngModel)]="currentServico.duracao"
+              type="text"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pj-cyan"
+              placeholder="Ex: 2-3 dias">
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Estoque *</label>
+            <input
+              [(ngModel)]="currentServico.estoque"
+              type="number"
+              min="0"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pj-cyan">
+          </div>
+        </div>
+
+        <div class="flex items-center">
+          <input
+            [(ngModel)]="currentServico.ativo"
+            type="checkbox"
+            id="ativo"
+            class="h-4 w-4 text-pj-cyan rounded border-gray-300 cursor-pointer">
+          <label for="ativo" class="ml-2 text-sm font-medium text-gray-700 cursor-pointer">
+            Serviço ativo
+          </label>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="sticky bottom-0 bg-gray-50 border-t border-gray-200 p-6 flex space-x-3">
+        <button
+          (click)="closeModal()"
+          class="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors">
+          Cancelar
+        </button>
+        <button
+          (click)="saveServico()"
+          [disabled]="!isFormValid()"
+          [class]="isFormValid() ? 'flex-1 px-4 py-2 bg-gradient-pj-primary text-white rounded-lg font-medium hover:opacity-90 transition-opacity' : 'flex-1 px-4 py-2 bg-gray-300 text-gray-500 rounded-lg font-medium cursor-not-allowed'">
+          {{ editMode ? 'Atualizar' : 'Criar' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

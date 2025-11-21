@@ -6,6 +6,7 @@ import { DetalhesComponent } from './pages/detalhes/detalhes.component';
 import { LoginComponent } from './components/login/login.component';
 import { PecasComponent } from './pages/pecas/pecas.component';
 import { BodykitsComponent } from './pages/bodykits/bodykits.component';
+import { SolicitarServicosComponent } from './pages/solicitar-servicos/solicitar-servicos.component';
 import { RegisterComponent } from './components/register/register.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
 import { OrderSuccessComponent } from './components/order-success/order-success.component';
@@ -20,6 +21,7 @@ const routes: Routes = [
   { path: 'bodykits', component: BodykitsComponent },
   { path: 'pecas/:id', component: DetalhesComponent },
   { path: 'bodykits/:id', component: DetalhesComponent },
+  { path: 'solicitar-servicos', component: SolicitarServicosComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'checkout', component: CheckoutComponent },

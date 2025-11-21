@@ -45,33 +45,36 @@
 
         <!-- Cart Items -->
         <div *ngIf="cartSummary.itemCount > 0" class="space-y-4">
-          <div *ngFor="let item of cartSummary.items" 
+          <div *ngFor="let item of cartSummary.items"
                class="flex items-center space-x-4 p-3 border border-gray-200 rounded-lg">
-            
+
             <!-- Product Image -->
-            <img [src]="item.imagem" [alt]="item.nome" 
+            <img [src]="item.imagem" [alt]="item.nome"
                  class="h-16 w-16 object-cover rounded-lg">
-            
+
             <!-- Product Info -->
             <div class="flex-1 min-w-0">
               <h4 class="text-sm font-medium text-gray-900 truncate">{{item.nome}}</h4>
-              <p class="text-xs text-gray-500">{{item.marca}} • {{item.categoria}}</p>
-              <p class="text-sm font-semibold text-pj-cyan">KZ {{item.preco | number:'1.2-2'}}</p>
+              <p class="text-xs text-gray-500">
+                <span *ngIf="item.tipo === 'servico'">{{item.categoria}} • {{item.duracao}}</span>
+                <span *ngIf="item.tipo !== 'servico'">{{item.marca}} • {{item.categoria}}</span>
+              </p>
+              <p class="text-sm font-semibold text-pj-cyan">R$ {{item.preco | number:'1.2-2'}}</p>
             </div>
-            
+
             <!-- Quantity Controls -->
             <div class="flex items-center space-x-2">
-              <button 
+              <button
                 (click)="updateQuantity(item, item.quantidade - 1)"
                 class="p-1 text-gray-400 hover:text-gray-600 transition-colors">
                 <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
                 </svg>
               </button>
-              
+
               <span class="w-8 text-center text-sm font-medium">{{item.quantidade}}</span>
-              
-              <button 
+
+              <button
                 (click)="updateQuantity(item, item.quantidade + 1)"
                 [disabled]="item.quantidade >= item.estoque"
                 class="p-1 text-gray-400 hover:text-gray-600 transition-colors disabled:opacity-50">
@@ -80,9 +83,9 @@
                 </svg>
               </button>
             </div>
-            
+
             <!-- Remove Button -->
-            <button 
+            <button
               (click)="removeItem(item)"
               class="p-1 text-red-400 hover:text-red-600 transition-colors">
               <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -99,11 +102,11 @@
         <div class="space-y-2 mb-4">
           <div class="flex justify-between text-sm">
             <span class="text-gray-600">Subtotal:</span>
-            <span class="font-medium">KZ {{cartSummary.subtotal | number:'1.2-2'}}</span>
+            <span class="font-medium">R$ {{cartSummary.subtotal | number:'1.2-2'}}</span>
           </div>
           <div class="flex justify-between text-base font-semibold">
             <span class="text-gray-900">Total:</span>
-            <span class="text-pj-cyan">KZ {{cartSummary.total | number:'1.2-2'}}</span>
+            <span class="text-pj-cyan">R$ {{cartSummary.total | number:'1.2-2'}}</span>
           </div>
         </div>
         
