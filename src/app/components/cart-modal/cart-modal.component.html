@@ -59,7 +59,7 @@
                 <span *ngIf="item.tipo === 'servico'">{{item.categoria}} • {{item.duracao}}</span>
                 <span *ngIf="item.tipo !== 'servico'">{{item.marca}} • {{item.categoria}}</span>
               </p>
-              <p class="text-sm font-semibold text-pj-cyan">R$ {{item.preco | number:'1.2-2'}}</p>
+              <p class="text-sm font-semibold text-pj-cyan"> {{ item.preco | currency:' Kz':'symbol':'1.0-2' }}</p>
             </div>
 
             <!-- Quantity Controls -->
@@ -102,11 +102,11 @@
         <div class="space-y-2 mb-4">
           <div class="flex justify-between text-sm">
             <span class="text-gray-600">Subtotal:</span>
-            <span class="font-medium">R$ {{cartSummary.subtotal | number:'1.2-2'}}</span>
+            <span class="font-medium">{{ cartSummary.subtotal| currency:' Kz':'symbol':'1.0-2' }}</span>
           </div>
           <div class="flex justify-between text-base font-semibold">
             <span class="text-gray-900">Total:</span>
-            <span class="text-pj-cyan">R$ {{cartSummary.total | number:'1.2-2'}}</span>
+            <span class="text-pj-cyan"> {{ cartSummary.total | currency:' Kz':'symbol':'1.0-2' }}</span>
           </div>
         </div>
         

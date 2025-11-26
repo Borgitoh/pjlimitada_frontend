@@ -99,7 +99,7 @@ export class OrdersComponent implements OnInit, OnDestroy {
         items: sale.items,
         itemsCount: sale.items.length,
         total: sale.total,
-        status: sale.status || 'confirmed',
+        status: this.getStatusLabel(sale.status) || 'confirmed',
         paymentMethod: sale.paymentMethod,
         trackingCode: sale.trackingCode,
         adminNotes: sale.adminNotes

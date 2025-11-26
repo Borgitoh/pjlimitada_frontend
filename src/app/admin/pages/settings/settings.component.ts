@@ -54,7 +54,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   tabs: Tab[] = [
     { id: 'company', label: 'Empresa' },
     { id: 'business', label: 'Negócio' },
-    { id: 'system', label: 'Sistema' },
+    // { id: 'system', label: 'Sistema' },
     { id: 'notifications', label: 'Notificações' },
     { id: 'security', label: 'Segurança' }
   ];

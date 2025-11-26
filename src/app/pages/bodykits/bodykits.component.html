@@ -179,7 +179,7 @@
         <!-- Preço e Ações -->
         <div class="flex justify-between items-center pt-4 border-t border-gray-100">
           <div>
-            <span class="text-2xl font-bold text-blue-600">${{bodykit.preco}}</span>
+            <span class="text-2xl font-bold text-blue-600">{{ bodykit.preco | currency:' Kz':'symbol':'1.0-2' }}</span>
             <p class="text-xs text-green-600 mt-1">{{bodykit.estoque}} em estoque</p>
           </div>
           <div class="flex space-x-2">
