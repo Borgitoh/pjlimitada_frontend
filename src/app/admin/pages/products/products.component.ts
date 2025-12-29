@@ -14,17 +14,23 @@ export class ProductsComponent implements OnInit, OnDestroy {
   filteredProducts: Product[] = [];
   selectedCategory: string = '';
   stockFilter: string = '';
+  filteredModels: any[] = [];
+  categorias: any[] = [];
+  categoriaSearch: string = '';
+  modelos: any[] = [];
+
 
   currentProduct: any = {
     name: '',
-    category: '',
-    sku: '',
-    price: 0,
-    cost: 0,
-    stock: 0,
-    minStock: 5,
     description: '',
-    active: true
+    preco: 0,
+    estoque: 0,
+    tipo: '',
+    imagem: '',
+    categoria_id: '',
+    modelos: [],
+    minStock: 5,
+    ativo: true
   };
 
   isModalOpen = false;
@@ -41,11 +47,10 @@ export class ProductsComponent implements OnInit, OnDestroy {
   tableColumns: TableColumn[] = [
     { key: 'name', label: 'Produto', sortable: true, type: 'text' },
     { key: 'categoryLabel', label: 'Categoria', sortable: true, type: 'text' },
-    { key: 'sku', label: 'SKU', sortable: true, type: 'text' },
-    { key: 'price', label: 'Preço', type: 'currency', sortable: true },
-    { key: 'stock', label: 'Estoque', type: 'number', sortable: true },
-    { key: 'stockStatus', label: 'Status', type: 'status' },
-    { key: 'active', label: 'Ativo', type: 'status' },
+    { key: 'modelos', label: 'Modelos Compatíveis', sortable: true, type: 'text' },
+    { key: 'preco', label: 'Preço', type: 'currency', sortable: true },
+    { key: 'estoque', label: 'Estoque', type: 'number', sortable: true },
+    { key: 'ativo', label: 'Status', type: 'status' },
     { key: 'actions', label: 'Ações', type: 'actions', width: '120px' }
   ];
 
@@ -66,14 +71,15 @@ export class ProductsComponent implements OnInit, OnDestroy {
       label: 'Excluir',
       icon: 'M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16',
       type: 'danger',
-      action: (product: Product) => this.deleteProduct(product)
+      action: (product: Product) => this.toggleProductActive(product)
     }
   ];
 
-  constructor(private adminService: AdminService) {}
+  constructor(private adminService: AdminService) { }
 
   ngOnInit(): void {
-    this.loadProducts();
+    this.loadCategorias();
+    this.loadModels();
   }
 
   ngOnDestroy(): void {
@@ -86,17 +92,49 @@ export class ProductsComponent implements OnInit, OnDestroy {
     this.modalTitle = 'Novo Produto';
     this.currentProduct = {
       name: '',
-      category: '',
-      sku: '',
-      price: 0,
-      cost: 0,
-      stock: 0,
-      minStock: 5,
       description: '',
-      active: true
+      preco: 0,
+      estoque: 0,
+      tipo: '',
+      imagem: '',
+      categoria_id: '',
+      modelos: [],
+      minStock: 5,
+      ativo: true
     };
     this.isModalOpen = true;
   }
+
+  loadModels(): void {
+    this.adminService.getModels()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(models => {
+        this.modelos = models;
+        this.filteredModels = models;
+      });
+  }
+
+  loadCategorias(): void {
+    this.adminService.getCategorias()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(data => this.categorias = data);
+    this.loadProducts();
+  }
+
+  categoriasFiltradas() {
+    if (!this.categoriaSearch) {
+      return this.categorias;
+    }
+
+    return this.categorias.filter(c =>
+      c.nome.toLowerCase().includes(this.categoriaSearch.toLowerCase())
+    );
+  }
+  onCategoriaChange() {
+    this.categoriaSearch = '';
+  }
+
+
 
   editProduct(product: Product): void {
     this.editMode = true;
@@ -106,19 +144,41 @@ export class ProductsComponent implements OnInit, OnDestroy {
   }
 
   updateStock(product: Product): void {
-    const newStock = prompt(`Atualizar estoque de "${product.name}".\nEstoque atual: ${product.stock}`, product.stock.toString());
+    console.log(product);
+
+    const newStock = prompt(
+      `Atualizar estoque de "${product.name}".\nEstoque atual: ${product.estoque}`,
+      product.estoque?.toString()
+    );
+
     if (newStock !== null) {
-      const stock = parseInt(newStock, 10);
-      if (!isNaN(stock) && stock >= 0) {
-        const productIndex = this.products.findIndex(p => p.id === product.id);
-        if (productIndex !== -1) {
-          this.products[productIndex].stock = stock;
-          this.filterProducts();
-          this.updateStats();
-        }
+      const estoqueAtualizado = parseInt(newStock, 10);
+
+      if (!isNaN(estoqueAtualizado) && estoqueAtualizado >= 0) {
+        // Chama o serviço para atualizar no backend
+        this.adminService.updateProductStock(Number(product.id), estoqueAtualizado)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe({
+            next: (updatedProduct) => {
+              // Atualiza a lista local
+              const index = this.products.findIndex(p => p.id === product.id);
+              if (index !== -1) {
+                this.products[index].estoque = updatedProduct.estoque;
+                this.filterProducts();
+                this.updateStats();
+              }
+            },
+            error: (err) => {
+              console.error('Erro ao atualizar estoque:', err);
+              alert('Não foi possível atualizar o estoque.');
+            }
+          });
+      } else {
+        alert('Informe um valor válido para o estoque.');
       }
     }
   }
+
 
   deleteProduct(product: Product): void {
     if (confirm(`Tem certeza que deseja excluir o produto "${product.name}"?`)) {
@@ -128,6 +188,27 @@ export class ProductsComponent implements OnInit, OnDestroy {
     }
   }
 
+toggleProductActive(product: Product): void {
+  const action = product.ativo ? 'desativar' : 'ativar';
+  if (confirm(`Tem certeza que deseja ${action} o produto "${product.name}"?`)) {
+    this.adminService.toggleProductActive(Number(product.id)).subscribe({
+      next: (updatedProduct) => {
+        this.products = this.products.map(p =>
+          p.id === updatedProduct.id ? updatedProduct : p
+        );
+        this.filterProducts();
+        this.updateStats();
+      },
+      error: (err) => {
+        console.error('Erro ao alterar status do produto', err);
+        alert('Não foi possível alterar o status do produto.');
+      }
+    });
+  }
+}
+
+
+
   closeModal(): void {
     this.isModalOpen = false;
     this.resetForm();
@@ -136,48 +217,25 @@ export class ProductsComponent implements OnInit, OnDestroy {
   isFormValid(): boolean {
     return !!(
       this.currentProduct.name &&
-      this.currentProduct.category &&
-      this.currentProduct.sku &&
-      this.currentProduct.price > 0 &&
-      this.currentProduct.stock >= 0 &&
+      this.currentProduct.tipo &&
+      this.currentProduct.categoria_id &&
+      this.currentProduct.preco > 0 &&
+      this.currentProduct.estoque >= 0 &&
       this.currentProduct.minStock >= 0
     );
   }
 
+
   saveProduct(): void {
     if (!this.isFormValid()) return;
 
-    if (this.editMode) {
-      const productIndex = this.products.findIndex(p => p.id === this.currentProduct.id);
-      if (productIndex !== -1) {
-        this.products[productIndex] = {
-          ...this.currentProduct,
-          category: this.getCategoryLabel(this.currentProduct.category)
-        };
-      }
-    } else {
-      const newProduct: Product = {
-        id: Date.now().toString(),
-        name: this.currentProduct.name,
-        category: this.currentProduct.category,
-        compatibleModels: [],
-        price: this.currentProduct.price,
-        cost: this.currentProduct.cost,
-        stock: this.currentProduct.stock,
-        minStock: this.currentProduct.minStock,
-        description: this.currentProduct.description,
-        images: [],
-        sku: this.currentProduct.sku,
-        active: this.currentProduct.active,
-        createdAt: new Date()
-      };
-      this.products.push(newProduct);
-    }
-
-    this.filterProducts();
-    this.updateStats();
-    this.closeModal();
+    this.adminService.createProduct(this.currentProduct)
+      .subscribe(() => {
+        this.loadProducts();
+        this.closeModal();
+      });
   }
+
 
   filterProducts(): void {
     let filtered = [...this.products];
@@ -217,10 +275,15 @@ export class ProductsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(products => {
         this.products = products;
-        this.filterProducts();
+        this.filteredProducts = this.products.map(product => ({
+          ...product,
+          categoryLabel: this.categorias.find(c => c.id === product.categoria_id)?.nome || '',
+          stockStatus: this.getStockStatus(product)
+        }));
         this.updateStats();
       });
   }
+
 
   private updateStats(): void {
     this.totalProducts = this.products.length;
@@ -247,14 +310,16 @@ export class ProductsComponent implements OnInit, OnDestroy {
   private resetForm(): void {
     this.currentProduct = {
       name: '',
-      category: '',
-      sku: '',
-      price: 0,
-      cost: 0,
-      stock: 0,
-      minStock: 5,
       description: '',
-      active: true
+      preco: 0,
+      estoque: 0,
+      tipo: '',
+      imagem: '',
+      categoria_id: '',
+      modelos: [],
+      minStock: 5,
+      ativo: true
     };
   }
+
 }

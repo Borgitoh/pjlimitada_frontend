@@ -30,6 +30,8 @@ export class BrandsComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
 
+  isLoading: boolean = false;
+
   brandColumns: TableColumn[] = [
     { key: 'name', label: 'Nome da Marca', sortable: true, type: 'text' },
     { key: 'modelsCount', label: 'Modelos', type: 'number', sortable: true },
@@ -40,7 +42,7 @@ export class BrandsComponent implements OnInit, OnDestroy {
   modelColumns: TableColumn[] = [
     { key: 'brandName', label: 'Marca', sortable: true, type: 'text' },
     { key: 'name', label: 'Modelo', sortable: true, type: 'text' },
-    { key: 'year', label: 'Ano', type: 'number', sortable: true },
+    { key: 'year', label: 'Ano', type: 'text', sortable: true },
     { key: 'version', label: 'Versão', type: 'text' },
     { key: 'active', label: 'Status', type: 'status' },
     { key: 'actions', label: 'Ações', type: 'actions', width: '120px' }
@@ -76,11 +78,11 @@ export class BrandsComponent implements OnInit, OnDestroy {
     }
   ];
 
-  constructor(private adminService: AdminService) {}
+  constructor(private adminService: AdminService) { }
 
   ngOnInit(): void {
     this.loadBrands();
-    this.loadAllModels();
+ 
   }
 
   ngOnDestroy(): void {
@@ -143,12 +145,12 @@ export class BrandsComponent implements OnInit, OnDestroy {
   openModelModal(): void {
     this.modelEditMode = false;
     this.modelModalTitle = 'Novo Modelo';
-    this.currentModel = { 
-      name: '', 
-      brandId: '', 
-      year: new Date().getFullYear(), 
-      version: '', 
-      active: true 
+    this.currentModel = {
+      name: '',
+      brandId: '',
+      year: new Date().getFullYear(),
+      version: '',
+      active: true
     };
     this.isModelModalOpen = true;
   }
@@ -164,7 +166,7 @@ export class BrandsComponent implements OnInit, OnDestroy {
     if (confirm(`Tem certeza que deseja excluir o modelo ${model.name}?`)) {
       this.models = this.models.filter(m => m.id !== model.id);
       this.filterModelsByBrand();
-      
+
       // Update brand models count
       const brand = this.brands.find(b => b.id === model.brandId);
       if (brand) {
@@ -175,18 +177,18 @@ export class BrandsComponent implements OnInit, OnDestroy {
 
   closeModelModal(): void {
     this.isModelModalOpen = false;
-    this.currentModel = { 
-      name: '', 
-      brandId: '', 
-      year: new Date().getFullYear(), 
-      version: '', 
-      active: true 
+    this.currentModel = {
+      name: '',
+      brandId: '',
+      year: new Date().getFullYear(),
+      version: '',
+      active: true
     };
   }
 
   isModelFormValid(): boolean {
     return !!(
-      this.currentModel.name && 
+      this.currentModel.name &&
       this.currentModel.name.trim() &&
       this.currentModel.brandId &&
       this.currentModel.year
@@ -211,7 +213,7 @@ export class BrandsComponent implements OnInit, OnDestroy {
         active: this.currentModel.active
       };
       this.models.push(newModel);
-      
+
       // Update brand models count
       const brand = this.brands.find(b => b.id === newModel.brandId);
       if (brand) {
@@ -240,25 +242,23 @@ export class BrandsComponent implements OnInit, OnDestroy {
   }
 
   private loadBrands(): void {
+    this.isLoading = true;
     this.adminService.getBrands()
       .pipe(takeUntil(this.destroy$))
       .subscribe(brands => {
         this.brands = brands;
+           this.loadAllModels();
       });
   }
 
   private loadAllModels(): void {
-    // For demo purposes, creating some mock models
-    this.models = [
-      { id: '1', name: 'Serie 3', brandId: '1', year: 2020, version: '320i', active: true },
-      { id: '2', name: 'Serie 5', brandId: '1', year: 2021, version: '530i', active: true },
-      { id: '3', name: 'X3', brandId: '1', year: 2022, active: true },
-      { id: '4', name: 'A3', brandId: '2', year: 2021, version: 'Sportback', active: true },
-      { id: '5', name: 'A4', brandId: '2', year: 2020, version: 'Avant', active: true },
-      { id: '6', name: 'Q5', brandId: '2', year: 2022, active: true },
-      { id: '7', name: 'Golf', brandId: '3', year: 2021, version: 'GTI', active: true },
-      { id: '8', name: 'Passat', brandId: '3', year: 2020, active: true }
-    ];
+    this.adminService.getModelsByBrand()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(models => {
+        this.models = models;
+         this.filterModelsByBrand();
+      this.isLoading = false;
+      });
     this.filterModelsByBrand();
   }
 

@@ -38,6 +38,7 @@
       [data]="brands"
       [columns]="brandColumns"
       [actions]="brandActions"
+      [spinner]="isLoading"
       (add)="openBrandModal()"
       addButtonText="Nova Marca"
       emptyMessage="Nenhuma marca cadastrada">
@@ -66,6 +67,7 @@
       [data]="filteredModels"
       [columns]="modelColumns"
       [actions]="modelActions"
+      [spinner]="isLoading"
       (add)="openModelModal()"
       addButtonText="Novo Modelo"
       emptyMessage="Nenhum modelo cadastrado">

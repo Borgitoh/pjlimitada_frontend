@@ -33,9 +33,12 @@ export interface Product {
   price: number;
   cost?: number;
   stock: number;
+  estoque?: number;
   minStock: number;
   description: string;
+  categoria_id?: number; 
   images: string[];
+  ativo?: boolean;
   sku: string;
   active: boolean;
   createdAt: Date;
@@ -113,8 +116,8 @@ export interface TableColumn {
 }
 
 export interface TableAction {
-  label: string;
-  icon: string;
+  label: string |((product: Product) => string);
+  icon: string | ((product: Product) => string);
   type: 'primary' | 'secondary' | 'danger' | 'success';
   action: (item: any) => void;
 }

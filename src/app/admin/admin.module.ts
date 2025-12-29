@@ -18,6 +18,7 @@ import { ChartComponent } from './components/chart/chart.component';
 import { StatsCardComponent } from './components/stats-card/stats-card.component';
 import { TableComponent } from './components/table/table.component';
 import { ModalComponent } from './components/modal/modal.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { ModalComponent } from './components/modal/modal.component';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    NgSelectModule,
     AdminRoutingModule
   ]
 })

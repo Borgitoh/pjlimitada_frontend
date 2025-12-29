@@ -9,6 +9,7 @@ interface RegisterPayload {
   phone?: string;
   password: string;
   role?: string;
+  active?: boolean;
 }
 interface LoginPayload {
   login: string;

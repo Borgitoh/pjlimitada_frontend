@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SERVICOS, CATEGORIAS_SERVICOS, Servico } from '../../../data/servicos.mock';
+import { ServicesService } from '../../services/service.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-services',
@@ -19,7 +21,7 @@ export class ServicesComponent implements OnInit {
     categoria: '',
     preco: 0,
     duracao: '',
-    estoque: 0,
+    imagem: 0,
     ativo: true
   };
 
@@ -27,12 +29,29 @@ export class ServicesComponent implements OnInit {
   modalTitle = '';
   editMode = false;
 
+    constructor(private servicoService: ServicesService) {}
+    private destroy$ = new Subject<void>();
+
   ngOnInit() {
     this.loadServicos();
   }
 
   loadServicos() {
-    this.servicos = JSON.parse(JSON.stringify(SERVICOS));
+     this.loading = true;
+    this.servicoService.getServicos()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (data : any) => {
+          this.servicos = data.data;
+          this.filterServicos();
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error('Erro ao carregar serviços', err);
+          this.loading = false;
+        }
+      });
+    // this.servicos = JSON.parse(JSON.stringify(SERVICOS));
     this.filterServicos();
   }
 
@@ -51,15 +70,7 @@ export class ServicesComponent implements OnInit {
   openServicoModal() {
     this.editMode = false;
     this.modalTitle = 'Novo Serviço';
-    this.currentServico = {
-      nome: '',
-      descricao: '',
-      categoria: '',
-      preco: 0,
-      duracao: '',
-      estoque: 0,
-      ativo: true
-    };
+    this.currentServico = {};
     this.isModalOpen = true;
   }
 
@@ -81,69 +92,49 @@ export class ServicesComponent implements OnInit {
       this.currentServico.descricao &&
       this.currentServico.categoria &&
       this.currentServico.preco > 0 &&
-      this.currentServico.duracao &&
-      this.currentServico.estoque >= 0
+      this.currentServico.duracao 
     );
   }
 
   saveServico() {
-    if (!this.isFormValid()) return;
+  if (!this.isFormValid()) return;
 
-    if (this.editMode) {
-      const servicoIndex = this.servicos.findIndex(s => s.id === this.currentServico.id);
-      if (servicoIndex !== -1) {
-        this.servicos[servicoIndex] = {
-          ...this.currentServico
-        };
-      }
+    if (this.editMode && this.currentServico.id) {
+      this.servicoService.updateServico(this.currentServico.id, this.currentServico)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: () => this.loadServicos(),
+          error: (err) => console.error(err)
+        });
     } else {
-      const newServico: Servico = {
-        id: Math.max(...this.servicos.map(s => s.id), 0) + 1,
-        nome: this.currentServico.nome,
-        descricao: this.currentServico.descricao,
-        preco: this.currentServico.preco,
-        duracao: this.currentServico.duracao,
-        categoria: this.currentServico.categoria,
-        imagem: this.currentServico.imagem || 'https://images.unsplash.com/photo-1487730116645-74489c95b41b?w=500&h=300&fit=crop&q=80',
-        estoque: this.currentServico.estoque,
-        ativo: this.currentServico.ativo
-      };
-      this.servicos.push(newServico);
+      this.servicoService.createServico(this.currentServico)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: () => this.loadServicos(),
+          error: (err) => console.error(err)
+        });
     }
 
-    this.filterServicos();
     this.closeModal();
   }
 
   deleteServico(servico: Servico) {
-    if (confirm(`Tem certeza que deseja excluir o serviço "${servico.nome}"?`)) {
-      this.servicos = this.servicos.filter(s => s.id !== servico.id);
-      this.filterServicos();
-    }
+    if (!confirm(`Deseja excluir o serviço "${servico.nome}"?`)) return;
+    this.servicoService.deleteServico(servico.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => this.loadServicos(),
+        error: (err) => console.error(err)
+      });
   }
 
   toggleServico(servico: Servico) {
-    const servicoIndex = this.servicos.findIndex(s => s.id === servico.id);
-    if (servicoIndex !== -1) {
-      this.servicos[servicoIndex].ativo = !this.servicos[servicoIndex].ativo;
-    }
-  }
-
-  updateStock(servico: Servico) {
-    const newStock = prompt(
-      `Atualizar estoque de "${servico.nome}".\nEstoque atual: ${servico.estoque}`,
-      servico.estoque.toString()
-    );
-    if (newStock !== null) {
-      const stock = parseInt(newStock, 10);
-      if (!isNaN(stock) && stock >= 0) {
-        const servicoIndex = this.servicos.findIndex(s => s.id === servico.id);
-        if (servicoIndex !== -1) {
-          this.servicos[servicoIndex].estoque = stock;
-          this.filterServicos();
-        }
-      }
-    }
+    this.servicoService.toggleServico(servico.id, !servico.ativo)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => this.loadServicos(),
+        error: (err) => console.error(err)
+      });
   }
 
   private resetForm() {

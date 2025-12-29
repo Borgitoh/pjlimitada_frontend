@@ -11,15 +11,20 @@ import {
   UserPermissions,
   SystemSettings
 } from '../models/admin.models';
+import { environment } from 'src/environments/environment';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminService {
+
+  private apiUrl = `${environment.apiUrl}`;
+
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor() {
+  constructor(private http: HttpClient) {
     // Simulate logged in admin user
     this.setCurrentUser({
       id: '1',
@@ -179,85 +184,39 @@ export class AdminService {
   }
 
   // Brands
-  getBrands(): Observable<Brand[]> {
-    return of([
-      { id: '1', name: 'BMW', active: true, modelsCount: 15 },
-      { id: '2', name: 'Audi', active: true, modelsCount: 12 },
-      { id: '3', name: 'Volkswagen', active: true, modelsCount: 18 },
-      { id: '4', name: 'Toyota', active: true, modelsCount: 20 },
-      { id: '5', name: 'Honda', active: true, modelsCount: 16 },
-      { id: '6', name: 'Mercedes-Benz', active: true, modelsCount: 14 },
-      { id: '7', name: 'Ford', active: true, modelsCount: 22 },
-      { id: '8', name: 'Chevrolet', active: true, modelsCount: 19 }
-    ]).pipe(delay(300));
+  getBrands(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/marcas-list`);
   }
 
-  getModelsByBrand(brandId: string): Observable<CarModel[]> {
-    const models: { [key: string]: CarModel[] } = {
-      '1': [
-        { id: '1', name: 'Serie 3', brandId: '1', year: 2020, version: '320i', active: true },
-        { id: '2', name: 'Serie 5', brandId: '1', year: 2021, version: '530i', active: true },
-        { id: '3', name: 'X3', brandId: '1', year: 2022, active: true }
-      ],
-      '2': [
-        { id: '4', name: 'A3', brandId: '2', year: 2021, version: 'Sportback', active: true },
-        { id: '5', name: 'A4', brandId: '2', year: 2020, version: 'Avant', active: true },
-        { id: '6', name: 'Q5', brandId: '2', year: 2022, active: true }
-      ]
-    };
-    return of(models[brandId] || []).pipe(delay(200));
+  getModelsByBrand(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/modelos`);
+  }
+
+  createProduct(data: any) {
+    return this.http.post<Product>(`${this.apiUrl}/produtos`, data);
   }
 
   // Products
   getProducts(): Observable<Product[]> {
-    return of([
-      {
-        id: '1',
-        name: 'Kit Freio Performance BMW Serie 3',
-        category: 'brakes' as const,
-        compatibleModels: ['1', '2'],
-        price: 2500,
-        cost: 1800,
-        stock: 15,
-        minStock: 5,
-        description: 'Kit completo de freio performance para BMW Serie 3',
-        images: ['brake-kit-1.jpg'],
-        sku: 'BRK-BMW-001',
-        active: true,
-        createdAt: new Date('2024-01-01')
-      },
-      {
-        id: '2',
-        name: 'Bodykit Audi A3 Sportback',
-        category: 'bodykit' as const,
-        compatibleModels: ['4'],
-        price: 4500,
-        cost: 3200,
-        stock: 8,
-        minStock: 3,
-        description: 'Bodykit completo para Audi A3 Sportback',
-        images: ['bodykit-audi-1.jpg'],
-        sku: 'BDK-AUD-001',
-        active: true,
-        createdAt: new Date('2024-01-15')
-      },
-      {
-        id: '3',
-        name: 'Filtro de Ar Esportivo',
-        category: 'engine' as const,
-        compatibleModels: ['1', '2', '4', '5'],
-        price: 350,
-        cost: 250,
-        stock: 2,
-        minStock: 10,
-        description: 'Filtro de ar esportivo de alta performance',
-        images: ['air-filter-1.jpg'],
-        sku: 'FLT-UNI-001',
-        active: true,
-        createdAt: new Date('2024-02-01')
-      }
-    ]).pipe(delay(400));
+    return this.http.get<Product[]>(`${this.apiUrl}/produtos`);
   }
+  updateProductStock(productId: number, estoque: number): Observable<Product> {
+    return this.http.patch<Product>(`${this.apiUrl}/produtos/${productId}/estoque`, { estoque });
+  }
+  
+  toggleProductActive(productId: number): Observable<Product> {
+    return this.http.patch<Product>(`${this.apiUrl}/produtos/${productId}/toggle-ativo`, {});
+  }
+
+
+  getModels() {
+    return this.http.get<any[]>(`${this.apiUrl}/modelos`);
+  }
+
+  getCategorias() {
+    return this.http.get<any[]>(`${this.apiUrl}/categorias`);
+  }
+
 
   // Sales
   getSales(): Observable<Sale[]> {

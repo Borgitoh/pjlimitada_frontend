@@ -162,7 +162,8 @@ export class RegisterComponent {
       email: this.email,
       phone: this.phone,
       password: this.password,
-      role: 'cliente'
+      role: 'cliente',
+      active: true
     };
       this.authService.register(payload).subscribe({
       next: (res: any) => {
