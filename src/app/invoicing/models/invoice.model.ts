@@ -106,6 +106,8 @@ export interface Invoice {
   createdAt: Date;
   updatedAt: Date;
   createdBy: string;              // Usuário que criou
+  sourceSaleId?: string;          // ID da venda no admin/e-commerce
+  sourceModule?: string;          // Origem da emissão
 }
 
 export interface InvoiceLineItem {

@@ -112,6 +112,14 @@ export class TableComponent implements OnInit, OnChanges {
     return badge?.label || badge?.toString() || '';
   }
 
+  getActionLabel(action: TableAction, item: any): string {
+    return typeof action.label === 'function' ? action.label(item) : action.label;
+  }
+
+  getActionIcon(action: TableAction, item: any): string {
+    return typeof action.icon === 'function' ? action.icon(item) : action.icon;
+  }
+
   getActionClasses(type: string): string {
     const baseClasses = 'p-2 rounded-md transition-colors';
     switch (type) {
@@ -121,6 +129,8 @@ export class TableComponent implements OnInit, OnChanges {
         return `${baseClasses} text-gray-600 hover:bg-gray-100`;
       case 'danger':
         return `${baseClasses} text-red-600 hover:bg-red-100`;
+      case 'success':
+        return `${baseClasses} text-green-600 hover:bg-green-100`;
       default:
         return `${baseClasses} text-gray-600 hover:bg-gray-100`;
     }
