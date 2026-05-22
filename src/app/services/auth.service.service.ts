@@ -4,10 +4,12 @@ import { Observable } from 'rxjs'; 7
 import { environment } from '../../environments/environment';
 
 interface RegisterPayload {
-  name: string;
+
+  nome: string;
+  nif: string;
   email: string;
-  phone?: string;
-  password: string;
+  telefone?: string;
+  senha: string;
   role?: string;
   active?: boolean;
 }
@@ -32,10 +34,10 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/login`, payload);
   }
   getUsers(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/get-user` );
+    return this.http.get(`${this.apiUrl}/get-user`);
   }
   updateUser(id: number, payload: any): Observable<any> {
-  return this.http.put(`${this.apiUrl}/update-user/${id}`, payload);
-}
+    return this.http.put(`${this.apiUrl}/update-user/${id}`, payload);
+  }
 
 }

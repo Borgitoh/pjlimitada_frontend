@@ -272,11 +272,11 @@ export class RegisterComponent {
     this.clearErrors();
 
     const payload = {
-      name: this.name,
+      nome: this.name,
       email: this.email,
-      phone: this.phone,
+      telefone: this.phone,
       nif: this.nif,
-      password: this.password,
+      senha: this.password,
       role: 'cliente',
       active: true
     };
