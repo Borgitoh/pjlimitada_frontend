@@ -146,11 +146,11 @@ export class UsersComponent implements OnInit, OnDestroy {
 
     } else {
       const payload = {
-        name: this.currentUser.name,
+        nome: this.currentUser.name,
         email: this.currentUser.email,
         role: this.currentUser.role,
-        active: this.currentUser.active,
-        password: this.currentUser.password
+        activo: this.currentUser.active,
+        senha: this.currentUser.password
       };
 
       this.authService.register(payload).subscribe(newUser => {

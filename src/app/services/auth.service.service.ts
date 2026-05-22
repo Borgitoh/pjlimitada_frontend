@@ -4,7 +4,6 @@ import { Observable } from 'rxjs'; 7
 import { environment } from '../../environments/environment';
 
 interface RegisterPayload {
-
   nome: string;
   nif: string;
   email: string;
@@ -27,7 +26,7 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
-  register(payload: RegisterPayload): Observable<any> {
+  register(payload: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/register`, payload);
   }
   login(payload: LoginPayload): Observable<any> {
