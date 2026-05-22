@@ -138,26 +138,90 @@ export class RegisterComponent {
       isValid = false;
 
     } else if (!this.isValidNif(this.nif)) {
-      this.nifError = 'NIF angolano inválido';
+      this.nifError = 'NIF inválido';
       isValid = false;
     }
 
     return isValid;
   }
   onNifInput(): void {
-    this.nif = this.nif.replace(/[^0-9]/g, '');
+    this.nif = this.nif.replace(/\s/g, '').toUpperCase();
+
+    // limite fixo
+    if (this.nif.length > 14) {
+      this.nif = this.nif.substring(0, 14);
+    }
+
+    this.validateNifLive();
+  }
+  validateNifLive(): void {
+    this.nifError = '';
+
+    if (!this.nif) return;
+
+    const value = this.nif;
+
+    // regras parciais (enquanto escreve)
+
+    // 1. só números no início (até 9)
+    if (value.length <= 9) {
+      if (!/^[0-9]*$/.test(value)) {
+        this.nifError = 'Os primeiros 9 caracteres devem ser números';
+        return;
+      }
+    }
+
+    // 2. parte das letras (posição 10-11)
+    if (value.length > 9 && value.length <= 11) {
+      const letters = value.substring(9);
+      if (!/^[A-Z]*$/.test(letters)) {
+        this.nifError = 'A posição 10-11 deve conter letras';
+        return;
+      }
+    }
+
+    // 3. parte final números (12-14)
+    if (value.length > 11) {
+      const last = value.substring(11);
+      if (!/^[0-9]*$/.test(last)) {
+        this.nifError = 'Os últimos 3 caracteres devem ser números';
+        return;
+      }
+    }
+
+    // 4. validação final completa
+    if (value.length === 14) {
+      const regex = /^[0-9]{9}[A-Z]{2}[0-9]{3}$/;
+
+      if (!regex.test(value)) {
+        this.nifError = 'Formato inválido de NIF';
+      }
+    }
   }
 
-  validateNifField() {
-
+  validateNifField(): void {
     this.nifError = '';
 
     if (!this.nif) {
+      this.nifError = 'NIF é obrigatório';
       return;
     }
 
-    if (!this.isValidNif(this.nif)) {
-      this.nifError = 'NIF angolano inválido';
+    // remove espaços e força maiúsculas
+    const nif = this.nif.replace(/\s/g, '').toUpperCase();
+
+    // tamanho exato
+    if (nif.length !== 14) {
+      this.nifError = 'NIF deve ter exatamente 14 caracteres';
+      return;
+    }
+
+    // REGRA PRINCIPAL: 9 números + 2 letras + 3 números
+    const regex = /^[0-9]{9}[A-Z]{2}[0-9]{3}$/;
+
+    if (!regex.test(nif)) {
+      this.nifError = 'Formato inválido. Use: 9 números + 2 letras + 3 números';
+      return;
     }
   }
   isValidEmail(email: string): boolean {
@@ -177,41 +241,26 @@ export class RegisterComponent {
   }
   isValidNif(nif: string): boolean {
 
-    // Remove espaços
-    nif = nif.replace(/\s/g, '');
+    if (!nif) return false;
 
-    // Deve conter exatamente 9 dígitos
-    if (!/^\d{9}$/.test(nif)) {
+    nif = nif.replace(/\s/g, '').toUpperCase();
+
+    // tamanho aceitável (ajusta se quiseres mais restrito)
+    if (nif.length < 10 || nif.length > 15) {
       return false;
     }
 
-    // NIF angolano normalmente começa com 1, 2 ou 5
-    if (!['1', '2', '5'].includes(nif.charAt(0))) {
+    // deve conter pelo menos 1 número
+    if (!/[0-9]/.test(nif)) {
       return false;
     }
 
-    // Evita números repetidos
-    if (/^(\d)\1+$/.test(nif)) {
+    // deve conter pelo menos 1 letra (porque teu exemplo tem LA)
+    if (!/[A-Z]/.test(nif)) {
       return false;
     }
 
-    // Algoritmo de validação
-    const pesos = [9, 8, 7, 6, 5, 4, 3, 2];
-
-    let soma = 0;
-
-    for (let i = 0; i < 8; i++) {
-      soma += Number(nif[i]) * pesos[i];
-    }
-
-    let resto = soma % 11;
-    let digito = 11 - resto;
-
-    if (digito >= 10) {
-      digito = 0;
-    }
-
-    return digito === Number(nif[8]);
+    return true;
   }
 
   async register() {
