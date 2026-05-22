@@ -69,7 +69,7 @@ export class LoginComponent {
     this.clearErrors();
     const payload = {
       login: this.email,
-      password: this.password
+      senha: this.password
     };
 
     this.authService.login(payload).subscribe({
