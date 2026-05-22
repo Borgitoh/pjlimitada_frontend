@@ -179,7 +179,7 @@
                 <div class="flex items-start justify-between mb-2">
                   <div class="flex-1">
                     <h4 class="font-semibold text-gray-900 text-sm truncate">{{servico.nome}}</h4>
-                    <p class="text-sm text-pj-cyan font-bold">R$ {{servico.preco | number:'1.0-0'}}</p>
+                    <p class="text-sm text-pj-cyan font-bold">KZ {{servico.preco | number:'1.0-0'}}</p>
                   </div>
                   <button
                     (click)="removerServico(servico.id)"
@@ -224,7 +224,7 @@
             </div>
             <div class="border-t border-gray-700 pt-4 flex justify-between items-center">
               <span class="text-lg font-semibold">Total do Orçamento:</span>
-              <span class="text-3xl font-bold text-pj-cyan">R$ {{totalOrcamento | number:'1.0-0'}}</span>
+              <span class="text-3xl font-bold text-pj-cyan">KZ {{totalOrcamento | number:'1.0-0'}}</span>
             </div>
           </div>
         </div>

@@ -10,6 +10,7 @@ import { AuthService } from 'src/app/services/auth.service.service';
 export class RegisterComponent {
   name: string = '';
   email: string = '';
+  nif: string = '';
   phone: string = '';
   password: string = '';
   confirmPassword: string = '';
@@ -24,6 +25,7 @@ export class RegisterComponent {
   successMessage: string = '';
   nameError: string = '';
   emailError: string = '';
+  nifError: string = '';
   passwordError: string = '';
   confirmPasswordError: string = '';
   termsError: string = '';
@@ -130,10 +132,34 @@ export class RegisterComponent {
       this.termsError = 'Você deve aceitar os termos de uso';
       isValid = false;
     }
+    // Validar NIF
+    if (!this.nif) {
+      this.nifError = 'NIF é obrigatório';
+      isValid = false;
+
+    } else if (!this.isValidNif(this.nif)) {
+      this.nifError = 'NIF angolano inválido';
+      isValid = false;
+    }
 
     return isValid;
   }
+  onNifInput(): void {
+    this.nif = this.nif.replace(/[^0-9]/g, '');
+  }
 
+  validateNifField() {
+
+    this.nifError = '';
+
+    if (!this.nif) {
+      return;
+    }
+
+    if (!this.isValidNif(this.nif)) {
+      this.nifError = 'NIF angolano inválido';
+    }
+  }
   isValidEmail(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -147,6 +173,45 @@ export class RegisterComponent {
     this.passwordError = '';
     this.confirmPasswordError = '';
     this.termsError = '';
+    this.nifError = '';
+  }
+  isValidNif(nif: string): boolean {
+
+    // Remove espaços
+    nif = nif.replace(/\s/g, '');
+
+    // Deve conter exatamente 9 dígitos
+    if (!/^\d{9}$/.test(nif)) {
+      return false;
+    }
+
+    // NIF angolano normalmente começa com 1, 2 ou 5
+    if (!['1', '2', '5'].includes(nif.charAt(0))) {
+      return false;
+    }
+
+    // Evita números repetidos
+    if (/^(\d)\1+$/.test(nif)) {
+      return false;
+    }
+
+    // Algoritmo de validação
+    const pesos = [9, 8, 7, 6, 5, 4, 3, 2];
+
+    let soma = 0;
+
+    for (let i = 0; i < 8; i++) {
+      soma += Number(nif[i]) * pesos[i];
+    }
+
+    let resto = soma % 11;
+    let digito = 11 - resto;
+
+    if (digito >= 10) {
+      digito = 0;
+    }
+
+    return digito === Number(nif[8]);
   }
 
   async register() {
@@ -161,11 +226,12 @@ export class RegisterComponent {
       name: this.name,
       email: this.email,
       phone: this.phone,
+      nif: this.nif,
       password: this.password,
       role: 'cliente',
       active: true
     };
-      this.authService.register(payload).subscribe({
+    this.authService.register(payload).subscribe({
       next: (res: any) => {
         this.successMessage = 'Conta criada com sucesso! Redirecionando...';
         setTimeout(() => this.router.navigate(['/login']), 2000);
