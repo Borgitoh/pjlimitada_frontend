@@ -31,10 +31,10 @@ export class UsersComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   tableColumns: TableColumn[] = [
-    { key: 'name', label: 'Nome', sortable: true, type: 'text' },
+    { key: 'nome', label: 'Nome', sortable: true, type: 'text' },
     { key: 'email', label: 'E-mail', sortable: true, type: 'text' },
     { key: 'roleLabel', label: 'Cargo', sortable: true, type: 'text' },
-    { key: 'active', label: 'Status', type: 'status' },
+    { key: 'activo', label: 'Status', type: 'status' },
     { key: 'last_login', label: 'Último Login', type: 'date', sortable: true },
     { key: 'actions', label: 'Ações', type: 'actions', width: '120px' }
   ];
@@ -69,11 +69,11 @@ export class UsersComponent implements OnInit, OnDestroy {
     this.editMode = false;
     this.modalTitle = 'Novo Usuário';
     this.currentUser = {
-      name: '',
+      nome: '',
       email: '',
       role: '',
-      active: true,
-      password: ''
+      activo: true,
+      senha: ''
     };
     this.isModalOpen = true;
   }
@@ -83,7 +83,7 @@ export class UsersComponent implements OnInit, OnDestroy {
     this.modalTitle = 'Editar Usuário';
     this.currentUser = {
       ...user,
-      password: ''
+      senha: ''
     };
     this.isModalOpen = true;
   }
@@ -225,11 +225,11 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   private resetForm(): void {
     this.currentUser = {
-      name: '',
+      nome: '',
       email: '',
       role: '',
-      active: true,
-      password: ''
+      activo: true,
+      senha: ''
     };
   }
 }
