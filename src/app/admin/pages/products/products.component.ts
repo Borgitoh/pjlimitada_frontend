@@ -271,7 +271,7 @@ toggleProductActive(product: Product): void {
   }
 
   private loadProducts(): void {
-    this.adminService.getProducts()
+    this.adminService.getProductsAll()
       .pipe(takeUntil(this.destroy$))
       .subscribe(products => {
         this.products = products;

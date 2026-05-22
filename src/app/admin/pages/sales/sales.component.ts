@@ -13,7 +13,7 @@ import { PdfService } from '../../../services/pdf.service';
 export class SalesComponent implements OnInit, OnDestroy {
   sales: Sale[] = [];
   filteredSales: Sale[] = [];
-  availableProducts: Product[] = [];
+  availableProducts: any[] = [];
   sellers: User[] = [];
 
   // Filters
@@ -189,14 +189,22 @@ export class SalesComponent implements OnInit, OnDestroy {
     this.updateSaleTotal();
   }
 
-  updateItemProduct(index: number, productId: string): void {
-    const product = this.availableProducts.find(p => p.id === productId);
-    if (product) {
-      this.currentSale.items[index].productName = product.name;
-      this.currentSale.items[index].unitPrice = product.price;
-      this.updateItemTotal(index);
-    }
+  updateItemProduct(index: number, productId: any): void {
+  const id = Number(productId);
+
+  const product = this.availableProducts.find(
+    p => Number(p.id) === id
+  );
+
+  console.log('Encontrado:', product);
+
+  if (product) {
+    this.currentSale.items[index].productName = product.name;
+    this.currentSale.items[index].unitPrice = Number(product.preco);
+    this.updateItemTotal(index);
   }
+}
+
 
   updateItemTotal(index: number): void {
     const item = this.currentSale.items[index];
@@ -255,7 +263,7 @@ export class SalesComponent implements OnInit, OnDestroy {
     this.adminService.getProducts()
       .pipe(takeUntil(this.destroy$))
       .subscribe(products => {
-        this.availableProducts = products.filter(p => p.active);
+        this.availableProducts = products;
       });
   }
 

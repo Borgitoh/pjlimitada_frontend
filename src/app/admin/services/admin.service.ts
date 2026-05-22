@@ -197,8 +197,11 @@ export class AdminService {
   }
 
   // Products
-  getProducts(): Observable<Product[]> {
+  getProductsAll(): Observable<Product[]> {
     return this.http.get<Product[]>(`${this.apiUrl}/produtos`);
+  }
+  getProducts(): Observable<Product[]> {
+    return this.http.get<Product[]>(`${this.apiUrl}/produtos/ativos`);
   }
   updateProductStock(productId: number, estoque: number): Observable<Product> {
     return this.http.patch<Product>(`${this.apiUrl}/produtos/${productId}/estoque`, { estoque });
