@@ -278,7 +278,7 @@ export class RegisterComponent {
       nif: this.nif,
       senha: this.password,
       role: 'cliente',
-      active: true
+      activo: true
     };
     this.authService.register(payload).subscribe({
       next: (res: any) => {

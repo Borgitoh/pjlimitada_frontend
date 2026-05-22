@@ -11,7 +11,7 @@ interface RegisterPayload {
   telefone?: string;
   senha: string;
   role?: string;
-  active?: boolean;
+  activo?: boolean;
 }
 interface LoginPayload {
   login: string;
