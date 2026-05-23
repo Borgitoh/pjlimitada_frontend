@@ -1,0 +1,225 @@
+<div class="min-h-screen bg-gray-50 py-8">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <!-- Cabeçalho -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900">Meu Programa de Afiliados</h1>
+      <p class="mt-2 text-gray-600">Ganhe comissões ao indicar novos clientes</p>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="carregando" class="flex items-center justify-center py-12">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-pj-cyan"></div>
+    </div>
+
+    <!-- Erro -->
+    <div *ngIf="erroMensagem && !carregando" class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+      <p class="text-red-800">{{ erroMensagem }}</p>
+    </div>
+
+    <div *ngIf="!carregando && meusDados">
+
+      <!-- Grid de Estatísticas -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <!-- Afiliados Directos -->
+        <div class="bg-white rounded-lg shadow p-6 border-l-4 border-blue-500">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-500 text-sm">Afiliados Directos</p>
+              <p class="text-3xl font-bold text-gray-900">{{ meusDados.totalAfiliadosDirectos }}</p>
+            </div>
+            <svg class="h-12 w-12 text-blue-500 opacity-20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Total Descendentes -->
+        <div class="bg-white rounded-lg shadow p-6 border-l-4 border-green-500">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-500 text-sm">Rede Total</p>
+              <p class="text-3xl font-bold text-gray-900">{{ meusDados.totalAfiliadosDirectos + meusDados.totalAfiliadosIndirectos }}</p>
+            </div>
+            <svg class="h-12 w-12 text-green-500 opacity-20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.856-1.487M15 10h.01M13 21H3V7a2 2 0 012-2h6a2 2 0 012 2v10a2 2 0 01-2 2z" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Comissão Total -->
+        <div class="bg-white rounded-lg shadow p-6 border-l-4 border-purple-500">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-500 text-sm">Comissão Total</p>
+              <p class="text-3xl font-bold text-gray-900">{{ (meusDados.comissaoTotal / 1000) | number:'1.0-0' }}k KZ</p>
+            </div>
+            <svg class="h-12 w-12 text-purple-500 opacity-20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Pendente -->
+        <div class="bg-white rounded-lg shadow p-6 border-l-4 border-orange-500">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-500 text-sm">Pendente Pagamento</p>
+              <p class="text-3xl font-bold text-gray-900">{{ (meusDados.comissaoPendente / 1000) | number:'1.0-0' }}k KZ</p>
+            </div>
+            <svg class="h-12 w-12 text-orange-500 opacity-20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Link de Convite -->
+      <div class="bg-white rounded-lg shadow p-6 mb-8">
+        <h2 class="text-xl font-bold text-gray-900 mb-4">Meu Link de Convite</h2>
+        <p class="text-gray-600 mb-4">Compartilhe este link para convidar novos afiliados</p>
+
+        <div class="flex gap-2 mb-4">
+          <input 
+            type="text" 
+            [value]="meusDados.linkConvite" 
+            readonly 
+            class="flex-1 px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-700">
+          
+          <button 
+            (click)="copiarLinkConvite()"
+            class="px-4 py-2 bg-pj-cyan text-white rounded-lg hover:bg-pj-cyan-hover transition-colors"
+            [class.bg-green-600]="linkConviteCopiado">
+            {{ linkConviteCopiado ? '✓ Copiado' : 'Copiar' }}
+          </button>
+        </div>
+
+        <!-- Botões de Compartilhamento -->
+        <div class="flex gap-2">
+          <button 
+            (click)="compartilharLinkWhatsApp()"
+            class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors flex items-center gap-2">
+            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.272-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.67-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421-7.403h-.004a9.87 9.87 0 00-9.746 9.798c0 2.718.734 5.369 2.126 7.659L.96 23.9l8.272-2.737a9.854 9.854 0 004.649 1.182h.004c5.444 0 9.868-4.436 9.868-9.893 0-2.63-.674-5.159-1.949-7.382-1.276-2.224-3.074-4.097-5.288-5.335-2.214-1.24-4.754-1.891-7.312-1.891z"/>
+            </svg>
+            WhatsApp
+          </button>
+
+          <button 
+            (click)="compartilharLinkEmail()"
+            class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2">
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            Email
+          </button>
+
+          <button 
+            class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors flex items-center gap-2">
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C9.539 12.053 10 10.659 10 9c0-4.418-3.582-8-8-8s-8 3.582-8 8 3.582 8 8 8c.235 0 .465-.013.697-.039l4.915 4.915a2.001 2.001 0 002.828-2.828l-4.915-4.915zm-1.8-4.342a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
+            </svg>
+            Copiar Código
+          </button>
+        </div>
+      </div>
+
+      <!-- Meus Afiliados -->
+      <div class="bg-white rounded-lg shadow overflow-hidden mb-8">
+        <div class="p-6 border-b border-gray-200">
+          <h2 class="text-xl font-bold text-gray-900">Meus Afiliados Directos</h2>
+          <p class="text-gray-600 text-sm mt-1">{{ afiliadosDiretos.length }} afiliados cadastrados</p>
+        </div>
+
+        <div *ngIf="afiliadosDiretos.length === 0" class="p-6 text-center text-gray-500">
+          <p>Você ainda não tem afiliados. Comece a compartilhar seu link!</p>
+        </div>
+
+        <div *ngIf="afiliadosDiretos.length > 0" class="overflow-x-auto">
+          <table class="w-full">
+            <thead class="bg-gray-50 border-b border-gray-200">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nome</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Data Referência</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Vendido</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Comissão</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Ações</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              <tr *ngFor="let afiliado of afiliadosDiretos" class="hover:bg-gray-50">
+                <td class="px-6 py-4 text-sm text-gray-900 font-medium">{{ afiliado.nome }}</td>
+                <td class="px-6 py-4 text-sm text-gray-500">{{ afiliado.email }}</td>
+                <td class="px-6 py-4 text-sm text-gray-500">{{ afiliado.dataReferencia | date:'short' }}</td>
+                <td class="px-6 py-4 text-sm text-gray-900">{{ (afiliado.vendidoTotal / 1000) | number:'1.0-0' }}k KZ</td>
+                <td class="px-6 py-4 text-sm font-medium text-green-600">{{ (afiliado.comissaoGerada / 1000) | number:'1.0-0' }}k KZ</td>
+                <td class="px-6 py-4 text-sm">
+                  <span *ngIf="afiliado.estadoAtivo" class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                    Ativo
+                  </span>
+                  <span *ngIf="!afiliado.estadoAtivo" class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                    Inativo
+                  </span>
+                </td>
+                <td class="px-6 py-4 text-center text-sm">
+                  <button 
+                    (click)="abrirDetalhesAfiliado(afiliado)"
+                    class="text-pj-cyan hover:text-pj-cyan-hover font-medium">
+                    Ver Detalhes
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Comissões Pendentes -->
+      <div class="bg-white rounded-lg shadow overflow-hidden">
+        <div class="p-6 border-b border-gray-200 flex items-center justify-between">
+          <div>
+            <h2 class="text-xl font-bold text-gray-900">Comissões Pendentes</h2>
+            <p class="text-gray-600 text-sm mt-1">{{ comissoesPendentes.length }} comissões aguardando pagamento</p>
+          </div>
+          <div class="text-right">
+            <p class="text-sm text-gray-600">Total Pendente</p>
+            <p class="text-2xl font-bold text-orange-600">{{ (meusDados.comissaoPendente / 1000) | number:'1.0-0' }}k KZ</p>
+          </div>
+        </div>
+
+        <div *ngIf="comissoesPendentes.length === 0" class="p-6 text-center text-gray-500">
+          <p>Nenhuma comissão pendente no momento. Ótimo trabalho! 🎉</p>
+        </div>
+
+        <div *ngIf="comissoesPendentes.length > 0" class="overflow-x-auto">
+          <table class="w-full">
+            <thead class="bg-gray-50 border-b border-gray-200">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Descrição</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tipo</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Data Geração</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Valor</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              <tr *ngFor="let comissao of comissoesPendentes" class="hover:bg-gray-50">
+                <td class="px-6 py-4 text-sm text-gray-900">{{ comissao.descricao }}</td>
+                <td class="px-6 py-4 text-sm">
+                  <span *ngIf="comissao.tipoComissao === 'venda'" class="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs font-medium">Venda</span>
+                  <span *ngIf="comissao.tipoComissao === 'ativacao'" class="px-2 py-1 bg-green-100 text-green-800 rounded text-xs font-medium">Ativação</span>
+                  <span *ngIf="comissao.tipoComissao === 'bonus'" class="px-2 py-1 bg-purple-100 text-purple-800 rounded text-xs font-medium">Bónus</span>
+                </td>
+                <td class="px-6 py-4 text-sm text-gray-500">{{ comissao.dataGeracao | date:'short' }}</td>
+                <td class="px-6 py-4 text-sm font-bold text-right text-gray-900">{{ (comissao.valor / 1000) | number:'1.0-0' }}k KZ</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>

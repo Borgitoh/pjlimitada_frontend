@@ -1,0 +1,43 @@
+// Estilos do dashboard de afiliados
+
+:host {
+  display: block;
+}
+
+.stat-card {
+  @apply bg-white rounded-lg shadow p-6 border-l-4;
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    @apply shadow-lg;
+    transform: translateY(-2px);
+  }
+}
+
+.commission-badge {
+  &.pending {
+    @apply bg-orange-100 text-orange-800;
+  }
+
+  &.paid {
+    @apply bg-green-100 text-green-800;
+  }
+
+  &.cancelled {
+    @apply bg-red-100 text-red-800;
+  }
+}
+
+.affiliate-row {
+  &:hover {
+    @apply bg-gray-50;
+  }
+}
+
+.copy-button {
+  transition: all 0.2s;
+
+  &.copied {
+    @apply bg-green-600;
+  }
+}
