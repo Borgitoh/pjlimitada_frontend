@@ -1,0 +1,161 @@
+<div class="min-h-screen bg-gray-50 py-8">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <!-- Cabeçalho -->
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900">Gestão de Afiliados</h1>
+        <p class="mt-2 text-gray-600">Visualize a estrutura de afiliações e comissões</p>
+      </div>
+      <button 
+        (click)="exportarRelatorio()"
+        class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2">
+        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        </svg>
+        Exportar CSV
+      </button>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="carregando" class="flex items-center justify-center py-12">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-pj-cyan"></div>
+    </div>
+
+    <!-- Erro -->
+    <div *ngIf="erroMensagem && !carregando" class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+      <p class="text-red-800">{{ erroMensagem }}</p>
+    </div>
+
+    <div *ngIf="!carregando && relatorioComissoes">
+
+      <!-- Resumo de Estatísticas -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <div class="bg-white rounded-lg shadow p-6 border-l-4 border-blue-500">
+          <p class="text-gray-500 text-sm">Total de Utilizadores</p>
+          <p class="text-3xl font-bold text-gray-900">{{ relatorioComissoes.totalUtilizadores }}</p>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6 border-l-4 border-green-500">
+          <p class="text-gray-500 text-sm">Total Comissões</p>
+          <p class="text-3xl font-bold text-gray-900">{{ relatorioComissoes.totalComissoes }}</p>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6 border-l-4 border-orange-500">
+          <p class="text-gray-500 text-sm">Pendentes</p>
+          <p class="text-3xl font-bold text-orange-600">{{ (relatorioComissoes.valorComissoesPendentes / 1000) | number:'1.0-0' }}k KZ</p>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6 border-l-4 border-purple-500">
+          <p class="text-gray-500 text-sm">Já Pagas</p>
+          <p class="text-3xl font-bold text-purple-600">{{ (relatorioComissoes.valorComissoesPagas / 1000) | number:'1.0-0' }}k KZ</p>
+        </div>
+      </div>
+
+      <!-- Filtros -->
+      <div class="bg-white rounded-lg shadow p-4 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Filtrar por Função</label>
+            <select 
+              [(ngModel)]="filtroFuncao"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pj-cyan">
+              <option value="">Todas as funções</option>
+              <option value="administrador">Administrador</option>
+              <option value="contador">Contador</option>
+              <option value="vendas">Vendas</option>
+              <option value="visualizador">Visualizador</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Filtrar por Estado</label>
+            <select 
+              [(ngModel)]="filtroAtivo"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pj-cyan">
+              <option value="">Todos</option>
+              <option value="true">Ativo</option>
+              <option value="false">Inativo</option>
+            </select>
+          </div>
+
+          <div class="flex items-end">
+            <button 
+              (click)="filtroFuncao = ''; filtroAtivo = ''"
+              class="w-full px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
+              Limpar Filtros
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabela de Utilizadores -->
+      <div class="bg-white rounded-lg shadow overflow-hidden">
+        <div class="p-6 border-b border-gray-200">
+          <h2 class="text-xl font-bold text-gray-900">Utilizadores e Estrutura de Afiliação</h2>
+          <p class="text-gray-600 text-sm mt-1">{{ (filtrarUtilizadores()).length }} utilizadores encontrados</p>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead class="bg-gray-50 border-b border-gray-200">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nome</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Função</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Referenciador</th>
+                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Afiliados</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Comissão Total</th>
+                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Estado</th>
+                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Ações</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              <tr *ngFor="let usuario of filtrarUtilizadores()" class="hover:bg-gray-50">
+                <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ usuario.nome }}</td>
+                <td class="px-6 py-4 text-sm text-gray-500">{{ usuario.email }}</td>
+                <td class="px-6 py-4 text-sm">
+                  <span class="px-2 py-1 rounded text-xs font-medium"
+                    [ngClass]="{
+                      'bg-red-100 text-red-800': usuario.funcao === 'administrador',
+                      'bg-blue-100 text-blue-800': usuario.funcao === 'contador',
+                      'bg-green-100 text-green-800': usuario.funcao === 'vendas',
+                      'bg-gray-100 text-gray-800': usuario.funcao === 'visualizador'
+                    }">
+                    {{ usuario.funcao }}
+                  </span>
+                </td>
+                <td class="px-6 py-4 text-sm text-gray-900">{{ obterNomeReferenciador(usuario.idReferenciador) }}</td>
+                <td class="px-6 py-4 text-center text-sm font-medium">
+                  <span class="text-blue-600">{{ usuario.totalAfiliadosDirectos }}</span>
+                  <span class="text-gray-500"> + </span>
+                  <span class="text-green-600">{{ usuario.totalAfiliadosIndirectos }}</span>
+                </td>
+                <td class="px-6 py-4 text-right text-sm font-bold text-purple-600">
+                  {{ (usuario.comissaoTotal / 1000) | number:'1.0-0' }}k KZ
+                </td>
+                <td class="px-6 py-4 text-center text-sm">
+                  <span *ngIf="usuario.ativo" class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                    Ativo
+                  </span>
+                  <span *ngIf="!usuario.ativo" class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                    Inativo
+                  </span>
+                </td>
+                <td class="px-6 py-4 text-center text-sm">
+                  <button 
+                    (click)="abrirDetalhesUtilizador(usuario)"
+                    class="text-pj-cyan hover:text-pj-cyan-hover font-medium">
+                    Detalhes
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>

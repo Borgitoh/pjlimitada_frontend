@@ -10,6 +10,7 @@ import { SalesComponent } from './pages/sales/sales.component';
 import { OrdersComponent } from './pages/orders/orders.component';
 import { ReportsComponent } from './pages/reports/reports.component';
 import { SettingsComponent } from './pages/settings/settings.component';
+import { AdminAffiliatesComponent } from './pages/affiliates/admin-affiliates.component';
 
 const routes: Routes = [
   {
@@ -24,6 +25,7 @@ const routes: Routes = [
       { path: 'services', component: ServicesComponent },
       { path: 'sales', component: SalesComponent },
       { path: 'orders', component: OrdersComponent },
+      { path: 'affiliates', component: AdminAffiliatesComponent },
       { path: 'reports', component: ReportsComponent },
       { path: 'settings', component: SettingsComponent }
     ]
