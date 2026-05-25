@@ -4,6 +4,8 @@ import { takeUntil } from 'rxjs/operators';
 import { AdminService } from '../../services/admin.service';
 import { Sale, SaleItem, Product, User, TableColumn, TableAction } from '../../models/admin.models';
 import { PdfService } from '../../../services/pdf.service';
+import { InvoiceService } from '../../../invoicing/services/invoice.service';
+import { CreateInvoiceDTO, DocumentType } from '../../../invoicing/models/invoice.model';
 
 @Component({
   selector: 'app-sales',
@@ -33,6 +35,7 @@ export class SalesComponent implements OnInit, OnDestroy {
     date: new Date().toISOString().split('T')[0],
     sellerId: '',
     customerName: '',
+    customerTaxId: '',
     items: [],
     discount: 0,
     paymentMethod: '',
@@ -44,6 +47,7 @@ export class SalesComponent implements OnInit, OnDestroy {
   isModalOpen = false;
   modalTitle = '';
   editMode = false;
+  isGeneratingInvoice = false;
 
   private destroy$ = new Subject<void>();
 
@@ -65,10 +69,10 @@ export class SalesComponent implements OnInit, OnDestroy {
       action: (sale: Sale) => this.viewSale(sale)
     },
     {
-      label: 'Baixar Fatura',
-      icon: 'M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2z',
+      label: (sale: Sale) => sale.invoiceNumber ? 'Ver Fatura' : 'Gerar Fatura',
+      icon: (sale: Sale) => sale.invoiceNumber ? 'M13 10V3L4 14h7v7l9-11h-7z' : 'M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2z',
       type: 'success',
-      action: (sale: Sale) => this.downloadInvoice(sale)
+      action: (sale: Sale) => sale.invoiceNumber ? this.downloadInvoice(sale) : this.generateInvoice(sale)
     },
     {
       label: 'Imprimir',
@@ -80,7 +84,8 @@ export class SalesComponent implements OnInit, OnDestroy {
 
   constructor(
     private adminService: AdminService,
-    private pdfService: PdfService
+    private pdfService: PdfService,
+    private invoiceService: InvoiceService
   ) {}
 
   ngOnInit(): void {
@@ -102,6 +107,7 @@ export class SalesComponent implements OnInit, OnDestroy {
       date: new Date().toISOString().split('T')[0],
       sellerId: '',
       customerName: '',
+      customerTaxId: '',
       items: [this.createEmptyItem()],
       discount: 0,
       paymentMethod: '',
@@ -170,14 +176,85 @@ export class SalesComponent implements OnInit, OnDestroy {
         total: this.currentSale.total,
         paymentMethod: this.currentSale.paymentMethod,
         customerName: this.currentSale.customerName,
-        notes: this.currentSale.notes
+        customerTaxId: this.currentSale.customerTaxId,
+        customerCountry: 'AO',
+        notes: this.currentSale.notes,
+        sourceChannel: 'admin'
       };
-      this.sales.unshift(newSale);
-      this.filterSales();
-      this.calculateStats();
+
+      this.adminService.createSale(newSale)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(
+          persistedSale => {
+            this.sales.unshift(persistedSale);
+            this.filterSales();
+            this.calculateStats();
+          }
+        );
     }
 
     this.closeModal();
+  }
+
+  generateInvoice(sale: Sale): void {
+    if (this.isGeneratingInvoice || sale.invoiceNumber) {
+      return;
+    }
+
+    this.isGeneratingInvoice = true;
+
+    const invoiceDTO: CreateInvoiceDTO = {
+      documentType: 'FT',
+      customer: {
+        taxId: sale.customerTaxId || '999999999999999',
+        country: sale.customerCountry || 'AO',
+        companyName: sale.customerName || 'Cliente Geral'
+      },
+      lines: sale.items.map((item, index) => ({
+        lineNumber: index + 1,
+        productCode: `PROD-${item.productId}`,
+        productDescription: item.productName,
+        quantity: item.quantity,
+        unitOfMeasure: 'UN',
+        unitPrice: item.unitPrice,
+        unitPriceBase: item.unitPrice,
+        taxes: []
+      }))
+    };
+
+    this.invoiceService.createInvoiceFromCheckout(invoiceDTO)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(
+        invoice => {
+          this.isGeneratingInvoice = false;
+
+          this.adminService.updateSaleInvoiceMetadata(sale.id, {
+            invoiceId: invoice.invoiceId,
+            invoiceNumber: invoice.documentNo,
+            invoiceType: invoice.documentType,
+            invoiceStatus: invoice.documentStatus,
+            invoiceValidationStatus: invoice.validationStatus,
+            invoiceTotal: invoice.documentTotals.grossTotal,
+            invoiceCreatedAt: invoice.createdAt
+          })
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(
+              () => {
+                this.loadSales();
+                alert(`Fatura ${invoice.documentNo} gerada com sucesso!`);
+              },
+              error => {
+                console.error('Erro ao atualizar metadados da fatura:', error);
+                alert('Fatura criada mas houve erro ao lincar à venda.');
+              }
+            );
+        },
+        error => {
+          this.isGeneratingInvoice = false;
+          console.error('Erro ao gerar fatura:', error);
+          alert('Erro ao gerar fatura. Tente novamente.');
+        }
+      );
   }
 
   addItem(): void {
@@ -253,7 +330,10 @@ export class SalesComponent implements OnInit, OnDestroy {
     this.adminService.getSales()
       .pipe(takeUntil(this.destroy$))
       .subscribe(sales => {
-        this.sales = sales;
+        this.sales = sales.map(sale => ({
+          ...sale,
+          invoiceCreatedAt: sale.invoiceCreatedAt ? new Date(sale.invoiceCreatedAt) : undefined
+        }));
         this.filterSales();
         this.calculateStats();
       });
@@ -328,6 +408,7 @@ export class SalesComponent implements OnInit, OnDestroy {
       date: new Date().toISOString().split('T')[0],
       sellerId: '',
       customerName: '',
+      customerTaxId: '',
       items: [],
       discount: 0,
       paymentMethod: '',

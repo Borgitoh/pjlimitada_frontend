@@ -20,6 +20,8 @@ import { HttpClient } from '@angular/common/http';
 export class AdminService {
 
   private apiUrl = `${environment.apiUrl}`;
+  private readonly manualSalesStorageKey = 'admin_manual_sales';
+  private readonly saleInvoiceMetadataStorageKey = 'admin_sale_invoice_metadata';
 
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
@@ -224,8 +226,11 @@ export class AdminService {
   // Sales
   getSales(): Observable<Sale[]> {
     const mockSales = this.getMockSales();
+    const manualSales = this.getManualSales();
     const ecommerceSales = this.getEcommerceSales();
-    const allSales = [...mockSales, ...ecommerceSales];
+    const allSales = [...manualSales, ...mockSales, ...ecommerceSales]
+      .map(sale => this.applySaleInvoiceMetadata(sale));
+
     return of(allSales.sort((a, b) => b.date.getTime() - a.date.getTime())).pipe(delay(300));
   }
 
@@ -233,8 +238,59 @@ export class AdminService {
     const ecommerceSales = JSON.parse(localStorage.getItem('admin_sales') || '[]');
     return ecommerceSales.map((sale: any) => ({
       ...sale,
-      date: new Date(sale.date)
+      date: new Date(sale.date),
+      invoiceCreatedAt: sale.invoiceCreatedAt ? new Date(sale.invoiceCreatedAt) : undefined,
+      sourceChannel: 'ecommerce' as const
     }));
+  }
+
+  createSale(sale: Sale): Observable<Sale> {
+    const manualSales = this.getManualSales();
+    const persistedSale: Sale = {
+      ...sale,
+      sourceChannel: 'admin'
+    };
+
+    manualSales.unshift(persistedSale);
+    localStorage.setItem(this.manualSalesStorageKey, JSON.stringify(manualSales));
+    return of(persistedSale).pipe(delay(150));
+  }
+
+  updateSaleInvoiceMetadata(saleId: string, metadata: Partial<Sale>): Observable<boolean> {
+    const storedMetadata = JSON.parse(localStorage.getItem(this.saleInvoiceMetadataStorageKey) || '{}');
+    storedMetadata[saleId] = {
+      ...(storedMetadata[saleId] || {}),
+      ...metadata,
+      invoiceCreatedAt: metadata.invoiceCreatedAt || storedMetadata[saleId]?.invoiceCreatedAt || new Date().toISOString()
+    };
+
+    localStorage.setItem(this.saleInvoiceMetadataStorageKey, JSON.stringify(storedMetadata));
+    return of(true).pipe(delay(100));
+  }
+
+  private getManualSales(): Sale[] {
+    const manualSales = JSON.parse(localStorage.getItem(this.manualSalesStorageKey) || '[]');
+    return manualSales.map((sale: any) => ({
+      ...sale,
+      date: new Date(sale.date),
+      invoiceCreatedAt: sale.invoiceCreatedAt ? new Date(sale.invoiceCreatedAt) : undefined,
+      sourceChannel: 'admin' as const
+    }));
+  }
+
+  private applySaleInvoiceMetadata(sale: Sale): Sale {
+    const metadataMap = JSON.parse(localStorage.getItem(this.saleInvoiceMetadataStorageKey) || '{}');
+    const metadata = metadataMap[sale.id];
+
+    if (!metadata) {
+      return sale;
+    }
+
+    return {
+      ...sale,
+      ...metadata,
+      invoiceCreatedAt: metadata.invoiceCreatedAt ? new Date(metadata.invoiceCreatedAt) : sale.invoiceCreatedAt
+    };
   }
 
   // Orders management (E-commerce integration)
@@ -243,8 +299,11 @@ export class AdminService {
     const orders = ecommerceSales
       .filter((sale: any) => sale.sellerId === 'ecommerce')
       .map((sale: any) => ({
-        ...sale,
-        date: new Date(sale.date),
+        ...this.applySaleInvoiceMetadata({
+          ...sale,
+          date: new Date(sale.date),
+          sourceChannel: 'ecommerce' as const
+        }),
         status: sale.status || 'confirmed'
       }));
     return of(orders).pipe(delay(300));

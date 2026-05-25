@@ -90,9 +90,9 @@
             <!-- Actions -->
             <div *ngIf="column.type === 'actions'" class="flex items-center space-x-1 sm:space-x-2">
               <button *ngFor="let action of actions" (click)="action.action(item)"
-                [class]="getActionClasses(action.type)" [title]="action.label">
+                [class]="getActionClasses(action.type)" [title]="getActionLabel(action, item)">
                 <svg class="h-3 w-3 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="action.icon" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="getActionIcon(action, item)" />
                 </svg>
               </button>
             </div>

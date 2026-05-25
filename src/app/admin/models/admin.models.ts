@@ -55,7 +55,17 @@ export interface Sale {
   total: number;
   paymentMethod: 'cash' | 'card' | 'transfer';
   customerName?: string;
+  customerTaxId?: string;
+  customerCountry?: string;
   notes?: string;
+  invoiceId?: string;
+  invoiceNumber?: string;
+  invoiceType?: string;
+  invoiceStatus?: string;
+  invoiceValidationStatus?: string;
+  invoiceTotal?: number;
+  invoiceCreatedAt?: Date;
+  sourceChannel?: 'admin' | 'ecommerce';
 }
 
 export interface SaleItem {
@@ -116,8 +126,8 @@ export interface TableColumn {
 }
 
 export interface TableAction {
-  label: string |((product: Product) => string);
-  icon: string | ((product: Product) => string);
+  label: string | ((item: any) => string);
+  icon: string | ((item: any) => string);
   type: 'primary' | 'secondary' | 'danger' | 'success';
   action: (item: any) => void;
 }

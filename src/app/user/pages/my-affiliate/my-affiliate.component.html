@@ -1,0 +1,146 @@
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-8">
+  <div class="max-w-4xl mx-auto px-4">
+
+    <!-- Cabeçalho -->
+    <div class="mb-8">
+      <h1 class="text-4xl font-bold text-gray-900">Minha Comissão de Afiliado</h1>
+      <p class="text-gray-600 mt-2">Ganhe dinheiro ao indicar novos clientes</p>
+    </div>
+
+    <div *ngIf="carregando" class="flex items-center justify-center py-16">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-pj-cyan"></div>
+    </div>
+
+    <div *ngIf="!carregando && meusDados" class="space-y-6">
+
+      <!-- Card do Referenciador -->
+      <div class="bg-white rounded-lg shadow-lg p-8">
+        <h2 class="text-xl font-bold text-gray-900 mb-6">Meu Referenciador</h2>
+
+        <div class="bg-blue-50 rounded-lg p-6 border border-blue-200">
+          <div class="flex items-center gap-4">
+            <div class="w-16 h-16 rounded-full bg-pj-cyan flex items-center justify-center text-white text-2xl font-bold">
+              {{ meusDados.nomeReferenciador?.charAt(0) || 'A' }}
+            </div>
+            <div>
+              <h3 class="text-2xl font-bold text-gray-900">{{ meusDados.nomeReferenciador || 'Root' }}</h3>
+              <p class="text-gray-600 text-sm mt-1">
+                Você foi indicado em {{ meusDados.dataAdesaoPrograma | date:'dd/MM/yyyy' }}
+              </p>
+              <p class="text-blue-600 font-medium text-sm mt-2">✓ Você está recebendo comissões por indicações</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Estatísticas -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Total Ganhado -->
+        <div class="bg-gradient-to-br from-green-400 to-green-600 rounded-lg shadow-lg p-6 text-white">
+          <p class="text-green-100 text-sm font-medium">Comissão Total Ganha</p>
+          <p class="text-5xl font-bold mt-2">{{ (meusDados.comissaoTotal / 1000) | number:'1.1-1' }}k</p>
+          <p class="text-green-100 text-xs mt-2">KZ</p>
+        </div>
+
+        <!-- Recebido -->
+        <div class="bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg shadow-lg p-6 text-white">
+          <p class="text-blue-100 text-sm font-medium">Já Recebido</p>
+          <p class="text-5xl font-bold mt-2">{{ (meusDados.comissaoPaga / 1000) | number:'1.1-1' }}k</p>
+          <p class="text-blue-100 text-xs mt-2">KZ</p>
+        </div>
+
+        <!-- Pendente -->
+        <div class="bg-gradient-to-br from-orange-400 to-orange-600 rounded-lg shadow-lg p-6 text-white">
+          <p class="text-orange-100 text-sm font-medium">Pendente de Pagamento</p>
+          <p class="text-5xl font-bold mt-2">{{ (meusDados.comissaoPendente / 1000) | number:'1.1-1' }}k</p>
+          <p class="text-orange-100 text-xs mt-2">KZ</p>
+        </div>
+      </div>
+
+      <!-- Meu Link de Convite -->
+      <div class="bg-white rounded-lg shadow-lg p-8">
+        <h2 class="text-xl font-bold text-gray-900 mb-4">Convide Novos Clientes</h2>
+        <p class="text-gray-600 mb-6">Compartilhe seu link pessoal e ganhe 5% de comissão em cada venda!</p>
+
+        <div class="bg-purple-50 rounded-lg p-6 border border-purple-200">
+          <div class="flex gap-2 mb-4">
+            <input 
+              type="text" 
+              [value]="meusDados.linkConvite" 
+              readonly 
+              class="flex-1 px-4 py-3 border border-purple-300 rounded-lg bg-white text-gray-700 font-mono text-sm">
+            
+            <button 
+              (click)="copiarLink()"
+              class="px-6 py-3 bg-pj-cyan text-white rounded-lg hover:bg-pj-cyan-hover transition-colors font-medium"
+              [class.bg-green-600]="linkCopiado">
+              {{ linkCopiado ? '✓ Copiado' : 'Copiar' }}
+            </button>
+          </div>
+
+          <div class="flex gap-2">
+            <button 
+              (click)="compartilharWhatsApp()"
+              class="flex-1 px-4 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors font-medium flex items-center justify-center gap-2">
+              <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.272-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.67-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421-7.403h-.004a9.87 9.87 0 00-9.746 9.798c0 2.718.734 5.369 2.126 7.659L.96 23.9l8.272-2.737a9.854 9.854 0 004.649 1.182h.004c5.444 0 9.868-4.436 9.868-9.893 0-2.63-.674-5.159-1.949-7.382-1.276-2.224-3.074-4.097-5.288-5.335-2.214-1.24-4.754-1.891-7.312-1.891z"/>
+              </svg>
+              WhatsApp
+            </button>
+
+            <button 
+              class="flex-1 px-4 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-medium flex items-center justify-center gap-2">
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+              Email
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Comissões Recentes -->
+      <div class="bg-white rounded-lg shadow-lg p-8">
+        <h2 class="text-xl font-bold text-gray-900 mb-4">Minhas Comissões Recentes</h2>
+
+        <div *ngIf="minhasComissoes.length === 0" class="text-center py-8 text-gray-500">
+          <p>Nenhuma comissão registada ainda</p>
+          <p class="text-sm mt-1">Comece a compartilhar seu link para ganhar!</p>
+        </div>
+
+        <div *ngIf="minhasComissoes.length > 0" class="space-y-3">
+          <div *ngFor="let comissao of minhasComissoes | slice:0:10" class="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 transition">
+            <div>
+              <p class="font-medium text-gray-900">{{ comissao.descricao }}</p>
+              <p class="text-xs text-gray-500 mt-1">{{ comissao.dataGeracao | date:'dd/MM/yyyy HH:mm' }}</p>
+            </div>
+            <div class="text-right">
+              <p class="text-2xl font-bold text-green-600">+{{ (comissao.valor / 1000) | number:'1.1-1' }}k</p>
+              <span *ngIf="comissao.estado === 'pendente'" class="text-xs text-orange-600 font-medium block mt-1">⏳ Pendente</span>
+              <span *ngIf="comissao.estado === 'paga'" class="text-xs text-green-600 font-medium block mt-1">✓ Paga</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Info -->
+      <div class="bg-blue-50 border border-blue-200 rounded-lg p-6">
+        <div class="flex gap-4">
+          <div class="text-2xl">ℹ️</div>
+          <div>
+            <h3 class="font-bold text-gray-900">Como Funciona</h3>
+            <ul class="text-gray-700 text-sm mt-2 space-y-1">
+              <li>• Compartilhe seu link pessoal</li>
+              <li>• Quando alguém se cadastra pelo seu link, você vira afiliador</li>
+              <li>• Ganhe 5% de comissão em cada venda feita por seus afiliados</li>
+              <li>• Ganhe 2% em vendas indirectas (afiliados dos seus afiliados)</li>
+              <li>• Comissões são pagas mensalmente</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
