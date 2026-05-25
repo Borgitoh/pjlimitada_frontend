@@ -14,6 +14,7 @@ import { SalesComponent } from './pages/sales/sales.component';
 import { OrdersComponent } from './pages/orders/orders.component';
 import { ReportsComponent } from './pages/reports/reports.component';
 import { SettingsComponent } from './pages/settings/settings.component';
+import { AdminAffiliatesComponent } from './pages/affiliates/admin-affiliates.component';
 import { ChartComponent } from './components/chart/chart.component';
 import { StatsCardComponent } from './components/stats-card/stats-card.component';
 import { TableComponent } from './components/table/table.component';
@@ -33,6 +34,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     OrdersComponent,
     ReportsComponent,
     SettingsComponent,
+    AdminAffiliatesComponent,
     ChartComponent,
     StatsCardComponent,
     TableComponent,

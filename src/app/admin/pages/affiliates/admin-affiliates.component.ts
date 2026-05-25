@@ -16,7 +16,7 @@ export class AdminAffiliatesComponent implements OnInit, OnDestroy {
   relatorioComissoes: any = null;
   
   filtroFuncao: string = '';
-  filtroAtivo: string = '';
+  filtroAtivo: boolean | string = '';
   dataInicio: string = '';
   dataFim: string = '';
 
@@ -88,7 +88,7 @@ export class AdminAffiliatesComponent implements OnInit, OnDestroy {
     }
 
     if (this.filtroAtivo !== '') {
-      const ativo = this.filtroAtivo === 'true';
+      const ativo = String(this.filtroAtivo) === 'true';
       filtrados = filtrados.filter(u => u.ativo === ativo);
     }
 
