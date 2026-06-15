@@ -83,6 +83,7 @@ export class LoginComponent {
       next: (res: any) => {
         // Supondo que a API retorne usuário e token
         localStorage.setItem('user', JSON.stringify({
+          id: res.user.id,
           name: res.user.name,
           email: res.user.email,
           token: res.token,
@@ -90,27 +91,12 @@ export class LoginComponent {
           rememberMe: this.rememberMe
         }));
 
+        this.isLoading = false;
         this.router.navigate(['/']); // redireciona após login
       },
       error: (err) => {
-        // Fallback: verificar se é um usuário demo
-        const demoUser = this.demoUsers.find(u => u.email === this.email);
-
-        if (demoUser) {
-          // Login com dados demo (sem API)
-          localStorage.setItem('user', JSON.stringify({
-            id: demoUser.id,
-            name: demoUser.name,
-            email: demoUser.email,
-            token: 'demo-token-' + demoUser.id,
-            role: demoUser.role,
-            rememberMe: this.rememberMe
-          }));
-          this.router.navigate(['/']); // redireciona após login
-          return;
-        }
-
-        if (err.status === 422 && err.error.errors) {
+        console.error('Login error:', err);
+        if (err.status === 422 && err.error?.errors) {
           this.emailError = err.error.errors.email ? err.error.errors.email[0] : '';
           this.passwordError = err.error.errors.password ? err.error.errors.password[0] : '';
         } else if (err.status === 401) {

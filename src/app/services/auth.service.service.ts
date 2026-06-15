@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
@@ -71,7 +71,7 @@ export class AuthService {
           });
         }
         // Se não encontrar, rejeita
-        throw new Error('Usuário não encontrado');
+        return throwError(() => new Error('Usuário não encontrado'));
       })
     );
   }
