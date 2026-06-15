@@ -162,6 +162,7 @@
     [title]="modalTitle"
     size="xl"
     [confirmDisabled]="!isFormValid()"
+    [closeOnBackdrop]="true"
     (closed)="closeModal()"
     (confirmed)="saveSale()">
 

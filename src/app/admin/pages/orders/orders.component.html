@@ -125,6 +125,7 @@
     size="xl"
     [confirmText]="isViewMode() ? 'Fechar' : 'Atualizar Status'"
     [showCancelButton]="!isViewMode()"
+    [closeOnBackdrop]="true"
     (closed)="closeModal()"
     (confirmed)="isViewMode() ? closeModal() : saveStatusUpdate()">
 

@@ -96,6 +96,14 @@ export class UsersComponent implements OnInit, OnDestroy {
     this.selectedUserForAffiliates = null;
   }
 
+  onAffiliatesPanelBackdropClick(event: MouseEvent): void {
+    // Fechar apenas se clicar no backdrop (div com fixed inset-0)
+    const target = event.target as HTMLElement;
+    if (target.classList.contains('fixed') && target.classList.contains('inset-0')) {
+      this.closeAffiliatesPanel();
+    }
+  }
+
   editUser(user: User): void {
     this.editMode = true;
     this.modalTitle = 'Editar Usuário';
