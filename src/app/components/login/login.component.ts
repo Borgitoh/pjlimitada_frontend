@@ -18,6 +18,13 @@ export class LoginComponent {
   emailError: string = '';
   passwordError: string = '';
 
+  // Dados demo de usuários
+  private demoUsers = [
+    { id: '1', name: 'Admin PJ Limitada', email: 'admin@pjlimitada.com', role: 'admin', active: true },
+    { id: '2', name: 'João Silva', email: 'joao@empresa.com', role: 'vendedor', active: true },
+    { id: 'afiliado-002', name: 'Maria Santos', email: 'maria@empresa.com', role: 'contador', active: true }
+  ];
+
   constructor(private router: Router, private authService: AuthService) { }
 
   togglePassword() {
@@ -86,6 +93,23 @@ export class LoginComponent {
         this.router.navigate(['/']); // redireciona após login
       },
       error: (err) => {
+        // Fallback: verificar se é um usuário demo
+        const demoUser = this.demoUsers.find(u => u.email === this.email);
+
+        if (demoUser) {
+          // Login com dados demo (sem API)
+          localStorage.setItem('user', JSON.stringify({
+            id: demoUser.id,
+            name: demoUser.name,
+            email: demoUser.email,
+            token: 'demo-token-' + demoUser.id,
+            role: demoUser.role,
+            rememberMe: this.rememberMe
+          }));
+          this.router.navigate(['/']); // redireciona após login
+          return;
+        }
+
         if (err.status === 422 && err.error.errors) {
           this.emailError = err.error.errors.email ? err.error.errors.email[0] : '';
           this.passwordError = err.error.errors.password ? err.error.errors.password[0] : '';

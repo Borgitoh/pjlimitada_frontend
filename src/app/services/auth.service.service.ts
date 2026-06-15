@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs'; 7
+import { Observable, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 interface RegisterPayload {
@@ -23,19 +24,68 @@ interface LoginPayload {
 export class AuthService {
   private apiUrl = `${environment.apiUrl}`;
 
+  // Dados demo de usuários
+  private demoUsers = [
+    {
+      id: '1',
+      name: 'Admin PJ Limitada',
+      email: 'admin@pjlimitada.com',
+      role: 'admin',
+      active: true,
+      last_login: new Date('2026-06-15')
+    },
+    {
+      id: '2',
+      name: 'João Silva',
+      email: 'joao@empresa.com',
+      role: 'vendedor',
+      active: true,
+      last_login: new Date('2026-06-14')
+    },
+    {
+      id: 'afiliado-002',
+      name: 'Maria Santos',
+      email: 'maria@empresa.com',
+      role: 'contador',
+      active: true,
+      last_login: new Date('2026-06-13')
+    }
+  ];
+
   constructor(private http: HttpClient) { }
 
   register(payload: RegisterPayload): Observable<any> {
     return this.http.post(`${this.apiUrl}/register`, payload);
   }
   login(payload: LoginPayload): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, payload);
+    // Primeiro tenta a API real
+    return this.http.post(`${this.apiUrl}/login`, payload).pipe(
+      // Se houver erro, tenta dados demo
+      catchError(() => {
+        // Procura o usuário nos dados demo
+        const demoUser = this.demoUsers.find(u => u.email === payload.login);
+        if (demoUser) {
+          return of({
+            user: demoUser,
+            token: 'demo-token-' + demoUser.id
+          });
+        }
+        // Se não encontrar, rejeita
+        throw new Error('Usuário não encontrado');
+      })
+    );
   }
   getUsers(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/get-user` );
+    // Primeiro tenta a API real, se falhar retorna dados demo
+    return this.http.get(`${this.apiUrl}/get-user`).pipe(
+      // Se houver erro, retorna dados demo
+      catchError(() => {
+        return of({ users: this.demoUsers });
+      })
+    );
   }
   updateUser(id: number, payload: any): Observable<any> {
-  return this.http.put(`${this.apiUrl}/update-user/${id}`, payload);
-}
+    return this.http.put(`${this.apiUrl}/update-user/${id}`, payload);
+  }
 
 }
