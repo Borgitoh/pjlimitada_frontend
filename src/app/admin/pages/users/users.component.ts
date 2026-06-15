@@ -23,9 +23,11 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   isModalOpen = false;
   isDeleteModalOpen = false;
+  isAffiliatesOpen = false;
   editMode = false;
   modalTitle = '';
   userToDelete: User | null = null;
+  selectedUserForAffiliates: User | null = null;
   isLoading: boolean = false;
 
   private destroy$ = new Subject<void>();
@@ -40,6 +42,12 @@ export class UsersComponent implements OnInit, OnDestroy {
   ];
 
   tableActions: TableAction[] = [
+    {
+      label: 'Afiliados',
+      icon: 'M17 20h5v-2a3 3 0 00-5.856-1.487M15 10a3 3 0 11-6 0 3 3 0 016 0zM15 20H9v-2a6 6 0 0112 0v2z',
+      type: 'primary',
+      action: (user: User) => this.viewUserAffiliates(user)
+    },
     {
       label: 'Editar',
       icon: 'M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z',
@@ -76,6 +84,16 @@ export class UsersComponent implements OnInit, OnDestroy {
       password: ''
     };
     this.isModalOpen = true;
+  }
+
+  viewUserAffiliates(user: User): void {
+    this.selectedUserForAffiliates = user;
+    this.isAffiliatesOpen = true;
+  }
+
+  closeAffiliatesPanel(): void {
+    this.isAffiliatesOpen = false;
+    this.selectedUserForAffiliates = null;
   }
 
   editUser(user: User): void {
