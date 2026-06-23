@@ -84,6 +84,7 @@
 
   <!-- Product Modal -->
   <app-modal [isOpen]="isModalOpen" [title]="modalTitle" size="lg" [confirmDisabled]="!isFormValid()"
+    [closeOnBackdrop]="true"
     (closed)="closeModal()" (confirmed)="saveProduct()">
 
     <form #productForm="ngForm" class="space-y-4">

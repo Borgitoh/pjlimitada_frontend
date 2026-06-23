@@ -80,6 +80,7 @@
     [title]="brandModalTitle"
     size="md"
     [confirmDisabled]="!isBrandFormValid()"
+    [closeOnBackdrop]="true"
     (closed)="closeBrandModal()"
     (confirmed)="saveBrand()">
 
