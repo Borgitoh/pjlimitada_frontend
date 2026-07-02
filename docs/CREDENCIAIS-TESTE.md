@@ -39,7 +39,24 @@ O sistema possui contas de teste pré-configuradas em localStorage para fins de 
 - **Email**: `maria@empresa.com`
 - **Senha**: `senha123` (qualquer senha válida com 6+ caracteres)
 - **Função**: Contador/Afiliado
+- **Afiliados**: 1 direto
 - **Permissões**: Mesmas do usuário 2
+
+### 4. **Usuário Normal 3 (COM 5 AFILIADOS)** ⭐ NOVO
+- **Nome**: Carlos Pereira
+- **Email**: `carlos@empresa.com`
+- **Senha**: `senha123`
+- **Função**: Vendedor/Afiliado
+- **Afiliados Diretos**: 5
+  1. Lucas Gomes (lucas.gomes@empresa.com)
+  2. Ana Costa (ana.costa@empresa.com)
+  3. Ricardo Santos (ricardo.santos@empresa.com)
+  4. Fernanda Lima (fernanda.lima@empresa.com)
+  5. Bruno Oliveira (bruno.oliveira@empresa.com)
+- **Afiliados Indiretos**: 3 (filhos dos afiliados diretos)
+- **Comissão Total**: 8.500 KZ
+  - Paga: 5.000 KZ
+  - Pendente: 3.500 KZ
 
 ---
 

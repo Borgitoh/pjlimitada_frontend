@@ -49,6 +49,14 @@ export class AuthService {
       role: 'contador',
       active: true,
       last_login: new Date('2026-06-13')
+    },
+    {
+      id: 'afiliado-003',
+      name: 'Carlos Pereira',
+      email: 'carlos@empresa.com',
+      role: 'vendedor',
+      active: true,
+      last_login: new Date('2026-06-12')
     }
   ];
 
